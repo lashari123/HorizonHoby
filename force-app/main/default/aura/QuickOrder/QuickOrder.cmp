@@ -1,0 +1,101 @@
+<aura:component controller="QuickOrderController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="showAddToDraftOrder" type="boolean" default="false"/>
+    <aura:attribute name="skuQuantityList" type="String[]" />
+    <aura:attribute name="Products" type="Map" default="{}"/>
+    <aura:attribute name="iterationValues" type="String[]" default="{}"/>
+    
+    <!--Handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="quick-orders-section">
+        <h1 style="text-align: center; font-size:200%;"><span>Quick Order</span></h1>
+        
+        <div class="form-content">
+            <aura:iteration var="iterationValue" items="{!v.iterationValues}" indexVar= "i">
+                <lightning:layout>
+                    
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        <lightning:input aura:id="sku" placeholder="Item" name="{!'sku0'+i}" onblur="{!c.checkValidity}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:buttonIcon name="{!'0'+i}" tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_increment" onclick="{!c.increment}" iconName="utility:add"  size="x-small" alternativeText="Minus" title="Minus" />
+                                
+                                <input type="number" name="{!'0'+i}" min="0" aura:id="quantity" class="slds-input slds-input_counter" onkeyup="{!c.onChange}" />
+                                
+                                <lightning:buttonIcon name="{!'0'+i}" tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_decrement"  onclick="{!c.decrement}" iconName="utility:dash"  size="x-small" alternativeText="Add" title="Add" />
+                                
+                            </div>
+                        </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        
+                        <lightning:input aura:id="sku" placeholder="Item" name="{!'sku1'+i}" onblur="{!c.checkValidity}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:buttonIcon name="{!'1'+i}" tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_increment" onclick="{!c.increment}" iconName="utility:add"  size="x-small" alternativeText="Minus" title="Minus" />
+                                
+                                <input type="number" name="{!'1'+i}"  min="0" aura:id="quantity" class="slds-input slds-input_counter" onkeyup="{!c.onChange}" />
+                                
+                                <lightning:buttonIcon name="{!'1'+i}" tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_decrement"  onclick="{!c.decrement}" iconName="utility:dash"  size="x-small" alternativeText="Add" title="Add" />
+                                
+                            </div>
+                        </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        
+                        <lightning:input aura:id="sku" placeholder="Item" name="{!'sku2'+i}" onblur="{!c.checkValidity}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:buttonIcon name="{!'2'+i}" tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_increment" onclick="{!c.increment}" iconName="utility:add"  size="x-small" alternativeText="Minus" title="Minus" />
+                                
+                                <input type="number" name="{!'2'+i}" min="0" aura:id="quantity" class="slds-input slds-input_counter" onkeyup="{!c.onChange}"/>
+                                
+                                <lightning:buttonIcon name="{!'2'+i}" tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_decrement"  onclick="{!c.decrement}" iconName="utility:dash"  size="x-small" alternativeText="Add" title="Add" />
+                                
+                            </div>
+                        </div>
+                        
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        
+                        <lightning:input aura:id="sku" placeholder="Item" name="{!'sku3'+i}" onblur="{!c.checkValidity}"/>
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:buttonIcon name="{!'3'+i}" tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_increment" onclick="{!c.increment}" iconName="utility:add"  size="x-small" alternativeText="Minus" title="Minus" />
+                                
+                                <input type="number" name="{!'3'+i}"  min="0"  aura:id="quantity" class="slds-input slds-input_counter" onkeyup="{!c.onChange}" />
+                                
+                                <lightning:buttonIcon name="{!'3'+i}" tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_decrement"  onclick="{!c.decrement}" iconName="utility:dash"  size="x-small" alternativeText="Add" title="Add" />
+                                
+                            </div>
+                        </div>
+                        
+                    </lightning:layoutItem>
+                    <aura:if isTrue="{!v.iterationValues.length == i+1}" >
+                        <lightning:layoutItem flexibility="auto" padding="around-small">
+                            <lightning:button class="btn-default" label="Add to Draft Order" onclick="{!c.Add}" />
+                        </lightning:layoutItem>
+                    </aura:if>
+                    
+                </lightning:layout>
+            </aura:iteration>
+            
+            <!--<lightning:button label="New" onclick="{!c.newInputs}" /> -->
+            <a class="add-more" onclick="{!c.newInputs}"><u>+ Add More</u></a>
+       	</div>
+    </div>
+    
+    <aura:if isTrue="{!v.showAddToDraftOrder}" >
+        <c:AddToDraftOrder Products="{!v.Products}" skuQuantityList="{!v.skuQuantityList}" show = "{!v.showAddToDraftOrder}" isHomePage = "{!v.showAddToDraftOrder}"/>
+    </aura:if>
+</aura:component>

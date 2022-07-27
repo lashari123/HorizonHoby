@@ -1,0 +1,131 @@
+<aura:component controller="contactusController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    
+    <ltng:require scripts="{!$Resource.HHJQueryFile}" afterScriptsLoaded="{!c.init}" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="wrapper" type="object" />
+    <aura:attribute name="auraIdDocIdMap" type="Map" default = "{}" />
+    <aura:attribute name= "Inputindex" type="integer" default = '1' />
+    <aura:attribute name= "Files" type="object[]" />
+    <aura:attribute name= "Subject" type="String" />
+    <aura:attribute name= "isGI" type="boolean" default= 'false' />
+    <aura:attribute name= "caseNumber" type="String" />
+    <aura:attribute name= "caseID" type="String" default='' />
+    <aura:attribute name= "fileName" type="String" />
+    <aura:attribute name= "completed" type="boolean" default= 'false' />
+    <aura:attribute name= "showFile" type="boolean" default= 'false' />
+    <aura:attribute name= "progress" type="boolean" default= 'false' />
+     <aura:attribute name="filetype" type="List" default="['.png', '.jpg', '.jpeg','.mov','.pdf','.mp4']" />
+    
+    <aura:if isTrue="{!v.progress}">
+        <lightning:spinner alternativeText="Loading" size="large" />   
+    </aura:if> 
+    
+    <div class="contact-us">
+        <h1>Contact Us</h1>
+        <aura:if isTrue="{!!v.completed }">
+            <div class="contact-row">
+                <div class="col">
+                    <ul class="user-items">
+                        <li>{!v.wrapper.accountNumber}</li>
+                        <li>{!v.wrapper.accountName}</li>
+                        <li>{!v.wrapper.contactPhone}</li>
+                        <li>{!v.wrapper.contactName}</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    
+                    <form action="#" class="contact-us-form">
+                        <div class="select-status">
+                            
+                            <label>*What can we help you with?</label>
+                            <span class="custom-select">
+                                <select onchange="{!c.typeChangeHandler}">
+                                    <option>Select</option>
+                                    <option>General Inquiry</option>
+                                    <option>Technical Question</option>
+                                </select>
+                            </span>
+                        </div>
+                        
+                        <div class="inquiry-box">
+                            <aura:if isTrue="{!v.isGI == false}">
+                                <div class="tech-box" >
+                                    <div class="select-status">
+                                        <label>*Product Category</label>
+                                        <span class="custom-select">
+                                            <select onchange="{!c.catChangeHandler}">
+                                                <option>Select</option>
+                                                <option>Airplane</option>
+                                                <option>Boats</option>
+                                                <option>Cars / Trucks</option>
+                                                <option>Charges</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                    <div class="custom-field">
+                                        <input type="text" id="item-number" placeholder=" " />
+                                        <label for="item-number">Item Number</label>
+                                    </div>
+                                    <div class="custom-field">
+                                        <input type="text" id="item-desciption" placeholder=" " />
+                                        <label for="item-desciption">Item Description</label>
+                                    </div>
+                                </div>
+                            </aura:if>
+                            
+                            <div class="custom-field">
+                                <input type="text" id="subject" placeholder=" " value="{!v.Subject}"/>
+                                <label for="subject">Subject</label>
+                            </div>
+                            <div class="custom-field">
+                                <input type="text" id="question" placeholder=" " />
+                                <label for="question">Question</label>
+                            </div>
+                            <div class="file-field" >
+                                <div id='uploadHere'>
+                                    <span class="sub-title">Upload Images and Videos</span>
+                                    <!--  <input  type="file" placeholder="CHOOSE" onchange="{!c.addFile}" onclick="{!c.remFile}" accept="image/*,.mp4,.mov,.pdf"/>  
+                                    -->
+                                    <lightning:fileUpload label=""
+                                                          aura:id= 'inputAppend0'
+                                                          name="fileUploader"
+                                                          multiple="false"  variant="label-hidden"
+                                                          accept="{!v.filetype}"
+                                                          disabled = "{!!v.showFile}"
+                                                          recordId="{!v.caseID}"
+                                                          onuploadfinished="{!c.handleUploadFinished}" />
+                                    <lightning:buttonIcon aura:id ='dltBtninputAppend0' 
+                                                          disabled = "{!!v.showFile}" iconName="utility:delete"  variant="border-filled" alternativeText="delete" onclick="{!c.deleteImage}" title="Settings" /> 
+                                    
+                                    <span id='FileinputAppend0' >{!v.fileName}</span>
+                                    {!v.body}
+                                </div>
+                                <aura:if isTrue="{!v.showFile}">
+                                    <a onclick="{!c.addRow}" class="add-more">Add More</a>
+                                </aura:if>
+                            </div>
+                            
+                            <div class="custom-field">
+                                <input type="text" id="ref" placeholder=" " />
+                                <label for="ref">Inquiry Reference</label>
+                            </div>
+                            <button id='SbmtBtn' type="button" class="btn-default" disabled='true' onclick="{!c.submit}">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <aura:set attribute="else">
+                <div class="submit-success" >
+                    <strong class="sub-title">We got it!</strong>
+                    <p>Your inquiry was successfully submitted. We will respond by email soon.</p>
+                    <p>Thanks for contacting us!</p>
+                    <span class="code">Case #: {!v.caseNumber}</span>
+                    <p><a onclick="{!c.refresh}" >Fill out Another Form ></a></p>
+                </div>
+            </aura:set>
+        </aura:if>
+        
+        
+    </div>
+</aura:component>

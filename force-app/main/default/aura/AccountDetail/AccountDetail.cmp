@@ -1,0 +1,93 @@
+<aura:component controller="AccountDetailController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:attribute name="Data" type="Object"/>
+    
+    <div class="accounts-page">
+        <div class="accounts-aside">
+            <strong class="orders-title">Account</strong>
+            <ul class="dashboard-links">
+                <li><a href="javascript:void(0)">Overview</a></li>
+                <li><a class="active" href="javascript:void(0)">Account Information</a></li>
+                <li><a href="javascript:void(0)">Balance</a></li>
+                <li><a href="javascript:void(0)">Dashboard &amp; Reports</a></li>
+                <li><a href="javascript:void(0)">Account Settings</a></li>
+                <li><a href="javascript:void(0)">Users &amp; Permissions</a></li>
+                <li><a href="javascript:void(0)">Reset Password</a></li>
+            </ul>
+        </div>
+        <div class="accounts-area">
+            <ul class="breadcrumbs">
+                <li><a href="javascript:void(0)">Account</a></li>
+                <li><a class="current" href="javascript:void(0)">Account Information</a></li>
+            </ul>
+            <div class="head">
+                <h1>Account Information</h1>
+            </div>
+            <div class="items-details">
+                <div class="checkout-widget">
+                    <strong class="title">Contact Information</strong>
+                    <div class="data-wrap">
+                        <dl>
+                            <dt>Name:</dt>
+                            <dd>{!v.Data.Name}</dd>
+                        </dl>
+                        <dl>
+                            <dt>Email:</dt>
+                            <dd>{!v.Data.Email}</dd>
+                        </dl>
+                    </div>
+                </div>
+                
+                <div class="checkout-widget">
+                    <strong class="title">Credit Term</strong>
+                    <div class="data-wrap">
+                        <dl>
+                            <dt>Type:</dt>
+                            <dd>{!v.Data.CreditType}</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="checkout-widget">
+                    <strong class="title">Payment Method</strong>
+                    <div class="data-wrap">
+                        <dl>
+                            <dt>Type:</dt>
+                            <dd>{!v.Data.PaymentType}</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="checkout-widget">
+                    <strong class="title">Shipping Address</strong>
+                    <div class="data-wrap">
+                        <dl>
+                            <dt>Store Name:</dt>
+                            <dd>{!v.Data.ShippingStoreName}</dd>
+                            
+                            <dt>Address:</dt>
+                            <dd>{!v.Data.ShippingAddress}</dd>
+                            
+                            
+                            <dt>Store Contact:</dt>
+                            <dd>{!v.Data.ShippingContact}</dd>
+                        </dl>
+                    </div>
+                     <div class="data-wrap">
+                        <dl>
+                            <dt>Store Name:</dt>
+                            <dd>{!v.Data.BillingStoreName}</dd>
+                            
+                            <dt>Address:</dt>
+                            <dd>{!v.Data.BillingAddress}</dd>
+                            
+                            
+                            <dt>Store Contact:</dt>
+                            <dd>{!v.Data.BillingContact}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

@@ -1,0 +1,160 @@
+.THIS.contact-us {
+    padding: 0 15px;
+    max-width: 910px;
+    margin: 0 auto;
+}
+.THIS a.disabled {
+    pointer-events: none;
+    color:gray
+}
+.THIS button:disabled,.THIS button[disabled]{
+   cursor: default;
+    background: gray; 
+    cursor: not-allowed;
+    color: darkgray;
+}
+
+.THIS.exampleHolder{
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+}
+.THIS.contact-us h1 {
+    text-align: center;
+    margin: 0 0 20px;
+    font-size: 32px;
+    line-height: 38px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
+.THIS .contact-row {
+    display: flex;
+    margin: 0 -15px;
+}
+.THIS .contact-row .col {
+    flex-basis: 0;
+    flex-grow: 1;
+    padding: 0 15px;
+}
+.THIS .user-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+}
+.THIS .user-items li {
+    padding: 15px;
+    background: #e1e1e1;
+    margin: 0 0 20px;
+}
+.THIS .select-status label {
+    font-weight: 600;
+    display: block;
+    margin: 0 0 5px;
+}
+.THIS .contact-us-form .custom-select select {
+    width: 100%;
+    text-transform: none;
+    height: 45px;
+}
+.THIS .contact-us-form .btn-default {
+    width: 100%;
+}
+.THIS .select-status {
+    margin: 0 0 20px;
+}
+.THIS .custom-field {
+    position: relative;
+    margin: 0 0 20px;
+}
+.THIS .custom-field label {
+    color:#000; 
+    font-size:14px;
+    font-weight:normal;
+    position:absolute;
+    pointer-events:none;
+    left:5px;
+    top:15px;
+    padding:0 8px;
+    background:#fff;
+    transition:0.2s ease all; 
+    -moz-transition:0.2s ease all; 
+    -webkit-transition:0.2s ease all;
+}
+.THIS .custom-field input {
+    font-size:14px;
+    display:block;
+    width:100%;
+    height:45px;
+    padding: 0 20px;
+    background: #fff;
+    color: #000;
+    border: 1px solid #e1e1e1;
+    border-radius: 0;
+    box-sizing: border-box;
+}
+.THIS .custom-field input:focus {
+    outline: none;
+}
+.THIS .custom-field input:not(:placeholder-shown) + label,
+.THIS .custom-field input:focus + label {
+    top:-8px;
+    font-size:10px;
+}
+.THIS .file-field {
+    margin: 0 0 20px;
+}
+.THIS .file-field .sub-title {
+    display: block;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 600;
+    margin: 0 0 5px;
+}
+.THIS .file-field input {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #e1e1e1;
+    margin: 0 3px 10px;
+}
+.THIS .file-field .add-more {
+    color: #000;
+    font-weight: 600;
+    text-decoration: underline;
+}
+.THIS .file-field .add-more:before {
+    content: "+ ";
+    font-size: 18px;
+}
+.THIS .submit-success {
+    text-align: center;
+}
+.THIS .submit-success .sub-title {
+    display: block;
+    font-size: 18px;
+    line-height: 22px;
+}
+.THIS .submit-success p {
+    margin: 0;
+}
+.THIS .submit-success .code {
+    display: block;
+    padding: 25px 0;
+    font-weight: 600;
+}
+.THIS .submit-success p a {
+    text-decoration: underline;
+    color: #003567;
+}
+@media only screen and (max-width: 767px) {
+    .THIS .contact-row {
+        display: block;
+        margin: 0;
+    }
+    .THIS .contact-row .col {
+        padding: 0 0 15px;
+    }
+}

@@ -1,0 +1,89 @@
+<aura:component controller="HomepageTabAuraControllerv2"  implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <lightning:navigation aura:id="navService"/>
+    
+    <aura:attribute name="pageReference" type="Object"/>
+    
+    <aura:attribute name="isPrice" type="boolean" default = "" />
+    
+    <aura:attribute name="sObjectName" type="string" default = "Product2" />
+    
+    <aura:attribute name="newreleaseData" type="Object" />
+    <aura:attribute name="newrelease" type="string" default = "New Releases" />
+    <aura:attribute name="newreleaseColumns" type="List" />
+    
+    <aura:attribute name="topsellingData" type="Object" />
+    <aura:attribute name="topselling" type="string" default = "Top Selling Items"/>
+    <aura:attribute name="topsellingColumns" type="List" />
+    
+    <aura:attribute name="newstockData" type="Object" />
+    <aura:attribute name="newstock" type="string" default = "New In Stock"/>
+    
+    <aura:attribute name="ViewAll" type="string" default = "View All"/>
+
+    <aura:attribute name="noOfRows" type="string"  default = '5'/>
+    
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <lightning:tabset variant="scoped">
+        <lightning:tab label="{!v.newrelease}" aura:id="newrelease">
+            
+            <aura:if isTrue="{!v.newreleaseData}">
+                <div style="width: 100%; padding-bottom:10px">
+                    <div class="slds-text-heading_large">
+                    </div>
+                    <lightning:datatable
+                                         keyField="id"
+                                         data="{! v.newreleaseData }"
+                                         columns="{! v.newreleaseColumns }"
+                                         hideCheckboxColumn="true"/>
+                   	<div class="sub-info">
+                        <b> *For up to date status select the Refresh button on the Order History and Backorder pages  </b>
+                        <button class='btnV' name ='New Release Items'  onclick='{!c.viewAllhandler}'>{!v.ViewAll}</button>
+                    </div>
+                </div>
+            </aura:if>            
+            
+            
+        </lightning:tab>
+        <lightning:tab label="{!v.topselling}" aura:id="topselling">
+            
+            <aura:if isTrue="{!v.topsellingData}">
+                <div style="width: 100%; padding-bottom:10px">
+                    <div class="slds-text-heading_large">
+                    </div>
+                    <lightning:datatable
+                                         keyField="id"
+                                         data="{! v.topsellingData }"
+                                         columns="{! v.topsellingColumns }"
+                                         hideCheckboxColumn="true"/>
+                    <div class="sub-info">
+                        <b> *For up to date status select the Refresh button on the Order History and Backorder pages  </b>
+                        <button class='btnV' name ='Top Selling Items'  onclick='{!c.viewAllhandler}'>{!v.ViewAll}</button>
+                    </div>
+                </div>
+            </aura:if>            
+        </lightning:tab>
+        <lightning:tab label="{!v.newstock}" aura:id="newstock">
+           
+            <aura:if isTrue="{!v.newstockData}">
+                <div style="width: 100%; padding-bottom:10px">
+                    <div class="slds-text-heading_large">
+                    </div>
+                    <lightning:datatable
+                                         keyField="id"
+                                         data="{! v.newstockData }"
+                                         columns="{! v.topsellingColumns }"
+                                         hideCheckboxColumn="true"/>
+                    <div class="sub-info">
+                        <b> *For up to date status select the Refresh button on the Order History and Backorder pages  </b>
+                        <button class='btnV' name ='Newly in Stock'  onclick='{!c.viewAllhandler}'>{!v.ViewAll}</button>
+                    </div>
+                </div>
+            </aura:if>   
+            
+        </lightning:tab>
+    </lightning:tabset>
+    
+    
+</aura:component>

@@ -1,0 +1,31 @@
+.THIS {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+.THIS .mainContentArea {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+.THIS .action-calls {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    right: 0;
+    bottom: 10px;
+    z-index: 10;
+}
+.THIS .action-calls li {
+    margin: 4px 0;
+}
+.THIS .action-calls li a {
+    width: 50px;
+    height: 50px;
+    background: #003567;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 4px 8px 13px rgb(0 0 0 / 5%);
+}

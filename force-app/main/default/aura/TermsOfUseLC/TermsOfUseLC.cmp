@@ -1,0 +1,141 @@
+<aura:component controller="DynamicContentCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    <ltng:require scripts="{!$Resource.HHJQueryFile}" afterScriptsLoaded="{!c.doInit}" />
+    <aura:html tag="style">
+        
+        .content-page {
+            max-width: 890px;
+            margin: 0 auto;
+        }        
+        
+        .accordion
+        {
+            overflow:hidden; 
+            border-radius:4px;
+            background:#f7f7f7;
+
+        }
+    
+        .accordion-section-title
+        {
+            width: 100%;
+            padding: 15px;
+            display: inline-block;
+            background-color: #e5dede;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 1.2em;
+            color: #000000;
+            transition: all linear 0.5s;
+            text-decoration:none;
+        
+        }
+        
+        .accordion-section-title.active
+        {
+            background-color:#4c4c4c;
+            text-decoration:none;
+            color: #ffffff;
+        }
+        
+        .accordion-section-title:hover
+        {
+            background-color:grey;
+            text-decoration:none;
+        }
+        
+        .accordion-section:last-child .accordion-section-title
+        {
+        	border-bottom:none;
+        }
+       
+        .accordion-section-content
+        {
+            padding:15px;
+            display:none;       
+        }   
+        
+        .plusminus {
+            float: right;
+            padding-right: 41px;
+        }  
+        
+        .date {
+            display: block;
+            margin: 0 0 15px;
+            font-weight: 700;
+        }
+        
+        h1 {
+            font-size: 32px;
+            line-height: 34px;
+            font-weight: bold;
+            margin: 0 0 20px;
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+        }       
+        
+ 
+        
+        
+.accordion_container {
+ 	width: 100%;
+}
+.accordion_head {
+	background-color: #e5dede;
+    color: #000000;
+    cursor: pointer;
+    font-family: arial;
+    font-size: 14px;
+	margin: 0 0 1px 0;
+    padding: 7px 11px;
+	font-weight: bold;
+    line-height: 2;    
+}
+.accordion_body {
+	background: #fbf3f3;
+  
+}
+.accordion_body p{
+	padding: 18px 5px;
+	margin: 0px;
+}
+.plusminus{
+	float:right;
+}        
+        
+.accordion_content {
+	margin-bottom: 5px;  
+}        
+    </aura:html>    
+    <aura:attribute name="dynamicContent" type="Object"/>
+    <aura:attribute name="contentSections" type="Content_Section__c[]"/>
+    <div class="content-page">    
+        <div>
+            <h1>
+                {!v.dynamicContent.Heading__c}
+            </h1>
+        </div>
+        <div>
+            <p class="date">
+                {!v.dynamicContent.Sub_Heading_1__c}
+            </p>
+        </div>   
+        <div>
+            <p>
+                {!v.dynamicContent.Sub_Text_1__c}
+            </p>
+        </div>     
+        <div class="accordion_container">
+            <aura:iteration items="{!v.contentSections}" var="cont">
+                <div class="accordion_content">
+                    <div class="accordion_head" >
+                        {!cont.Button_Label_1__c}
+                        <span class="plusminus">+</span>
+                    </div>
+                    <div class="accordion_body" style="display: none;">
+                        <p><lightning:formattedRichText value="{!cont.Rich_Text_1__c}"></lightning:formattedRichText></p>
+                    </div>
+                </div>
+            </aura:iteration>
+        </div>
+    </div>
+</aura:component>

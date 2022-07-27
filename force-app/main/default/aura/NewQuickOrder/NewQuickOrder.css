@@ -1,0 +1,123 @@
+.THIS.quick-orders-section {
+    background: #e1e1e1;
+    padding: 25px 0;
+    text-align:center;
+    position: relative;
+}
+.THIS.quick-orders-section:after,
+.THIS.quick-orders-section:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right:100%;
+    width: 50vw;
+    background: #e1e1e1;
+}
+.THIS.quick-orders-section:after {
+    left: 100%;
+    right: auto;
+}
+.THIS.quick-orders-section  h1 {
+	font-size: 18px !important;
+	line-height: 22px;
+    color: #000;
+    margin: 0 0 24px;
+    font-family: 'Roboto', sans-serif;
+}
+.THIS.quick-orders-section  h1 span {
+    display: inline-block;
+    vertical-align: top;
+    padding: 0 0 3px;
+    border-bottom: 3px solid #000;
+}
+.THIS.quick-orders-section .slds-grid {
+    flex-flow: row wrap;
+}
+.THIS.quick-orders-section .slds-col {
+    padding: 0 9px 0 0;
+    margin: 0 0 10px;
+    flex:none;
+}
+.THIS.quick-orders-section .slds-form-element__label:empty {
+    display: none;
+}
+.THIS.quick-orders-section .slds-input {
+    height: 41px;
+    border: 1px solid #777;
+    width: 100%;
+    background: #fff;
+    font-size: 12px;
+    line-height: 14px;
+    padding: 11px 10px 10px;
+    color: #7d7d7d;
+    border-radius: 0;
+}
+.THIS.quick-orders-section .slds-form-element__control {
+    border-radius: 0;
+    width: 67px;
+    margin: 0 18px 0 0;
+}
+.THIS.quick-orders-section .slds-form-element__control .slds-input_counter {
+    width: 100%;
+}
+.THIS.quick-orders-section .slds-form-element__control button{
+    border:0;
+    padding: 0;
+    width: auto;
+    outline: none;
+}
+.THIS.quick-orders-section .slds-form-element__control.slds-grow {
+    width: 151px;
+    margin: 0;
+}
+.THIS.quick-orders-section .slds-button_icon-x-small .slds-button__icon {
+    width: 11px;
+}
+.THIS.quick-orders-section .btn-default {
+    border-radius: 0;
+}
+.THIS.quick-orders-section .btn-default:hover {
+    color: #fff;
+    background: #003567;
+    min-wdith: 155px;
+}
+.THIS.quick-orders-section .form-content {
+    display: inline-block;
+    vertical-align: top;
+    text-align:left;
+}
+.THIS.quick-orders-section .add-more {
+    color: #000;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 14px;
+}
+.THIS.quick-orders-section .slds-input__button_decrement {
+    left: 8px;
+}
+.THIS.quick-orders-section .slds-input__button_increment {
+    right: 8px;
+}
+@media only screen and (max-width: 1023px) {
+    .THIS.quick-orders-section .slds-col:nth-child(odd) {
+        width: 35%;
+    }
+    .THIS.quick-orders-section .slds-col {
+        width: 15%;
+    }
+    .THIS.quick-orders-section .slds-form-element__control.slds-grow {
+        width: 100%;
+    }
+    .THIS.quick-orders-section .slds-form-element__control {
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .THIS.quick-orders-section .slds-col:nth-child(odd) {
+        width: 70%;
+    }
+    .THIS.quick-orders-section .slds-col {
+        width: 30%;
+    }
+}

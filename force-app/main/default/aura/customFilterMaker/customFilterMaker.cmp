@@ -1,0 +1,61 @@
+<aura:component controller="customFilterMakerController" implements="lightning:actionOverride,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    
+    <aura:method name="onchangeQuery" action="{!c.refreshData}" access="public"/>
+    
+    <aura:attribute type="list" name="rows" default="['1']" />
+    
+    <aura:attribute name="ObjectNames" type="list" default="['Product','Pricebook','Inventory']"></aura:attribute>
+    <aura:attribute name="FieldNames" type="list" default="[]"></aura:attribute>
+    <aura:attribute name="columns" type="list" default="[]"></aura:attribute>
+    <aura:attribute name="show" type="boolean" default='false'></aura:attribute>
+    <aura:attribute name="FilterName" type="string" default=''></aura:attribute>
+    
+    <aura:attribute name="isEditable" type="boolean" default='true'></aura:attribute>
+
+
+
+    <aura:attribute name="data" type="list" default="[]"></aura:attribute>
+    
+    
+    
+    <aura:attribute name="ConditionStrings" type="list" default="['']"></aura:attribute>
+    
+    <aura:attribute name="parseStringList" type="list"></aura:attribute>
+    <aura:if isTrue="{!v.show}">
+        <lightning:card>
+            <aura:set attribute="title"> Set Filter </aura:set>
+            <div class="slds-p-around_medium">
+                
+                <lightning:input  class="slds-col slds-size_4-of-12" name="FilterName" value="{!v.FilterName}" label="Filter Name" />
+                <aura:iteration items="{!v.rows}" var="item" indexVar="index">
+                    <aura:if isTrue="{!index == 0}">
+                        <c:customFilterMarkerRow  parent="{!this}" parseStringList="{!v.parseStringList}" ConditionStrings="{!v.ConditionStrings}" conditionalOperator="false" index="{!index}" aura:id="{!child +v.index} "/>
+                        <aura:set attribute="else">
+                            <c:customFilterMarkerRow parent="{!this}" parseStringList="{!v.parseStringList}" ConditionStrings="{!v.ConditionStrings}" conditionalOperator="true" index="{!index}" aura:id="{!child +v.index} "/>            
+                        </aura:set>
+                    </aura:if>
+                    
+                </aura:iteration>
+                <div class="slds-p-top_x-small">
+                        <lightning:button variant="brand" disabled="{!!v.isEditable}" onclick="{!c.add}">add</lightning:button>
+                        
+                        <lightning:button variant="Neutral" disabled="{!!v.isEditable}"  onclick="{!c.Submit}">Submit</lightning:button>
+                  
+                </div>
+            </div>
+        </lightning:card>
+        <p aura:id="conditionP">
+            
+        </p>
+        
+        <lightning:datatable aura:id="searchTab"
+                             columns="{! v.columns }"
+                             data="{! v.data }"
+                             keyField="Product2Id"
+                             hideCheckboxColumn="true"/>
+    </aura:if>
+    
+</aura:component>

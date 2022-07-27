@@ -1,0 +1,7 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader"
+                access="global" controller="EmailSend">
+	<aura:attribute name = "syncText" type = "String" default= "Waiting for the Email to be Sent"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" access="global" />
+    
+    <h4>{!v.syncText}</h4>
+    </aura:component>

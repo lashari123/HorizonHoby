@@ -1,0 +1,2 @@
+<apex:page standardController="Case" extensions="CaseChangeStatus_Controller" lightningStyleSheets="true" action="{!changeStatusToOpen}" recordSetVar="cases">
+</apex:page>

@@ -1,0 +1,132 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <!--declare aura attributes-->
+    <aura:attribute name="showSaveCancelBtn" type="boolean"/>
+    <aura:attribute name="showErrorClass" type="boolean" default="false"/>
+    <aura:attribute name="sNo" type="string" />
+    <aura:attribute name="item" type="object"/>
+    <aura:attribute name="EditMode" type="boolean" default="false" />
+    
+    <aura:attribute name="parent" type="Aura.Component"/>
+    
+    <aura:attribute name="printable" type="boolean" default="false" />
+    
+    <aura:attribute name="SelectedValues" type="list" default="[]"/>
+    
+    
+    <aura:attribute name="totalAmountSelected" type="decimal" default = "0"/>
+    
+    <tr aria-selected="false" class="slds-hint-parent">
+        
+        <!--   <td class="slds-cell-edit" role="gridcell">
+            <div class="slds-checkbox">
+                <input type="checkbox" name="options" id="checkbox-02" value="checkbox-02" tabindex="-1" aria-labelledby="check-button-label-02 column-group-header" />
+                <label class="slds-checkbox__label" for="checkbox-02" id="check-button-label-02">
+                    <span class="slds-checkbox_faux"></span>
+                    <span class="slds-form-element__label slds-assistive-text">Select item 2</span>
+                </label>
+            </div>
+        </td>-->
+        
+        <!-- <td role="gridcell">
+            <div class="slds-truncate"> <img src='{!v.item.PrimaryImageLink}' style = "width:100px;height100px;"/></div>
+            
+        </td>-->
+        <td role="gridcell" tabindex="-1">
+            <div class="product-name" title="{!v.item.pbe.Product2.ProductCode}">
+                <aura:if isTrue="{!v.printable}">
+                    {!v.item.pbe.Product2.ProductCode}
+                </aura:if>
+                
+                <aura:if isTrue="{!!v.printable}"> 
+                    <a href="{!'/horizonhobby/s/product-detail-page?pid='+v.item.pbe.Product2Id}">{!v.item.pbe.Product2.ProductCode}</a>
+                    
+                    <div class="image">
+                        <img src='{!v.item.PrimaryImageLink}' />
+                    </div>
+                </aura:if>
+                
+            </div>
+        </td> 
+        <aura:if isTrue="{!!v.printable}">
+            <td class="slds-cell-edit" scope="row" tabindex="0">
+                <!--   <aura:if isTrue="{!v.EditMode == false}">
+                <span class="slds-grid slds-grid_align-spread">
+                    <ui:outputText value="{!v.item.Quantity}"/>
+                    <lightning:buttonIcon  iconName="utility:edit" size="x-small" alternativeText="Edit" title="Edit" onclick="{!c.onEditCell}"/>
+                    
+                    
+                </span>
+                <aura:set attribute="else">-->
+                <section  tabindex="0" class="slds-popover slds-popover_edit" role="dialog" style="position: absolute; top: 0px">
+                    <div class="slds-popover__body">
+                        <div class="slds-form-element slds-grid slds-wrap">
+                            <div class="slds-form-element__control slds-grow">
+                                
+                                <lightning:buttonIcon name="{!'1'+i}"  tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_increment" onclick="{!c.increment}" iconName="utility:add"  size="x-small" alternativeText="Minus" title="Minus" />
+                                <ui:inputNumber  class="slds-input inputFieldWidth"
+                                                labelClass="slds-form-element__label slds-form-element__label_edit slds-no-flex"
+                                                aura:id="inputId"
+                                                required="true"
+                                                label=""
+                                                keydown ="{!c.counter}"
+                                                updateOn="keyup"   
+                                                change="{!c.onChange}" 
+                                                value="{!v.item.Quantity}" /> 
+                                
+                                
+                                <lightning:buttonIcon name="{!'1'+i}" tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_decrement"  onclick="{!c.decrement}" iconName="utility:dash"  size="x-small" alternativeText="Add" title="Add" />
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <span id="form-end" tabindex="0"></span>
+                </section>  
+                <!--        </aura:set>  
+            </aura:if> -->
+            </td>
+        </aura:if>
+        <aura:if isTrue="{!v.printable}">
+            
+        </aura:if>
+        <td role="gridcell" tabindex="-1">
+            <div class="slds-truncate" title="{!v.item.ProductName}">{!v.item.ProductName}</div>
+        </td> 
+        <td role="gridcell" tabindex="-1">
+            <div class="slds-truncate" title="{!v.item.UnitPrice}">€{!v.item.retail}</div>
+        </td> 
+        
+        <td role="gridcell" tabindex="-1">
+            <div class="slds-truncate" title="{!v.item.UnitPrice}">€{!v.item.dealer}</div>
+        </td> 
+        <td role="gridcell" tabindex="-1">
+            <div class="slds-truncate" title="{!v.item.pbe.Product2.Avail__c}">{!v.item.pbe.Product2.Avail__c}</div>
+        </td>
+        <td role="gridcell" tabindex="-1">
+            <div class="slds-truncate" title="{!v.item.pbe.Product2.ETA__c}">{!v.item.pbe.Product2.ETA__c}</div>
+        </td>
+        <td role="gridcell" tabindex="-1">
+            <div class="slds-truncate" title="{!v.item.Product2.ShippingClass__c}">{!v.item.pbe.Product2.ShippingClass__c}</div>
+            
+        </td>
+        <td role="gridcell">
+            <div class="slds-truncate" title="{!v.item.pbe.Product2.ShippingClass__c}">{!v.item.category}</div>
+            
+        </td>
+        <td role="gridcell">
+            <div class="slds-truncate" title="{!v.item.pbe.Product2.InventoryStatus__c}">{!v.item.pbe.Product2.InventoryStatus__c}</div>
+            
+        </td>
+        <td role="gridcell">
+            <div class="slds-truncate" title="{!v.item.pbe.Product2.UPC__c}">{!v.item.pbe.Product2.UPC__c}</div>
+        </td>
+        <td role="gridcell">
+            <div class="slds-truncate" title="{!v.item.pbe.Product2.LastModifiedDate}">{!v.item.pbe.Product2.LastUpdated__c}</div>
+        </td>
+        <td role="gridcell">
+            <div class="slds-truncate" title="{!v.item.pbe.Product2.Rank__c}">{!v.item.pbe.Product2.Rank__c}</div>
+            
+        </td>
+        
+    </tr>
+</aura:component>

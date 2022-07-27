@@ -1,0 +1,117 @@
+<aura:component controller="CheckoutController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+   
+    <aura:attribute name="orderId" type="string" default =''/>    
+    <aura:attribute name="orderData" type="object" />
+     <lightning:navigation aura:id="navService"/>   
+   
+    
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <div class="checkout-details">
+        
+        <div class="items-details">
+            <h1>Checkout</h1>
+            
+            <div class="checkout-widget">
+                <strong class="title">Contact Information</strong>
+                <div class="data-wrap">
+                    <dl>
+                        <dt>Name:</dt>
+                        <dd>{!v.orderData.contactName}</dd>
+                    </dl>
+                    <dl>
+                        <dt>Email:</dt>
+                        <dd>{!v.orderData.email}</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="checkout-widget">
+                <strong class="title">Order Information</strong>
+                <div class="data-wrap">
+                    <dl>
+                        <dt>Order Name:</dt>
+                        <dd>{!v.orderData.Name}</dd>
+                        <dt>Order #:</dt>
+                        <dd>{!v.orderData.OrderName}</dd>
+                        <dt>PO #:</dt>
+                        <dd>{!v.orderData.PONumber}</dd>
+                    </dl>
+                    <dl>
+                        <dt>Store Name:</dt>
+                        <dd>Hobby Town</dd>
+                        <dt>Address:</dt>
+                        <dd><aura:unescapedHtml value="{!v.orderData.shippingAddress}" /></dd>
+                    </dl>
+                </div>
+                <div class="sub-info">
+                    <strong class="sub-title">Order Comments</strong>
+                    <p>{!v.orderData.Description}</p>
+                </div>
+            </div>
+            <div class="checkout-widget">
+                <strong class="title">Shipping Options</strong>
+                <div class="data-wrap">
+                    <dl>
+                        <dt>Shipping:</dt>
+                        <dd>{!v.orderData.shippingType}</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="checkout-widget">
+                <strong class="title">Payment Terms</strong>
+                <div class="data-wrap">
+                    <dl>
+                        <dt>Type:</dt>
+                        <dd>{!v.orderData.paymentType}</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <aura:if isTrue= "{!v.orderData.Status != 'Pending'}">
+                <a href="" class="btn-default" onclick='{!c.onAuthorizeHandler}'>Authorize Purchase</a>
+            </aura:if>
+        
+        </div>
+        <div class="summary-details">
+            <div class="shipping-progress">
+                <aura:if isTrue="{!v.orderData.awayFromFreeShipping == 0}">
+                    	<strong class="shipping-title">Your order is eligible for free shipping</strong>                        
+                    <aura:set attribute="else">    
+                    	<strong class="shipping-title"><span>€{!v.orderData.awayFromFreeShipping}</span> away from <span class="shipping-status">Free Shipping!</span></strong>
+                    </aura:set>
+                </aura:if>
+                <div class="progress-bar">
+                    <div class="status" style="{! 'width:'+v.orderData.FreeShippingPercent + '%'}"></div>
+                </div>
+            </div>
+            <strong class="title">Order Summary</strong>
+            <ul class="order-summary-list">
+                <li>
+                    <span class="sub-title">Original Price</span>
+                    <span class="value">{!v.orderData.orderOriginalPrice}</span>
+                </li>
+                <li>
+                    <span class="sub-title">Discount</span>
+                    <span class="value">{!v.orderData.orderDiscount}</span>
+                </li>
+                <li>
+                    <span class="sub-title">Shipping</span>
+                    <span class="value">{!v.orderData.shipping}</span>
+                </li>
+                <li>
+                    <span class="sub-title">Sales Tax/VAT</span>
+                    <span class="value">{!v.orderData.salesTaxVAT}</span>
+                </li>
+                <li class="totals">
+                    <span class="sub-title">Your Price:</span>
+                    <span class="value">{!v.orderData.orderNetTotal}</span>
+                </li>
+            </ul>
+            <ul  class="order-summary-list">
+               <li>
+                    <span class="sub-title">Order Details</span>
+                    <span class="value"><a href="{!'/horizonhobby/s/cart?oid='+ v.orderId}" class="edit">Edit</a></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</aura:component>

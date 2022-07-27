@@ -1,0 +1,92 @@
+.THIS.search-filters{
+    background: #e1e1e1;
+    padding: 15px 15px 0;
+    min-width: 300px;
+    margin: 15px 0;
+}
+.THIS.search-filters .search-area input {
+    width: 100%;
+    height: 33px;
+    background: #fff;
+    font-size: 14px;
+    line-height: 19px;
+    padding:6px 10px;
+    font-weight: 600;
+    color: #a2a1a1;
+    border-radius: 0;
+    border: 1px solid #7d7d7d;
+    margin: 0 0 10px;
+}
+.THIS.search-filters .search-area input:focus {
+    outline: none;
+    border-radius: 0;
+}
+.THIS.search-filters .search-area .btn-default {
+    width: 100%;
+    padding: 7px;
+}
+.THIS .checkboxes-list {
+    list-style: none;
+    padding: 10px 0 0;
+    margin: 0;
+}
+.THIS .checkboxes-list li {
+    margin: 0 0 3px;
+}
+.THIS .filter-checkbox {
+    display: inline-flex;
+    align-items: center;
+}
+.THIS.search-filters .slds-checkbox .slds-checkbox_faux,
+.THIS .filter-checkbox .fake-checkbox {
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border: 2px solid #003567;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    margin:0 !important;
+}
+.THIS.search-filters .slds-checkbox .slds-checkbox_faux:after,
+.THIS .filter-checkbox .fake-checkbox:after {
+    content: "";
+    position: absolute;
+    left: 2px !important;
+    top: 2px !important;
+    bottom: 2px;
+    right: 2px;
+    width: auto !important;
+    height: auto !important;
+    transform: none !important;
+    border: 0 !important;
+    background: #003567;
+    visibility: hidden;
+}
+.THIS .filter-checkbox input {
+    display: none;
+}
+.THIS.search-filters .slds-checkbox [type=checkbox]:checked + .slds-checkbox__label .slds-checkbox_faux {
+    border-color: #003567 !important;
+}
+.THIS.search-filters .slds-checkbox [type=checkbox]:checked + .slds-checkbox__label .slds-checkbox_faux:after,
+.THIS .filter-checkbox input:checked + .fake-checkbox:after {
+    visibility: visible;
+}
+.THIS.search-filters .slds-checkbox .slds-checkbox__label .slds-form-element__label,
+.THIS .filter-checkbox .label {
+    color: #333;
+    font-weight: 600;
+    padding: 0 0 0 8px;
+    text-transform: uppercase;
+}
+.THIS.search-filters .slds-checkbox {
+    margin: 0 0 5px;
+}
+.THIS.search-filters .slds-form-element__legend {
+    font-size: 16px;
+    float: none;
+    display: block;
+    padding: 0;
+    margin: 0 0 10px;
+}

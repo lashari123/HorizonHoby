@@ -1,0 +1,63 @@
+.THIS.quick-orders-section .slds-input__button_decrement {
+    left: 8px;
+}
+.THIS.quick-orders-section .slds-input__button_increment {
+    right: 8px;
+}
+
+.THIS .product-name{
+    position: relative;
+    display: block;
+    padding: 0 20px 0 0;
+}
+.THIS .product-name:hover {
+    z-index: 2;
+}
+.THIS .product-name a {
+    color: #000;
+    font-size: 11px;
+    line-height: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+}
+.THIS .product-name:hover a {
+    color: #003567;
+    text-decoration: underline;
+}
+.THIS .product-name .image {
+    width: 175px;
+    padding: 7px;
+    background: #fff;
+    position: absolute;
+    left: 100%;
+    top: -40px;
+    z-index: 10;
+    visibility:hidden;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    box-shadow: -1px 0 12px rgba(0,0,0, 0.25);
+}
+.THIS .product-name .image:before {
+    content:"";
+    position: absolute;
+    right: 100%;
+    top: 40px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #fff;
+}
+.THIS .product-name:hover .image{
+    visibility: visible;
+    opacity: 1;
+}
+.THIS .product-name .image img {
+    width: 100%;
+    height: auto;
+}
+.THIS .textarea {
+    resize: none !important;
+}

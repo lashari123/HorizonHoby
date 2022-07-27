@@ -1,0 +1,85 @@
+.THIS.saved-lists {
+    background: #fff;
+    border: 1px solid #7d7d7d;
+    font-size: 12px;
+    line-height: 14px;
+    font-weight: 500;
+    position: relative;
+    margin: 0 0 20px;
+}
+.THIS.saved-lists .saved-opener {
+    padding: 10px;
+    display: block;
+    color: #000;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+.THIS.saved-lists .saved-opener span {
+    display: block;
+    position: relative;
+    padding: 0 22px;
+}
+.THIS.saved-lists .saved-opener span:after {
+    content: "\f078";
+    font-family: "Font Awesome 5 Pro";
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #003567;
+    transition: all 0.3s ease-in-out;
+}
+.THIS.saved-lists .saved-opener.active span:after {
+    transform: rotate(-180deg);
+}
+.THIS.saved-lists .saved-opener span:before {
+    content: "\f005";
+    font-family: "Font Awesome 5 Pro";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #003567;
+}
+.THIS.saved-lists .dropdown {
+    display: none;
+    padding: 0 10px;
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: calc(100% - 1px);
+    border: 1px solid #7d7d7d;
+    border-top: 0;
+    background: #fff;
+    z-index: 2;
+}
+.THIS.saved-lists .dropdown ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid #e1e1e1;
+}
+.THIS.saved-lists .dropdown ul li {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 0;
+}
+.THIS.saved-lists .dropdown .filter-name {
+    flex-grow: 1;
+    padding: 0 10px 0 0;
+}
+.THIS.saved-lists .dropdown .filter-name a {
+    color: #000;
+    text-decoration: none;
+}
+.THIS.saved-lists .dropdown .edit {
+    color: #000;
+    text-decoration: none;
+}
+.THIS.saved-lists .dropdown .edit:hover,
+.THIS.saved-lists .dropdown .filter-name a:hover {
+    text-decoration: underline;
+}
+.THIS.saved-lists .dropdown .remove {
+    color: #003567;
+    text-decoration: none;
+    margin: 0 0 0 10px;
+}

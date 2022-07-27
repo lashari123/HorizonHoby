@@ -1,0 +1,596 @@
+<aura:component controller="CartController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    <!--  <aura:handler name="init" value="{!this}" action="{!c.init}" />
+   -->
+    <aura:attribute name="orderData" type="object" />
+    <aura:attribute name="data" type="list" />
+    <aura:attribute name="copyOfData" type="list" />
+    <aura:attribute name="columns" type="list" />
+    <aura:attribute name="isDataloaded" type="Boolean" default ='false'/>
+    <aura:attribute name="isCheckAll" type="Boolean" default ='false'/>
+    <aura:attribute name="isParentCheckAll" type="Boolean" default ='false'/>
+    <aura:attribute name="notEdit" type="Boolean" default ='true'/>
+    <aura:attribute name="orderId" type="string" default =''/>
+    <aura:attribute name="draftOrderList" type="Order[]"/>  
+    <aura:attribute name="skuQuantityList" type="String[]" default="[]"/>
+    
+    <aura:attribute name="isExcel" type="boolean" default="false"/>
+    
+    <aura:attribute name="isHtml" type="boolean" default="false"/>
+    <aura:attribute name="showPrintModal" type="boolean" default="false"/>
+    
+    <aura:attribute name="showImportModal" type="boolean" default="false"/>
+    
+    <aura:attribute name="isImportModalOpen" type="boolean" default="false"/>
+    
+    
+    <!-- Fields for AddToDraftOrder Component -->
+    <aura:attribute name="showAddToDraftOrder" type="boolean" default="false"/>
+    <aura:attribute name="onlyNewOrder" type="Boolean" default="false" />
+    <aura:attribute name="onlyDraftOrder" type="Boolean" default="false" />
+    
+    <!-- Fields for DeleteOrderAlert Component -->
+    <aura:attribute name="showDeleteAlert" type="Boolean" default="false" />
+    <aura:attribute name="deleteAll" type="Boolean" default="false" />
+    <aura:attribute name="callName" type="string" default="Delete" />
+    
+    <aura:attribute name="isPDFShow" type="Boolean" default="false" />    
+    
+    <aura:attribute name="AlertGroupData" type="list" />
+    
+    <aura:attribute name="poNumber" type="String" default=""/>
+    
+    
+    <aura:attribute name="SelectedValues" type="list" default="[]"/>
+    <aura:attribute name="SelectedValuePrices" type="decimal" default="0"/>
+    
+    <aura:method name="updateLineItem" action="{!c.updateLineItem}" access="public"/>
+    
+    <aura:handler name="DeleteOrderLineItemEvent" event="c:DeleteOrderLineItem" action="{!c.Delete}"/>
+    <aura:handler name="MoveOrderLineItemEvent" event="c:MoveOrderLineItem" action="{!c.MovingOrderLineItem}"/>
+    
+    <ltng:require scripts="{!$Resource.HHJQueryFile}" afterScriptsLoaded="{!c.init}" />
+    
+    <!--Translation Fields-->
+     <aura:attribute name="Translations" type="list" default="[]"/>
+   
+    <aura:attribute name="OrderAlertTitle" type="String" default="Order Alert"/>
+    <aura:attribute name="cartTitle" type="String" default="Shopping Cart"/>
+    <aura:attribute name="SmartTechnology" type="String" default="Smart Technology"/>
+    <aura:attribute name="PartsAvailable" type="String" default="Parts Available"/>
+    <aura:attribute name="ItemonBackorder" type="String" default="Item on Backorder"/>
+    <aura:attribute name="BackorderDuplicate" type="String" default="Backorder Duplicate"/>
+    <aura:attribute name="SalesMultiple" type="String" default="Sales Multiple"/>
+    <aura:attribute name="MaxQuantities" type="String" default="Max Quantities"/>
+    <aura:attribute name="HazardousItems" type="String" default="Hazardous Items"/>
+    <aura:attribute name="MovetoNewOrder" type="String" default="Move to New Order"/>
+    <aura:attribute name="MovetoExistingOrder" type="String" default="Move to Existing Order"/>
+    <aura:attribute name="Delete" type="String" default="Delete"/>
+    <aura:attribute name="All" type="String" default="All"/>
+    <aura:attribute name="lineItems" type="String" default="Line Items"/>
+
+    
+    <aura:html tag="style">
+        .status { 
+        
+        width: {!v.orderData.awayFromFreeShipping}% !important;
+        
+        } 
+        
+        
+    </aura:html>  
+    
+    <iframe id='vfiframe' aura:id="vfFrame" src="{!'/horizonhobby/apex/LightningPDFGeneratorDemo?oid='+v.orderId}" style="overflow: hidden; width:100%; height:0;display:none" frameborder="0" ></iframe>
+    <div aura:id='toPrint' id="target">
+    <div class="cart-page" >
+        <h2>{!v.cartTitle}</h2>
+        <div class="cart-details">
+            <div class="items-details">
+                <div class="cart-head">
+                    <div class="order-info">
+                        <strong class="title">#{!v.orderData.OrderName}</strong>
+                        <span class="item-numbers"> | {!v.orderData.TotalItems} Items | </span>
+                        <!--
+                        <div class="edit-item">
+                            <a onclick="{!c.Edit}" class="edit">Edit</a>
+                            <aura:if isTrue="{!v.notEdit}">
+                                <aura:set attribute="else">
+                                    <div class="edit-dropdown">
+                                        <lightning:input name="Name" aura:id="Name"/> <a onclick="{!c.Save}" class="btn-default">Save</a>
+                                    </div>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+            --> 
+                        <div class="saved-lists">
+                            <a href="javascript:void(0)" class="saved-opener">Change Draft Order <span class="fa fa-chevron-right"></span></a>
+                            <div class="dropdown">
+                                <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table--header-fixed">
+                                    
+                                    <thead>
+                                        <tr class="slds-text-title_caps">
+                                            <th scope="col"><div class="slds-truncate slds-cell-fixed">ORDER #</div></th>
+                                            <th scope="col"><div class="slds-truncate slds-cell-fixed">PO #</div></th>
+                                            <th scope="col"><div class="slds-truncate slds-cell-fixed">Date</div></th>
+                                            <th scope="col"><div class="slds-truncate slds-cell-fixed"></div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <aura:iteration items="{!v.draftOrderList}" var="item">
+                                            <tr>
+                                                <td><div class="slds-truncate"><a href="{!'/horizonhobby/s/cart?oid='+ item.Id}">{!item.OrderNumber}</a></div></td>
+                                                <td><div class="slds-truncate">{!item.PoNumber}</div></td>
+                                                <td><div class="slds-truncate">{!item.EffectiveDate}</div></td>
+                                                <td>
+                                                    <a href="{!'/horizonhobby/s/cart?oid='+ item.Id}" class="btn-default">View Cart</a>
+                                                </td>
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                                <!--
+                                <ul>
+                                    <aura:iteration items="{!v.draftOrderList}" var="item">
+                                        <li>
+                                            <span class="filter-name">
+                                                <a href="{!'/horizonhobby/s/cart?oid='+ item.Id}" data-filterId="{!item.Id}" >{!item.Name}  {!item.OrderNumber}  {!item.Total_Quantity__c}</a>
+                                            </span>
+                                        </li>
+                                    </aura:iteration>
+                                </ul>
+            -->
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="cart-import-export"> 
+                        <li><a href="javascript:void(0);" id="importc" onclick="{!c.openModalImport}">Import</a></li>
+                        <li><a href="javascript:void(0);" id="exportc" onclick="{!c.openModal}">Export PDF </a></li>
+                        <li><a href="javascript:void(0);" id="exporthtml" onclick="{!c.openModal}">Export HTML</a></li>
+                        <li><a href="javascript:void(0);" id="exportcsv" onclick="{!c.openModal}">Export Excel</a></li>
+                    </ul>
+                </div>
+                <div class="line-items-row">
+                    <div class="line-item">
+                        <div class="col">
+                            <dl>
+                                <dt>Lines:</dt>
+                                <dd>{!v.orderData.lines}</dd>
+                                <dt>Estimated Total:</dt>
+                                <dd>€ <ui:outputNumber value="{!v.orderData.EstTotal}"/></dd>
+                                <dt>Estimated Shippable:</dt>
+                                <dd>€ <ui:outputNumber value="{!v.orderData.EstShipable}"/> </dd>
+                                <dt>Estimated Weight:</dt>
+                                <dd> {!v.orderData.EstWeight} lbs</dd>
+                                <dt>Estimated Cube:</dt>
+                                <dd>{!v.orderData.EstCube} ft"<sup>2</sup></dd>
+                                <dt>Selected Lines Total:</dt>
+                                <dd><span class='hide'> {!v.SelectedValuePrices}"</span><lightning:formattedNumber value="{!v.SelectedValuePrices}" maximumFractionDigits="2"/></dd>
+                            </dl>
+                        </div>
+                        <div class="col">
+                            <input aura:id="PONumber" class="form-control" value='{!v.orderData.PONumber}' placeholder="Add PO#" onchange='{!c.updateOrder}'/> 
+                            <input type="Date" aura:id="EndDate" class="form-control" value='{!v.orderData.EndDate}' placeholder="Due Date" onchange='{!c.updateOrder}'/>
+                        </div>
+                        <div class="col">
+                            <textarea aura:id="Description" class="form-control" value='{!v.orderData.Description}' placeholder="Add Order Comments" onchange='{!c.updateOrder}'></textarea>
+                        </div>
+                    </div>
+                </div>
+                <aura:if isTrue="{! v.AlertGroupData.length > 0}">       
+                    <div class="order-alerts">
+                        <h2><span>{!v.OrderAlertTitle}</span></h2>
+                        <ul class="alerts-accordion">
+                            <aura:iteration items="{! v.AlertGroupData }" var="item">
+                                <aura:if isTrue="{!item.items.length > 0}">
+                                    <li>
+                                        <a href="javascript:void(0);"  class="opener">
+                                            <span class="icon">
+                                                <img src="{!'https://b2bdev-horizonhobbysupport.cs166.force.com/horizonhobby/resource/'+item.iconName}" />
+                                            </span>
+                                            <strong class="title"> {!item.alertName} </strong>
+                                            <span class="line-items"><span>{!item.items.length}</span> {!' ' + v.lineItems}</span>
+                                        </a>
+                                        <div class="line-items-content">
+                                            <ul class="items-list">
+                                                <!--<li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                        <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                        -->
+                                                <aura:iteration items="{! item.items }" var="item">
+                                                    <li><span>{!item.Product2.ProductCode}</span> | Item(s) on this order have {!item.alertName}.</li>
+                                                    
+                                                </aura:iteration>
+                                            </ul>
+                                            <aura:if isTrue='{!item.items.length>3}'>
+                                                <a href="javascript:void(0);" class="show-more" onclick="{!c.showMoreLines}">Show More</a>
+                                            </aura:if>
+                                        </div>
+                                    </li>
+                                </aura:if> 
+                                
+                            </aura:iteration>
+                            
+                            <!--       <li>
+                            <a href="javascript:void(0);" class="opener">
+                                <span class="icon">
+                                 <img src="{!$Resource.hh_order_icon02}" />
+                                </span>
+                                <strong class="title">Max Quantities </strong>
+                                <span class="line-items"><span>4</span> Line Items</span>
+                            </a>
+                            <div class="line-items-content">
+                                <ul class="items-list">
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                </ul>
+                                <a href="javascript:void(0);" class="show-more">Show More</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="opener">
+                                <span class="icon">
+                                 <img src="{!$Resource.hh_order_icon03}" />
+                                </span>
+                                <strong class="title">Sales Multiple </strong>
+                                <span class="line-items"><span>1</span> Line Item</span>
+                            </a>
+                            <div class="line-items-content">
+                                <ul class="items-list">
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                </ul>
+                                <a href="javascript:void(0);" class="show-more">Show More</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="opener">
+                                <span class="icon">
+                                 <img src="{!$Resource.hh_order_icon04}" />
+                                </span>
+                                <strong class="title">Backorder Duplicate </strong>
+                                <span class="line-items"><span>1</span> Line Item</span>
+                            </a>
+                            <div class="line-items-content">
+                                <ul class="items-list">
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                </ul>
+                                <a href="javascript:void(0);" class="show-more">Show More</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="opener">
+                                <span class="icon">
+                                 <img src="{!$Resource.hh_order_icon05}" />
+                                </span>
+                                <strong class="title">Item on Backorder</strong>
+                                <span class="line-items"><span>1</span> Line Item</span>
+                            </a>
+                            <div class="line-items-content">
+                                <ul class="items-list">
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                </ul>
+                                <a href="javascript:void(0);" class="show-more">Show More</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="opener">
+                                <span class="icon">
+                                 <img src="{!$Resource.hh_order_icon06}" />
+                                </span>
+                                <strong class="title">Parts Available </strong>
+                                <span class="line-items"><span>30</span> Line Items</span>
+                            </a>
+                            <div class="line-items-content">
+                                <ul class="items-list">
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                </ul>
+                                <a href="javascript:void(0);" class="show-more">Show More</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="opener">
+                                <span class="icon">
+                                 <img src="{!$Resource.hh_order_icon07}" />
+                                </span>
+                                <strong class="title">Smart Technology </strong>
+                                <span class="line-items"><span>8</span> Line Items</span>
+                            </a>
+                            <div class="line-items-content">
+                                <ul class="items-list">
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                </ul>
+                                <a href="javascript:void(0);" class="show-more">Show More</a>
+                            </div>
+                        </li>-->
+                        </ul>
+                    </div>
+                </aura:if>
+            </div>
+            <div class="summary-details">
+                <div class="shipping-progress">
+                    <aura:if isTrue="{!v.orderData.awayFromFreeShipping == 0}">
+                        <strong class="shipping-title">Your order is eligible for free shipping</strong>                        
+                        <aura:set attribute="else">    
+                            <strong class="shipping-title"><span>€{!v.orderData.awayFromFreeShipping}</span> away from <span class="shipping-status">Free Shipping!</span></strong>
+                        </aura:set>
+                    </aura:if>
+                    <div class="progress-bar">
+                        <div class="status" style="{! 'width:'+v.orderData.FreeShippingPercent + '% !important'}"></div>
+                    </div>
+                </div>
+                <strong class="title">Order Summary</strong>
+                <ul class="order-summary-list">
+                    <li>
+                        <span class="sub-title">Original Price</span>
+                        <span class="value">{!v.orderData.orderOriginalPrice}</span>
+                    </li>
+                    <li>
+                        <span class="sub-title">Discount</span>
+                        <span class="value">{!v.orderData.orderDiscount}</span>
+                    </li>
+                    <li>
+                        <span class="sub-title">Shipping</span>
+                        <span class="value">{!v.orderData.shipping}</span>
+                    </li>
+                    <li>
+                        <span class="sub-title">Sales Tax/VAT</span>
+                        <span class="value">{!v.orderData.salesTaxVAT}</span>
+                    </li>
+                    <li class="totals">
+                        <span class="sub-title">Your Price:</span>
+                        <span class="value">{!v.orderData.orderNetTotal}</span>
+                    </li>
+                </ul>
+                <a href="{!'/horizonhobby/s/checkout?oid='+ v.orderId}" class="btn-default">Checkout</a>
+            </div>
+        </div>
+        <ul class="table-selector">
+            <li>
+                <lightning:input type="checkbox" label="{!v.All}" name="input1" aura:id='parentSelectAll'  onchange="{!c.onCheckAll}"/>
+            </li>
+            <li>
+                <a onclick="{!c.MoveToNewOrderAll}" class="move-new"><i class="fa fa-plus" aria-hidden="true"></i> {!v.MovetoNewOrder}</a>
+            </li>
+            <li>
+                <a onclick="{!c.MoveToDraftOrderAll}" class="move-existing"><i class="fa fa-long-arrow-right" aria-hidden="true"></i>{!v.MovetoExistingOrder}</a>
+            </li>
+            <li>
+                <a onclick="{!c.deleteLineItems}" class="delete"><i class="fas fa-trash-alt" aria-hidden="true"></i> {!v.Delete}</a>
+            </li>
+        </ul>
+        <div class="custom-select slds-hide">
+            <Select class='slds-select' aura:id="sort" onchange="{!c.onSortChange}" >
+                
+                
+                <aura:iteration items="{! v.columns }" var="item">
+                    <Option text="{!item.label}" value="{!item.fieldName}"/>
+                    
+                </aura:iteration>  
+            </Select>
+        </div>
+        <div class="slds-table_edit_container slds-is-relative">
+            <table aura:id= 'tab' aria-multiselectable="true" class="slds-table slds-no-cell-focus slds-table_bordered slds-table_edit slds-table_fixed-layout " role="grid" aria-label="Example default inline edit table with cell focused">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        
+                        <th>Select</th>
+                        <aura:iteration items="{! v.columns }" var="item">
+                            <th aria-label="Name" aria-sort="none" class=" slds-is-sortable" scope="col">
+                                <span class="slds-assistive-text">Sort by: </span>
+                                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                    <span class="slds-th__action slds-truncate" id="{!item.fieldName +'|0'}" title="{!item.label}" onclick="{!c.headerClick}">{!item.label + ' ▼'} </span>
+                                    
+                                    
+                                    
+                                </div>
+                                
+                            </th>
+                            
+                            
+                        </aura:iteration>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{! v.data }" var="item" indexVar="i">
+                        
+                        <c:OrderInlineRow item="{!item}"
+                                          parent="{! this }"
+                                          showSaveCancelBtn="{!v.showSaveCancelBtn}"
+                                          sNo="{!index }" 
+                                          SelectedValuePrices ="{!v.SelectedValuePrices}"
+                                          SelectedValues= "{!v.SelectedValues}"
+                                          isCheckAll = "{!v.isCheckAll}"
+                                          isParentCheckAll = "{!v.isParentCheckAll}"
+                                          totalAmountSelected = "{!v.totalAmountSelected}"
+                                          isLineUpdated = "{!v.notEdit}"
+                                          orderId = "{!v.orderId}"/>
+                        
+                        <aura:if isTrue="{!item.Product2.isHazardousItems__c || item.Product2.isMaxQuantities__c || item.Product2.isSalesMultiple__c || item.Product2.isSalesMultiple__c || item.Product2.isBackorderDuplicate__c || item.Product2.isItemOnBackorder__c ||item.Product2.isSmartTechnology__c || item.Product2.isPartAvailable__c}">
+                            <tr>
+                                <td colspan="8" style="padding: 0;">
+                                    <div class="order-tabs">
+                                        <ul class="tabset">
+                                            <aura:if isTrue='{!item.Product2.isHazardousItems__c}'>
+                                                <li >
+                                                    <a href="{!'#tab-1' + i}" id='Hazardous Items' >
+                                                        <img src="{!'https://b2bdev-horizonhobbysupport.cs166.force.com'+$Resource.hh_order_icon01}" />
+                                                    </a>
+                                                </li>
+                                            </aura:if>
+                                            <aura:if isTrue='{!item.Product2.isMaxQuantities__c}'>
+                                                <li>
+                                                    <a href="{!'#tab-2'+ i}" id='Max Quantities' >
+                                                        <img src="{!'https://b2bdev-horizonhobbysupport.cs166.force.com'+$Resource.hh_order_icon02}" />
+                                                    </a>
+                                                </li>
+                                            </aura:if>
+                                            <aura:if isTrue='{!item.Product2.isSalesMultiple__c}'>
+                                                <li>
+                                                    <a href="{!'#tab-3'+ i}" id='Sales Multiple' >
+                                                        <img src="{!'https://b2bdev-horizonhobbysupport.cs166.force.com'+$Resource.hh_order_icon03}" />
+                                                    </a>
+                                                </li>
+                                            </aura:if>
+                                            <aura:if isTrue='{!item.Product2.isBackorderDuplicate__c}'>
+                                                <li>
+                                                    <a href="{!'#tab-4'+ i}" id='Backorder Duplicate' >
+                                                        <img src="{!'https://b2bdev-horizonhobbysupport.cs166.force.com'+$Resource.hh_order_icon04}" />
+                                                    </a>
+                                                </li>
+                                            </aura:if>
+                                            <aura:if isTrue='{!item.Product2.isItemOnBackorder__c}'>
+                                                <li>
+                                                    <a href="{!'#tab-5'+ i}" id='Item on Backorder' >
+                                                        <img src="{!'https://b2bdev-horizonhobbysupport.cs166.force.com'+$Resource.hh_order_icon05}" />
+                                                    </a>
+                                                </li>
+                                            </aura:if>
+                                            <aura:if isTrue='{!item.Product2.isPartAvailable__c}'>
+                                                <li>
+                                                    <a href="{!'#tab-6'+ i}" id='Parts Available' >
+                                                        <img src="{!'https://b2bdev-horizonhobbysupport.cs166.force.com'+$Resource.hh_order_icon06}" />
+                                                    </a>
+                                                </li>
+                                            </aura:if>
+                                            <aura:if isTrue='{!item.Product2.isSmartTechnology__c}'>
+                                                <li>
+                                                    <a href="{!'#tab-7'+i}" id='Smart Technology' >
+                                                        <img src="{!'https://b2bdev-horizonhobbysupport.cs166.force.com'+$Resource.hh_order_icon07}" />
+                                                    </a>
+                                                </li>
+                                            </aura:if>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane" id="{!'#tab-1'+i	}">
+                                                <div class="inner-content">
+                                                    <strong class="title">{!v.HazardousItems}</strong>
+                                                    <p>Your order includes hazardous materials.</p>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="{!'#tab-2'+i	}">
+                                                <div class="inner-content">
+                                                    <strong class="title">{!v.MaxQuantities}</strong>
+                                                    <p>Quantity exceeds warning threshold.</p>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="{!'#tab-3'+i	}">
+                                                <div class="inner-content">
+                                                    <strong class="title">{!v.SalesMultiple} </strong>
+                                                    <p>This order has been adjusted to hit the multiple threshold.</p>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="{!'#tab-4'+i	}">
+                                                <div class="inner-content">
+                                                    <strong class="title">{!v.BackorderDuplicate} </strong>
+                                                    <p>This item is also on an existing Back-Order. </p>
+                                                    <a href="javascript:void(0);" class="link">Order #</a>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="{!'#tab-5'+i	}">
+                                                <div class="inner-content">
+                                                    <strong class="title">{!v.ItemonBackorder}</strong>
+                                                    <p>This item on this order which is also on another Draft Order.</p>
+                                                    <a href="javascript:void(0);" class="link">Order #</a>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="{!'#tab-6'+i	}">
+                                                <div class="inner-content">
+                                                    <strong class="title">{!v.PartsAvailable} </strong>
+                                                    <p>This item has linked support parts. </p>
+                                                    <a href="javascript:void(0);" class="link">Compatible Parts</a>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="{!'#tab-7'+i	}">
+                                                <div class="inner-content">
+                                                    <strong class="title"> This item is SMART compatible. </strong>
+                                                    <p>Quantity exceeds warning threshold.</p>
+                                                    <a href="javascript:void(0);" class="link">Compatible Parts</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </td>
+                           </tr>
+                        </aura:if>
+                    </aura:iteration>
+                    <!--   <lightning:button label="First" disabled="{!v.start == 0}"  onclick="{!c.first}" />-->
+                    
+                    
+                    
+                    <!--    <lightning:button label="Last" disabled="{!v.end >= v.totalSize-1}" onclick="{!c.last}" />-->
+                    
+                </tbody>
+            </table>
+            <div class='hide'>
+                <b>Please do not share any data or content from this partner site outside of your organization.
+                    <br/>Product pricing is valid as of the time of printing  and subject to change at the discretion of Horizon Hobby.
+                </b>  
+            </div>
+        </div>
+        
+        
+    </div>
+    </div>
+    
+    
+    <aura:if isTrue="{!v.showPrintModal}">
+        <section role="dialog" tabindex="-1" onclick="{!c.closeModal2}" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open print-modal" >
+            <div class="slds-modal__container" onclick="{!c.closeModal2}">
+                <div class="slds-modal__wrap slds-theme_default" onclick="{!c.closeModal2}">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModal }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <strong class="slds-modal__title slds-hyphenate">Do you want to Export page?</strong>
+                    </header>    
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                        
+                        <aura:if isTrue="{!v.isHtml}">
+                              <button class="slds-button slds-button_neutral btn-default" onclick="{!c.printHTML}">YES</button>
+                            <button class="slds-button slds-button_brand btn-default"  onclick="{!c.closeModal}" id="all">NO</button>
+                        </aura:if>
+                        <aura:if isTrue="{!v.isPDFShow}">
+                            
+                              <button class="slds-button slds-button_neutral btn-default" onclick="{!c.print}">YES</button>
+                            <button class="slds-button slds-button_brand btn-default"  onclick="{!c.closeModal}" id="all">NO</button>
+                        </aura:if>
+                        <aura:if isTrue="{!v.isExcel}">
+                            
+                            <c:csvExport records="{!v.data}" calledFrom = "orderDetail" buttonName="YES" fileName="Export.csv"/>
+                             <button class="slds-button slds-button_brand btn-default"  onclick="{!c.closeModal}" id="all">NO</button>
+                        </aura:if>
+                    </div>
+                </div>  
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.showAddToDraftOrder}" >
+        <c:AddToDraftOrder skuQuantityList="{!v.skuQuantityList}" show = "{!v.showAddToDraftOrder}" onlyNewOrder = "{!v.onlyNewOrder}" onlyDraftOrder = "{!v.onlyDraftOrder}"/>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.showDeleteAlert}" >
+        <c:DeleteOrderAlert orderId="{!v.orderId}" SelectedValues = "{!v.SelectedValues}" show = "{!v.showDeleteAlert}" deleteAll="{!v.deleteAll}" callName="{!v.callName}"/>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isPDFShow}" >
+        <c:CartPDF aura:Id='pdfPrint' />
+    </aura:if>
+    
+    <aura:if isTrue="{!v.showImportModal}">
+        
+        <c:ImportContacts   />
+
+    </aura:if>
+</aura:component>

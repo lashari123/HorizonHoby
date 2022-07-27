@@ -1,0 +1,8 @@
+<aura:component controller="ImprintController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="imprintObject" type="Object" />
+    <aura:attribute name="test" type="String"  />
+    
+    
+    <aura:unescapedHtml value="{!v.test}"/>
+</aura:component>

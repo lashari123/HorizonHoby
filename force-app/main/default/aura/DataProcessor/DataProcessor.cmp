@@ -1,0 +1,7 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	  <!-- attribute to accept Visualforce page's javascript method -->
+   <aura:attribute name="sendData" type="object"/>
+
+   <!-- Button component to invoke PDF download -->
+   <lightning:button label="Download Document" onclick="{!c.downloadDocument}" />
+</aura:component>

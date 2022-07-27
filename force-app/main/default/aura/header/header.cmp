@@ -1,0 +1,158 @@
+<aura:component controller="HeaderController" description="header" implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <ltng:require scripts="{!$Resource.HHJQueryFile}" afterScriptsLoaded="{!c.handleAfterScriptsLoaded}" />
+     <aura:attribute name="filterList" type="list" default="[]"></aura:attribute>
+    <aura:attribute name="showPathFinderComponent" type="Boolean" default="false"/>
+    <aura:attribute name="monthlySale" type="decimal" default="0"/>
+    <aura:attribute name="saleColor" type="string" default="Red"/> 
+   
+    <lightning:navigation aura:id="navService"/>  
+    
+    <header id="header">
+        <!-- Component for notification/message at the top of the screen -->
+        <c:Notification />
+		
+		<div class="container">
+			<div class="header-content">
+				<div class="logo">
+                    <a href="../">
+						<img src="{!$Resource.HH_Logo}" />
+					</a>
+				</div>
+				<div class="user-bar">
+					<div class="nav-area">
+						<a class="btn-nav" href="#"><i class="fas fa-bars"></i></a>
+						<a class="btn-search" href="#"><i class="fas fa-search"></i></a>
+						<div class="nav-wrap">
+							<a href="#" class="btn-nav-close"><i class="fas fa-times"></i></a>
+							<ul id="nav">
+								<li class="dropdown">
+									<a href="#">Products</a>
+									<div class="nav-dropdown">
+										<div class="container">
+											<div class="dropdown-content">
+												<ul>
+													 <aura:iteration items="{!v.filterList}" var="item" indexVar="index">
+                                                        
+                                                        <li><a id="{!item.Id}" onclick="{!c.search}">{!item.Name}</a></li>
+                                                        
+                                                    </aura:iteration>
+                                                </ul>
+												<div class="featured-links">
+													<a href="#" class="feature-item">
+														<span class="feature-icon">
+                                                        	<img src="{!$Resource.nav_icon01}" />
+                                                        </span>
+														<span class="text">Trusted Manufacturers</span>
+													</a>
+													<a href="#" class="feature-item">
+														<span class="feature-icon">
+                                                        	<img src="{!$Resource.nav_icon02}" />
+                                                        </span>
+														<span class="text">Co-op Program Information</span>
+													</a>
+													<a href="#" class="feature-item">
+														<span class="feature-icon">
+                                                        	<img src="{!$Resource.nav_icon03}" />
+                                                        </span>
+														<span class="text">MAP &amp; Sales Policies &amp; Agreements</span>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>
+								<li class="dropdown">
+									<a href="#">Orders</a>
+									<div class="nav-dropdown">
+										<div class="container">
+											<div class="dropdown-content">
+												<ul>
+													<li><a href="/horizonhobby/s/order-summary?type=Draft">Draft</a></li>
+													<li><a href="/horizonhobby/s/order-summary?type=Submitted">Submitted</a></li>
+                                                    <li><a href="/horizonhobby/s/order-summary">Orders</a></li>
+													<li><a href="#">Open Backorders</a></li>
+                                                    <li><a href="/horizonhobby/s/order-summary?type=Order History">Order History</a></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</li>
+								<li class="dropdown">
+									<a href="#">Support</a>
+									<div class="nav-dropdown">
+										<div class="container">
+											<div class="dropdown-content">
+												<ul>
+													<li><a href="#">Partner Resources</a></li>
+													<li><a href="#">Support</a></li>
+                                                    <li><a href="/horizonhobby/s/contact-us">Contact Us</a></li>
+                                                    <li><a href="/horizonhobby/s/rma-request">Repairs RMA Request</a></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</li>
+								<li class="dropdown">
+									<a href="#">Account</a>
+									<div class="nav-dropdown">
+										<div class="container">
+											<div class="dropdown-content">
+												<ul>
+													<li><a href="/horizonhobby/s/balance">Balance</a></li>
+													<li><a href="/horizonhobby/s/dashboard">Dashboard and Reports</a></li>
+													<li><a href="/horizonhobby/s/account-settings">Account Settings</a></li>
+                                                    <li><a href="/horizonhobby/s/accountinformation">Account Information</a></li>
+													<li><a href="/horizonhobby/s/users-and-permissions">Users and Permissions</a></li>
+													<li><a href="/horizonhobby/s/reset-password">Reset Password</a></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</li>
+                                <!--
+                                <li>
+                                    <a onclick="{!c.showPathFinder}">Path Finder</a>
+                                </li>
+-->
+							</ul>
+						</div>
+                        <c:headerSearch/>
+					</div>
+                   
+                  <div class="user-info">
+				 		<div class="sub-info">
+                            <c:LanguageSelector/>
+                       		<c:PricePermisionToggle/>
+                            <lightning:button variant="base" class="btn-logout" label="logout" title="Base action" onclick="{! c.logout }"/>
+
+							<!-- 		<div class="dealer-pricing">
+								<label class="dealer-checkbox">
+									<input type="checkbox" />
+									<span class="fake-checkbox"></span>
+									<span class="label">Dealer Pricing</span>
+								</label>
+							</div>-->
+						</div>
+						<ul class="user-info-list">
+							<li class="for-scroll"><a href="#">HPP</a></li>
+                            <aura:if isTrue="{!v.saleColor=='Green'}">
+                                <li class="for-scroll for-mobile"> <a href="{!'/horizonhobby/s/account-overview'}" class="sales"> SALES: € {!v.monthlySale}</a> </li>
+                                <aura:set attribute="else">
+                                    <li class="for-scroll for-mobile"> <a href="{!'/horizonhobby/s/account-overview'}" class="sales1"> SALES: € {!v.monthlySale} </a> </li>
+                                </aura:set>
+                            </aura:if>
+                            <!-- <li class="for-scroll for-mobile"><span class="sales">SALES: €100,000</span></li> -->
+                            
+                            <li><a class="cart-link" href="{!'/horizonhobby/s/cart'}"><img src="{!$Resource.icon_truck}" />Cart</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+        <!--
+        <aura:If isTrue="{!v.showPathFinderComponent}">
+        	<c.PartFinder show="{!v.showPathFinderComponent}"/>
+        </aura:If> -->
+	</header>
+</aura:component>

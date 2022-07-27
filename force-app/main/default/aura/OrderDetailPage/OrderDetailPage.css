@@ -1,0 +1,379 @@
+.THIS.orders-page {
+    display: flex;
+}
+.THIS.orders-page .orders-aside {
+    width: 27%;
+}
+.THIS.orders-page .orders-area {
+    flex-grow: 1;
+    width: 73%;
+    padding: 0 0 0 20px;
+}
+.THIS.orders-page .orders-area .btn-default {
+    padding: 5px 10px;
+    height: 33px;
+}
+.THIS .orders-aside .orders-title {
+    display: block;
+    padding: 15px;
+    color: #fff;
+    margin: 0 0 20px;
+    background: #000;
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: bold;
+}
+.THIS .orders-links {
+    list-style: none;
+    padding: 0 0 0 15px;
+    margin: 0;
+    font-size: 16px;
+    line-height: 20px;
+}
+.THIS .orders-links li {
+    margin: 0 0 15px;
+}
+.THIS .orders-links li a {
+    color: #000;
+    text-decoration: none;
+}
+.THIS .orders-links li a:hover {
+    color: #003567;
+    text-decoration: underline;
+}
+.THIS .orders-links li a.active {
+    color: #003567;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.THIS .breadcrumbs {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+    display: flex;
+    font-size: 10px;
+    line-height: 12px;
+}
+.THIS .breadcrumbs li + li:before {
+    content: "/";
+    margin: 0 3px;
+}
+.THIS .breadcrumbs li a {
+    color: #000;
+    text-decoration: none;
+}
+.THIS .breadcrumbs li a.current {
+    pointer-events: none;
+}
+.THIS .orders-area .head {
+    margin: 0 0 25px;
+}
+.THIS .orders-area .head h1 {
+    font-size: 32px;
+    line-height: 36px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    margin: 0 0 30px;
+}
+.THIS .orders-area .head h2 {
+    color: #003567;
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
+.THIS.checkout-details {
+    display: flex;
+    align-items: flex-start;
+}
+.THIS.checkout-details .items-details {
+    width: 75%;
+    padding-right: 20px;
+}
+.THIS .summary-details {
+    background: #e1e1e1;
+    padding: 15px;
+    text-align: center;
+    width: 25%;
+}
+.THIS .shipping-progress {
+    margin: 0 0 25px;
+}
+.THIS .shipping-progress .shipping-title {
+    display: block;
+    margin: 0 0 5px;
+    font-size: 12px;
+    font-weight: normal;
+}
+.THIS .shipping-progress .shipping-title .shipping-status {
+    color: #003567;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.THIS .summary-details .title{
+    font-size: 20px;
+    line-height: 22px;
+    margin: 0 0 15px;
+    display: block;
+}
+.THIS .order-summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px;
+}
+.THIS .order-summary-list + .order-summary-list {
+    padding: 10px 0;
+    margin:0;
+    border-top: 1px solid rgba(0,0,0,0.4);
+}
+.THIS .order-summary-list li {
+    display: flex;
+    margin: 0 0 8px;
+}
+.THIS .order-summary-list li .sub-title {
+    flex-grow: 1;
+    padding: 0 5px 0 0;
+    text-align: left;
+}
+.THIS .order-summary-list li.totals {
+    font-weight: bold;
+}
+.THIS .order-summary-list li .edit {
+    color: #003567;
+}
+.THIS .summary-details .btn-default{
+    display: block;
+    text-decoration: none;
+}
+.THIS .progress-bar {
+    width: 100%;
+    height: 5px;
+    position: relative;
+    background: #fff;
+}
+.THIS .progress-bar .status {
+    position: relative;
+    height: 5px;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: #003567;
+}
+.THIS .status-list {
+    list-style: none;
+    margin: 0;
+    padding: 15px 0;
+    display: flex;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: center;
+}
+.THIS .status-list li {
+    flex-grow: 1;
+    flex-basis: calc(25% + 32px);
+    margin: 0 16px;
+    padding: 15px;
+    background: #f8f8f8;
+    border: 1px solid #7d7d7d;
+}
+.THIS .status-list li.open {
+    background:#fefcf3;
+    border-color:#e9cd0e;
+}
+.THIS .status-list li.fulfilled {
+    background:#f2f7f6;
+    border-color:#00674e;
+}
+.THIS .status-list li.cancelled {
+    background:#faf4f4;
+    border-color:#992b2b;
+}
+.THIS .status-list .title {
+    display: block;
+    margin: 0 0 5px;
+    text-transform: uppercase;
+}
+.THIS .status-list .items {
+    display: block;
+}
+.THIS .checkout-widget {
+    margin: 0 0 10px;
+    font-size: 16px;
+    line-height: 20px;
+    border: 1px solid #e1e1e1;
+    border-left: 0;
+    border-right: 0;
+    padding: 15px;
+}
+.THIS .checkout-widget .title {
+    display: block;
+    padding: 10px 15px;
+    color: #7d7d7d;
+    border-bottom: 1px solid #e1e1e1;
+}
+.THIS .checkout-widget .data-wrap {
+    display: flex;
+    flex-flow: row wrap;
+}
+.THIS .checkout-widget .data-wrap dl {
+    flex-grow: 1;
+    flex-basis: 0;
+    max-width: 50%;
+    padding: 0 10px 0 0;
+    margin: 0;
+    font-size: 12px;
+    line-height: 14px;
+}
+.THIS .checkout-widget .data-wrap dl dt {
+    width: 50%;
+    padding: 0 5px 0 0;
+    font-weight: bold;
+    margin: 0 0 8px;
+    float: left;
+}
+.THIS .checkout-widget .data-wrap dl dd {
+    display:flex;
+    min-height: 20px;
+    margin: 0 0 8px;
+}
+.THIS .checkout-widget .sub-info {
+    font-size: 12px;
+    line-height: 16px;
+    padding: 10px 0;
+}
+.THIS .checkout-widget .sub-info .sub-title {
+    font-weight: 500;
+    display: block;
+}
+.THIS .checkout-widget .sub-info p {
+    margin: 0;
+}
+.THIS .order-confirmation-head {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    margin: 0 0 20px;
+}
+.THIS .order-confirmation-head h1 {
+    font-size: 30px;
+    line-height: 34px;
+    font-weight: bold;
+    margin: 0 0 5px;
+}
+.THIS .order-confirmation-head .btn-default {
+    min-width: 120px;
+    text-align: center;
+    vertical-align: top;
+    margin: 5px 0 0;
+}
+.THIS .order-confirmation-head .titles-area {
+    flex-grow: 1;
+    padding: 0 10px 0 0;
+}
+.THIS .slds-table {
+    border: none;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    white-space: normal;
+}
+.THIS .slds-table thead th {
+    vertical-align: top;
+}
+.THIS .slds-table thead th:nth-child(2) {
+    width: 45px;
+    text-align: center;
+}
+.THIS .slds-table thead th:last-child,
+.THIS .slds-table thead th:nth-child(3) {
+    width: 170px;
+}
+.THIS .slds-table tbody td,
+.THIS .slds-table thead th {
+    color: #000;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 700;
+    padding: 5px 5px 5px 0;
+    border-top: 0;
+    white-space: normal;
+}
+.THIS .slds-table thead th {
+    padding: 15px 10px;
+    border-bottom: none;
+}
+.THIS .slds-table thead th .slds-th__action {
+    padding: 0;
+    height: auto;
+    white-space: normal;
+}
+.THIS .slds-table thead th .slds-th__action:hover {
+    background: #fff;
+}
+.THIS .slds-table .slds-truncate {
+    white-space: normal;
+}
+.THIS .slds-table a {
+    color: #003567;
+}
+.THIS .slds-table tbody td {
+    font-weight: 400;
+    padding: 10px 5px;
+}
+.THIS .slds-table tbody td:nth-child(2) {
+    text-align: center;
+}
+.THIS .slds-table tbody td.slds-cell-edit {
+    padding-left: 10px;
+}
+.THIS .slds-table tbody tr:hover td {
+    background: #fff;
+    box-shadow: none !important;
+}
+.THIS .slds-table tbody tr td:focus,
+.THIS .slds-table tbody tr td:hover {
+    box-shadow: none !important;
+}
+.THIS .slds-table tbody tr td {
+    border-top: 2px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
+}
+.THIS .slds-table tbody tr td:first-child {
+    border-left: 1px solid #e1e1e1;
+}
+.THIS .slds-table tbody tr td:last-child {
+    border-right: 1px solid #e1e1e1;
+}
+.THIS .dropdown .slds-table_bordered {
+    border: 0;
+    color: #000;
+    font-size: 13px;
+}
+.THIS .dropdown .slds-cell-fixed {
+    position: static;
+}
+.THIS .dropdown .slds-table thead th {
+    color: #000;
+    padding: 0;
+    border-bottom: 1px solid #e1e1e1;
+}
+.THIS .dropdown .slds-truncate a{
+    color: #000;
+}
+.THIS .dropdown .slds-table thead th .slds-cell-fixed {
+    padding: 15px 0; 
+}
+.THIS .dropdown .slds-table_bordered tbody td {
+    padding: 15px 0;
+    border: 0;
+    min-height: 61px;
+}
+.THIS .dropdown .slds-table_bordered tbody td:last-child {
+    text-align: right;
+}
+.THIS .dropdown .slds-table_bordered tbody tr:hover td {
+    box-shadow: none;
+    background: none;
+}
+.THIS .dropdown .slds-table_bordered tbody tr + tr td {
+    border-top: 1px solid #dcdcdc;
+}

@@ -1,0 +1,11 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="records" type="sObject[]"/>
+    <aura:attribute name="fileName" type="String"/>
+    <aura:attribute name="calledFrom" type="String"/>
+    
+    <aura:attribute name="buttonName" type="String"/>
+    
+    <button class="slds-button slds-button_neutral btn-default" onclick="{!c.downloadCsv}" id="current">{!v.buttonName}</button>
+    
+    <!--<aura:handler name="init" value="{!this}" action="{!c.downloadCsv}" /><a onclick="{!c.downloadCsv}" alternativeText="Export Data"> Excel </a>-->
+</aura:component>

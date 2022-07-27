@@ -1,0 +1,133 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+      <ltng:require scripts="{!$Resource.HHJQueryFile}" afterScriptsLoaded="{!c.handleAfterScriptsLoaded}" />
+
+    <aura:attribute name="AlertGroupData" type="list" />
+    <div class="order-alerts">
+        <h2><span>Order Alerts</span></h2>
+        <ul class="alerts-accordion">
+            <aura:iteration items="{! v.AlertGroupData }" var="item">
+                
+                <li>
+                    <a href="javascript:void(0);" onclick="{!c.openerHandler}" class="opener">
+                        <span class="icon">
+                            <img src="{!$Resource.hh_order_icon01}" />
+                        </span>
+                        <strong class="title"> {!item.alertName} </strong>
+                        <span class="line-items"><span>10</span> Line Items</span>
+                    </a>
+                    <div class="line-items-content">
+                        <ul class="items-list">
+                            <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                            <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                            <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                        </ul>
+                        <a href="javascript:void(0);" class="show-more">Show More</a>
+                    </div>
+                </li>
+            </aura:iteration>
+            
+            <li>
+                <a href="javascript:void(0);" class="opener">
+                    <span class="icon">
+                        <img src="{!$Resource.hh_order_icon02}" />
+                    </span>
+                    <strong class="title">Max Quantities </strong>
+                    <span class="line-items"><span>4</span> Line Items</span>
+                </a>
+                <div class="line-items-content">
+                    <ul class="items-list">
+                        <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                        <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                        <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                    </ul>
+                    <a href="javascript:void(0);" class="show-more">Show More</a>
+                </div>
+            </li>
+            <!--      <li>
+                            <a href="javascript:void(0);" class="opener">
+                                <span class="icon">
+                                 <img src="{!$Resource.hh_order_icon03}" />
+                                </span>
+                                <strong class="title">Sales Multiple </strong>
+                                <span class="line-items"><span>1</span> Line Item</span>
+                            </a>
+                            <div class="line-items-content">
+                                <ul class="items-list">
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                </ul>
+                                <a href="javascript:void(0);" class="show-more">Show More</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="opener">
+                                <span class="icon">
+                                 <img src="{!$Resource.hh_order_icon04}" />
+                                </span>
+                                <strong class="title">Backorder Duplicate </strong>
+                                <span class="line-items"><span>1</span> Line Item</span>
+                            </a>
+                            <div class="line-items-content">
+                                <ul class="items-list">
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                </ul>
+                                <a href="javascript:void(0);" class="show-more">Show More</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="opener">
+                                <span class="icon">
+                                 <img src="{!$Resource.hh_order_icon05}" />
+                                </span>
+                                <strong class="title">Item on Backorder</strong>
+                                <span class="line-items"><span>1</span> Line Item</span>
+                            </a>
+                            <div class="line-items-content">
+                                <ul class="items-list">
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                </ul>
+                                <a href="javascript:void(0);" class="show-more">Show More</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="opener">
+                                <span class="icon">
+                                 <img src="{!$Resource.hh_order_icon06}" />
+                                </span>
+                                <strong class="title">Parts Available </strong>
+                                <span class="line-items"><span>30</span> Line Items</span>
+                            </a>
+                            <div class="line-items-content">
+                                <ul class="items-list">
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                </ul>
+                                <a href="javascript:void(0);" class="show-more">Show More</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="opener">
+                                <span class="icon">
+                                 <img src="{!$Resource.hh_order_icon07}" />
+                                </span>
+                                <strong class="title">Smart Technology </strong>
+                                <span class="line-items"><span>8</span> Line Items</span>
+                            </a>
+                            <div class="line-items-content">
+                                <ul class="items-list">
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                    <li><span>LOS05016V2</span> | Item(s) on this order have SMART Technology.</li>
+                                </ul>
+                                <a href="javascript:void(0);" class="show-more">Show More</a>
+                            </div>
+                        </li>-->
+        </ul>
+    </div>	
+</aura:component>

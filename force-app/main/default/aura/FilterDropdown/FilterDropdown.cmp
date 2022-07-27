@@ -1,0 +1,27 @@
+<aura:component controller="FilterDropdownController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	 <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="showPathFinderComponent" type="Boolean" default="false"/>
+    <aura:attribute name="draftOrderList" type="Order[]"/>
+    <ltng:require scripts="{!$Resource.HHJQueryFile}" afterScriptsLoaded="{!c.savedFilterCollapse}" />
+
+    <a onclick="{!c.showPathFinder}">Path Finder</a>
+    
+    <aura:If isTrue="{!v.showPathFinderComponent}">
+        <c.PartFinder show="{!v.showPathFinderComponent}"/>
+    </aura:If>
+    
+    <div class="saved-lists">
+		<a href="javascript:void(0)" class="saved-opener"><span>Edit</span></a>
+		<div class="dropdown">
+			<ul>
+                <aura:iteration items="{!v.draftOrderList}" var="item">
+                    <li>
+                        <span class="filter-name">
+                            <a data-filterId="{!item.Id}" >{!item.Name} --- {!item.OrderNumber} --- {!item.Total_Quantity__c}</a>
+                        </span>
+                    </li>
+                </aura:iteration>
+			</ul>
+		</div>
+	</div>
+</aura:component>

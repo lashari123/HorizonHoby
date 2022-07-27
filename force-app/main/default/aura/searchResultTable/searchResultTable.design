@@ -1,0 +1,4 @@
+<design:component>
+	 <design:attribute name="ShowQuantity" label ="Show quantity"/>
+    	 <design:attribute name="TableName" datasource="New Releases,New In Stocks,Top Selling"  label ="Type"/>
+</design:component>

@@ -1,0 +1,111 @@
+.THIS#footer {
+    font-size: 14px;
+    line-height: 18px;
+    background: #e1e1e1;
+    font-family: 'Roboto', sans-serif;
+}
+.THIS#footer .container {
+    padding-top: 50px;
+    padding-bottom: 30px;
+    display: flex;
+    max-width: 1325px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 0 auto;
+}
+.THIS#footer p {
+    margin: 0;
+}
+.THIS#footer .footer-logo {
+    margin: 0 0 20px;
+}
+.THIS#footer .footer-logo img {
+    max-width: 100%;
+    vertical-align: top;
+}
+.THIS#footer .logo-area {
+    width: 30%;
+}
+.THIS#footer .footer-detail {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 0 10px;
+}
+.THIS#footer .footer-detail .widget {
+    flex-grow: 1;
+}
+.THIS#footer address {
+    font-weight: 600;
+    display: block;
+    font-style: normal;
+    margin: 0 0 10px;
+}
+.THIS#footer .title {
+    font-weight: 700;
+    display: block;
+    margin: 0 0 10px;
+}
+.THIS#footer .sub-title {
+    font-weight: 700;
+    display: block;
+    margin: 0 0 5px;
+}
+.THIS#footer .num {
+    display: block;
+}
+.THIS .footer-nav {
+    list-style: none;
+    margin: 0;
+    padding: 20px 0 0;
+    display: flex;
+    font-size: 12px;
+    line-height: 14px;
+    font-weight: 700;
+    border-top: 1px solid #000;
+}
+.THIS .footer-nav li {
+    padding: 0 8px;
+    position: relative;
+}
+.THIS .footer-nav li:first-child {
+    padding-left: 0;
+}
+.THIS .footer-nav li + li:before {
+    content: "";
+    width: 1px;
+    height: 14px;
+    background: #000;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.THIS .footer-nav li a {
+    color: #000;
+    text-decoration: none;
+}
+@media only screen and (max-width: 1023px) {
+    .THIS#footer .logo-area {
+        width: 35%;
+    }
+    .THIS .footer-logo {
+        max-width: 190px;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .THIS#footer .container {
+        display: block;
+    }
+    .THIS#footer .logo-area {
+        width: 100%;
+    }
+    .THIS .footer-logo {
+        max-width: 190px;
+    }
+    .THIS#footer .footer-detail {
+        padding: 0;
+    }
+    .THIS#footer p {
+        margin: 0 0 15px;
+    }
+}

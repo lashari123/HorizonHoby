@@ -1,0 +1,31 @@
+<aura:component controller="storeListViewHandler" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="data" type="Object" access="global"/>
+    <aura:attribute name="sObjectName" type="string" default = "Product2" />
+    <aura:attribute name="title" type="string" access="global"/>
+    
+    <aura:attribute name="noOfRows" type="string" access="global" default = '5'/>
+    <aura:attribute name="filter" type="string" access="global"/>
+    
+    
+    <aura:attribute name="columns" type="List" />
+    
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    
+    
+    <!-- the container element determine the height of the datatable -->
+    <aura:if isTrue="{!v.data}">
+    <div style="width: 100%">
+        <div class="slds-text-heading_large">{!v.title}
+           </div>
+        <div>
+         <br><br></br></br></div>
+        <lightning:datatable
+                             keyField="id"
+                             data="{! v.data }"
+                             columns="{! v.columns }"
+                             hideCheckboxColumn="true"/>
+        </div>
+    </aura:if>
+</aura:component>

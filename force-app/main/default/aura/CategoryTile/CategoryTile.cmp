@@ -1,0 +1,24 @@
+<aura:component controller="categoryTileHelper" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name= "categories" type='list'/> 
+    
+    <lightning:navigation aura:id="navService"/>  
+      <!--Handler-->
+    
+     <aura:attribute name="title" type="string" default="Categories" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+   <div class="wrapper">
+       <h2><span>{!v.title}</span></h2>
+       <div class="mcard"> 
+        	<aura:iteration var="item" indexVar="i" items="{!v.categories}">
+                <div class="card" >
+              		<!--<a href="{!'/horizonhobby/s/category/'+ item.Name + '/' + item.Id}">-->
+                   <a onclick="{!c.search}" id="{!item.Id}" name="{!item.Id}" >
+                        <img src="{!'../servlet/servlet.FileDownload?file='+item.primaryImageId__c}"></img>
+                        <strong class ="title"> {!item.Name}</strong>
+                	</a>
+                </div>
+    		</aura:iteration>
+            <!---->
+    	</div>
+    </div>
+</aura:component>

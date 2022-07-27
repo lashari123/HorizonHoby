@@ -1,0 +1,8 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name ='printAll' type='boolean'></aura:attribute>
+    
+    <div id="isAll" class='slds-hidden'>{!v.printAll}</div>
+    <ltng:require
+                  scripts="{!join(',',$Resource.html2canvas,$Resource.jsPDF,$Resource.jsPDFAutoTab,$Resource.jquerryMin)}"
+                  afterScriptsLoaded="{!c.scriptsLoaded}" />
+</aura:component>

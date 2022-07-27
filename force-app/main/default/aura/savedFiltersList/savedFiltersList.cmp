@@ -1,0 +1,40 @@
+<aura:component description="Saved Filters List" access="global" controller="SavedFilterListController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="savedFilterList" type="Filter_List__c[]"/>
+    <aura:attribute name="renderedList" type="List" default="[]"/>
+    <aura:attribute name="name" type="String" default=""/>
+    <aura:attribute name="editListId" type="String" default=""/>
+    <aura:attribute name="showFilterList" type="boolean" default="false"/>
+    <aura:attribute name="showSavedList" type="boolean" default="true"/>
+    <aura:attribute name="dropDownLabel" type="String" default="Saved Lists"/>
+    <aura:attribute name="filterListSelected" type="String" default="Filters Selected"/>
+    <aura:attribute name="mapper" type="Map" default="{}" />
+    
+    <!-- Event Handler for updating the Saved List dropdown -->
+    <aura:handler name="SavedFilterListUpdatedEvent" event="c:SavedFilterListUpdated" action="{!c.UpdateSavedFilterList}"/>
+    
+    <aura:registerEvent name="RunFilterEvent" type="c:RunFilter"/> 
+    
+    <ltng:require scripts="{!$Resource.HHJQueryFile}" afterScriptsLoaded="{!c.savedFilterCollapse}" />
+    <aura:if isTrue="{!v.showSavedList}" >
+	<div class="saved-lists">
+		<a href="javascript:void(0)" class="saved-opener"><span>{!v.dropDownLabel}</span></a>
+		<div class="dropdown">
+			<ul>
+                <aura:iteration items="{!v.savedFilterList}" var="item">
+                    <li>
+                        <span class="filter-name">
+                            <a data-filterId="{!item.Id}" onclick="{!c.renderList}" >{!item.Name}</a>
+                        </span>
+                        <a data-filterId="{!item.Id}" onclick="{!c.Edit}" class="edit">Edit</a>
+                        <a data-filterId="{!item.Id}" onclick="{!c.deleteSavedList}" class="remove"><i class="fas fa-trash-alt"></i></a>
+                    </li>
+                </aura:iteration>
+			</ul>
+		</div>
+	</div>
+    </aura:if>
+    <aura:if isTrue="{!v.showFilterList}" >
+        <c:FilterList renderedList="{!v.renderedList}" show = "{!v.showFilterList}" name="{!v.name}" editListId="{!v.editListId}"/>
+    </aura:if>
+</aura:component>

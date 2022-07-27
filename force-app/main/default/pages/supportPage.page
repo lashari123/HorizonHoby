@@ -1,0 +1,19 @@
+<apex:page >
+    <h2>Customer Service</h2>
+    <p>Welcome to our Customer Service section. Here you will find everything you need to know about ordering from Horizon.</p>
+    <p>Whether you're a new account or you've been a Horizon dealer for years, we want to make your ordering experience as smooth as possible. To help you find the information you're looking for, we've included brief descriptions of the contents of each page.</p>
+    <a href="#">Shipping</a>
+    <p>Find out what to do about lost, missing, and damaged merchandise, shipping discrepancies, returns, and more.</p>
+    <a href="#">Pricing</a>
+    <p>Read our policies on sales, discounts, net pricing, and price corrections.</p>
+    <a href="#">Payment</a>
+    <p>See our different payment options for qualified dealers.</p>
+    <a href="#">Drop Ships</a>
+    <p>Read our policy on drop shipping products.</p>
+    <a href="#">MAP Pricing Updates &amp; Policies</a>
+    <p>Read the latest MAP and Sales policies from Horizon and other manufacturers.</p>
+    <a href="#">Horizon Returns</a>
+    <p>Manage your returns with the Horizon Returns service.</p>
+    <a href="#">Freight Terms</a>
+    <p>See how to get freight paid terms with Horizon.</p>
+</apex:page>

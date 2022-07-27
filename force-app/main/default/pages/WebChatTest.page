@@ -1,0 +1,371 @@
+<apex:page standardcontroller="Case" showChat="true" showHeader="true" sidebar="true" lightningStylesheets="true">
+    
+       <style type='text/css'>
+        .embeddedServiceHelpButton .helpButton .uiButton {
+            background-color: #005290;
+            font-family: "Arial", sans-serif;
+        }
+        .embeddedServiceHelpButton .helpButton .uiButton:focus {
+            outline: 1px solid #005290;
+        }
+        
+        /* added in some customer styling to test */
+        .embeddedServiceHelpButton .helpButton {
+            left: 12px;
+        }
+    
+        .embeddedServiceHelpButton .uiButton .helpButtonLabel .message {
+            overflow: visible;
+            background-color: transparent;
+            color: #fff;
+            border: none;
+            font-size: 1.125rem;
+        }
+    
+        .embeddedServiceHelpButton .uiButton .helpButtonLabel {
+            overflow: visible;
+        }
+        
+        .embeddedServiceHelpButton .helpButton .uiButton {
+            max-width: 19em;
+        }
+        
+        .embeddedServiceHelpButton .embeddedServiceIcon {
+            margin-right: 1px;
+        }
+        
+        .embeddedServiceSidebar.layout-docked .dockableContainer {
+            left: 12px;
+        }
+    
+    </style>
+
+    <script type='text/javascript' src='https://c.la1-c2-ia5.salesforceliveagent.com/content/g/js/47.0/deployment.js' ></script>
+    <script type='text/javascript' src='https://c.la1-c2-ia5.salesforceliveagent.com/content/g/js/47.0/prechat.js' ></script>
+    <script type='text/javascript' src='https://service.force.com/embeddedservice/5.0/esw.min.js'></script>
+
+    <script>
+        console.log("Script event was fired.");
+        if (!window._laq) { 
+            window._laq = []; 
+        }
+        
+        window._laq.push(
+            function(){
+                console.log("window._laq event was fired.");
+                liveagent.showWhenOnline('5736g000000kA9v', document.getElementById('liveagent_button_online_5736g000000kA9v'));
+                liveagent.showWhenOffline('5736g000000kA9v', document.getElementById('liveagent_button_offline_5736g000000kA9v'));
+            }
+        );
+
+        // Chat deployment code that initializes chat: URL, Deployment Id, HH Org is 00DD01234567890
+        liveagent.init('https://d.la1-c2-ia5.salesforceliveagent.com/chat', '5726g000000M1YX', '00D6g0000023inq');
+
+        // Enable Chat advanced logging to be available through the Browser's Developer Console 
+        liveagent.enableLogging();
+        console.log("liveagent", liveagent);
+
+        function activateChat()
+        {
+            embedded_svc.settings.prepopulatedPrechatFields = {
+                FirstName: "{!$User.FirstName}",
+                LastName: "{!$User.LastName}",
+                Email: "{!$User.Email}",
+                ChannelName: "horizon-us"
+            };
+
+            if (!window.embedded_svc) {
+                var s = document.createElement('script');
+                s.setAttribute('src', 'https://horizonhobby.my.salesforce.com/embeddedservice/5.0/esw.min.js');
+                s.onload = function() {
+                    initESW(null);
+                };
+                document.body.appendChild(s);
+                } else {
+                initESW('https://service.force.com');
+            }
+        }
+        
+        function openContactUs()
+        {
+            alert('Contact Us Form Redirect');
+        }
+        
+    </script>
+    
+    <h1>Service Cloud Chat implementation</h1>
+    <body>
+        <br />
+        <br />
+        <div id="liveagent_button_online_5736g000000kA9v" style="display: none;" >
+            The agents are online...
+            <br />
+
+            <button onclick="activateChat()">Click to Chat With Us</button>
+        </div>
+        <div id="liveagent_button_offline_5736g000000kA9v" style="display: none;">
+            There are no agents available. Please submit a request through the Contact Us instead...
+            <br />
+            <button onclick="openContactUs()">Click Contact Us</button>
+        </div>
+    </body>
+
+
+    <script type='text/javascript'>
+        function buttonCallback(e) {
+            console.log("buttonCallback", e);
+        }
+        
+        var initESW = function(gslbBaseURL) {
+            embedded_svc.settings.displayHelpButton = false; //true Or false
+            //embedded_svc.settings.autoOpenPostChat = true;
+            embedded_svc.settings.language = ''; //For example, enter 'en' or 'en-US'
+    
+            //embedded_svc.settings.defaultMinimizedText = '...'; //(Defaults to Chat with an Expert)
+            //embedded_svc.settings.disabledMinimizedText = '...'; //(Defaults to Agent Offline)
+    
+            //embedded_svc.settings.loadingText = ''; //(Defaults to Loading)
+            //embedded_svc.settings.storageDomain = 'yourdomain.com'; //(Sets the domain for your deployment so that visitors can navigate subdomains during a chat session)
+    
+            // Settings for Chat
+            //embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
+                // Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
+                // Returns a valid button ID.
+            //};
+            //embedded_svc.settings.prepopulatedPrechatFields = {}; //Sets the auto-population of pre-chat form fields
+            //embedded_svc.settings.fallbackRouting = []; //An array of button IDs, user IDs, or userId_buttonId
+            //embedded_svc.settings.offlineSupportMinimizedText = '...'; //(Defaults to Contact Us)
+            
+            /*
+            embedded_svc.snippetSettingsFile.directToButtonRouting = function(prechatFormData) {
+                console.log("direct to button routing initiated.");
+                alert("Alert: direct to button routing initiated!");
+                return "5736g000000kA9v";
+            }
+            */
+    
+            embedded_svc.settings.enabledFeatures = ['LiveAgent'];
+            embedded_svc.settings.entryFeature = 'LiveAgent';
+    
+            embedded_svc.settings.extraPrechatFormDetails = [
+                {
+                    "label":"First Name",
+                    "transcriptFields":["First_Name__c"],
+                    "displayToAgent":true
+                }, {
+                    "label":"Last Name",
+                    "transcriptFields":["Last_Name__c"],
+                    "displayToAgent":true
+                }, {
+                    "label":"Email",
+                    "transcriptFields":["Email__c"],
+                    "displayToAgent":true
+                }, {
+                    "label":"Subject",
+                    "transcriptFields":["Subject__c"],
+                    "displayToAgent":true
+                }, {
+                    "label":"ChannelName",
+                    "value": embedded_svc.settings.prepopulatedPrechatFields.ChannelName,
+                    "transcriptFields":[],
+                    "displayToAgent":true
+                }, {
+                    "label":"PreeChat_AccountId",
+                    "value": embedded_svc.settings.prepopulatedPrechatFields.AccountID,
+                    "transcriptFields":[],
+                    "displayToAgent":true
+                }
+     
+            ]; 
+            
+            embedded_svc.settings.extraPrechatInfo = [{
+              "entityFieldMaps": [{
+                "doCreate":false,
+                "doFind":false,
+                "fieldName":"LastName",
+                "isExactMatch":true,
+                "label":"Last Name"
+              }, {
+                "doCreate":false,
+                "doFind":false,
+                "fieldName":"FirstName",
+                "isExactMatch":true,
+                "label":"First Name"
+              }, {
+                "doCreate":false,
+                "doFind":false,
+                "fieldName":"Email",
+                "isExactMatch":true,
+                "label":"Email"
+              }],
+              "entityName":"Contact"
+            },
+            
+            {
+                "entityName": "Case",
+                "showOnCreate": true,
+                "saveToTranscript": "CaseId",
+                "entityFieldMaps": [{
+                    "isExactMatch": false,
+                    "fieldName": "First_Name__c",
+                    "doCreate": true,
+                    "doFind": false,
+                    "label": "First Name"
+                }, {
+                    "isExactMatch": false,
+                    "fieldName": "Last_Name__c",
+                    "doCreate": true,
+                    "doFind": false,
+                    "label": "Last Name"
+                }, {
+                    "isExactMatch": false,
+                    "fieldName": "SuppliedEmail",
+                    "doCreate": true,
+                    "doFind": false,
+                    "label": "Email"
+                },  {
+                    "label": "ChannelName",
+                    "fieldName": "Site_Name__c",
+                    "doCreate": true,
+                    "doFind": false,
+                    "isExactMatch": false,                    
+                } ,  {
+                    "label": "PreeChat_AccountId",
+                    "fieldName": "AccountId",
+                    "doCreate": true,
+                    "doFind": false,
+                    "isExactMatch": false,                    
+                } 
+                ]
+            }
+            ];
+
+            // embedded_svc.addEventHandler("onHelpButton", function(data) {
+            //     console.log("onHelpButton event was fired.");
+            // });
+            
+            liveagent.addButtonEventHandler('5736g000000kA9v', buttonCallback);
+            
+            embedded_svc.addEventHandler("afterInit", function(data) {
+                console.log("embedded_svc.init event was fired.", data);
+                // console.log(liveagent.BUTTON_EVENT.BUTTON_AVAILABLE);
+                embedded_svc.onHelpButtonClick();
+                // liveagent.showWhenOnline('5726g000000M1YX', document.getElementById('chat_agents_online'));
+            });
+
+            embedded_svc.addEventHandler("onHelpButtonClick", function(data) {
+                console.log("onHelpButtonClick event was fired.");
+            });
+
+            embedded_svc.addEventHandler("onChatRequestSuccess", function(data) {
+                console.log("onChatRequestSuccess event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onChatEstablished", function(data) {
+                console.log("onChatEstablished event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onChasitorMessage", function(data) {
+                console.log("onChasitorMessage event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onAgentMessage", function(data) {
+                console.log("onAgentMessage event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onChatConferenceInitiated", function(data) {
+                console.log("onChatConferenceInitiated event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onAgentJoinedConference", function(data) {
+                console.log("onAgentJoinedConference event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onAgentLeftConference", function(data) {
+                console.log("onAgentLeftConference event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onChatConferenceEnded", function(data) {
+                console.log("onChatConferenceEnded event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onChatTransferSuccessful", function(data) {
+                console.log("onChatTransferSuccessful event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onChatEndedByChasitor", function(data) {
+                console.log("onChatEndedByChasitor event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onChatEndedByAgent", function(data) {
+                console.log("onChatEndedByAgent event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onQueueUpdate", function(data) {
+                console.log("onQueueUpdate event was fired. liveAgentSessionKey was " + data.liveAgentSessionKey + "and queuePosition was " + data.queuePosition);
+            });
+
+            embedded_svc.addEventHandler("onIdleTimeoutOccurred", function(data) {
+                console.log("onIdleTimeoutOccurred event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onConnectionError", function(data) {
+                console.log("onConnectionError event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+
+            embedded_svc.addEventHandler("onClickSubmitButton", function(data) {
+                console.log("onClickSubmitButton event was fired.  liveAgentSessionKey was " + data.liveAgentSessionKey);
+            });
+            embedded_svc.addEventHandler("onInviteAccepted", function(data) {
+                console.log("onInviteAccepted event was fired.");
+            });
+
+            embedded_svc.addEventHandler("onInviteRejected", function(data) {
+                console.log("onInviteRejected event was fired.");
+            });
+
+    
+            embedded_svc.init(
+                'https://horizonhobby.my.salesforce.com',
+                'https://horizonhobbysupport.force.com',
+                gslbBaseURL,
+                '00D6g0000023inq',
+                'Product_Support_Chat',
+                {
+                    baseLiveAgentContentURL: 'https://c.la1-c2-ia5.salesforceliveagent.com/content',
+                    deploymentId: '5726g000000M1YX',
+                    buttonId: '5736g000000kA9v',
+                    baseLiveAgentURL: 'https://d.la1-c2-ia5.salesforceliveagent.com/chat',
+                    eswLiveAgentDevName: 'EmbeddedServiceLiveAgent_Parent04I6g000000k9t4EAA_17251fb4543',
+                    isOfflineSupportEnabled: false
+                }
+            );
+            
+            console.log(" embedded_svc.init was fired.", embedded_svc);
+     
+        };
+    
+    </script>
+    
+    <!--
+    <apex:form >
+        <apex:pageblock mode="edit" title="{!$ObjectType.Case.label} Edit">
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="Submit" action="{!Save}"/>
+                <apex:commandbutton value="Cancel" action="{!Cancel}"/>
+            </apex:pageblockbuttons>
+            <apex:outputpanel >
+                <apex:pageblocksection title="Case Information" showheader="true" columns="2">
+                    <apex:inputfield value="{!Case.First_Name__c}" required="false"/>
+                    <apex:inputfield value="{!Case.Last_Name__c}" required="true"/>
+                </apex:pageblocksection>
+    
+                <apex:pageblocksection title="Description Information" showheader="true" columns="1">
+                    <apex:inputfield value="{!Case.Description}" required="false"/>
+                </apex:pageblocksection>
+            </apex:outputpanel>
+        </apex:pageblock>
+    </apex:form>
+    -->
+    
+</apex:page>

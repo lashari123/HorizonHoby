@@ -1,0 +1,84 @@
+.dummy{
+	color : black;
+}
+.slds-card {
+    border: 0;
+}
+
+.scroll{
+    max-height: 392px !important;
+    overflow-y: auto;
+    border-radius: 0;
+}
+.slds-accordion__section {
+    border: 1px solid #e1e1e1; 
+}
+.slds-accordion__section .slds-accordion__summary {
+    background: #e1e1e1;
+    padding: 0;
+}
+.slds-accordion__section .slds-accordion__summary .slds-accordion__summary-heading {
+    position: relative;
+    padding: 0;
+}
+.slds-accordion__section .slds-accordion__summary .slds-accordion__summary-heading button {
+    text-decoration: none;
+    padding: 25px 50px 25px 25px;
+    position: relative;
+    margin: 0;
+    font-weight: 500;
+}
+.slds-accordion__section .slds-accordion__summary .slds-accordion__summary-heading button:after {
+    content: "\f067";
+    position: absolute;
+    right: 30px;
+    font-size: 18px;
+    font-family: "Font Awesome 5 Pro";
+    top: 28px;
+}
+.slds-accordion__section.slds-is-open .slds-accordion__summary .slds-accordion__summary-heading button:after {
+    content: "\f068";
+}
+.slds-accordion__section .slds-icon-utility-add {
+    display: none;
+}
+.slds-accordion .slds-accordion__list-item {
+    margin: 0 0 4px;
+    overflow: hidden;
+    border: 0;
+}
+.slds-accordion__section .slds-accordion__summary-action {
+    font-size: 18px;
+    color: #000;
+    font-family: 'Roboto',sans-serif;
+}
+
+lightning-icon.slds-icon-utility-add.slds-icon_container {
+    padding: 15px;
+}
+
+.slds-accordion__section .slds-accordion__content {
+	margin: 0 -12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.slds-accordion__section .slds-accordion__content .btn-default{
+    padding: 5px 10px;
+    font-size: 12px;
+    float: right;
+    margin: 10px 10px 0 0;
+}
+
+.slds-accordion__section .slds-accordion__content .btn-default:hover {
+    text-decoration: none;
+    color: #fff;
+}
+.slds-accordion__section .slds-accordion__content .dt-outer-container{
+        min-width: 450px;
+    }
+@media only screen and (max-width: 767px) {
+    .slds-accordion__section .slds-accordion__content .dt-outer-container{
+        min-width: 450px;
+    }
+}

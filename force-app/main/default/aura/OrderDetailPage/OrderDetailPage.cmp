@@ -1,0 +1,200 @@
+<aura:component controller="OrderDetailPageController" implements="lightning:isUrlAddressable,forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes">
+    
+    <aura:attribute name="orderId" type="string" default =''/>    
+    <aura:attribute name="orderData" type="object" />
+    <aura:attribute name="data" type="object" />
+    <aura:attribute name="columns" type="list" />
+    <aura:attribute name="countMap" type="object" />
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    
+    <aura:attribute name="isExcel" type="boolean" default="false"/>
+    <aura:attribute name="showPrintModal" type="boolean" default="false"/>
+    
+    <div class="orders-page">
+        <div class="orders-aside">
+            <strong class="orders-title">Orders</strong>
+            <ul class="orders-links">
+                <li><a class="active" href="javascript:void(0)">All Orders</a></li>
+                <li><a href="javascript:void(0)">Open Backorders</a></li>
+            </ul>
+        </div>
+        <div class="orders-area">
+            <ul class="breadcrumbs">
+                <li><a href="/horizonhobby/s/order-summary">Orders</a></li>
+                <li><a href="/horizonhobby/s/order-summary">All Orders</a></li>
+                <li><a class="current" href="javascript:void(0)">{!v.orderData.OrderName}</a></li>
+            </ul>
+            <div class="head">
+                <h1>Order Details</h1>
+                <h2>My Order Name - {!v.orderData.OrderName}</h2>
+            </div>
+            <div class="items-details">
+                <div class="checkout-widget">
+                    <div class="data-wrap">
+                        <dl>
+                            <dt>Name:</dt>
+                            <dd>{!v.orderData.contactName}</dd>
+                            <dt>Email:</dt>
+                            <dd>{!v.orderData.email}</dd>
+                            <dt>Store Name:</dt>
+                            <dd>{!v.orderData.storeName}</dd>
+                            <dt>Address:</dt>
+                            <dd><aura:unescapedHtml value="{!v.orderData.shippingAddress}" /></dd>
+                            <dt>Order Date:</dt>
+                            <dd>{!v.orderData.EndDate}</dd>
+                            <dt>PO #:</dt>
+                            <dd>{!v.orderData.PONumber}</dd>
+                            <dt>Lines:</dt>
+                            <dd>{!v.orderData.lines}</dd>
+                            <dt>Shipping:</dt>
+                            <dd>{!v.orderData.shippingType}</dd>
+                            <dt>Payment Type:</dt>
+                            <dd>{!v.orderData.paymentType}</dd>
+                        </dl>
+                        <dl>
+                            <dt>Status:</dt>
+                            <dd>{!v.orderData.Status}</dd>
+                            <dt>Total (Value):</dt>
+                            <dd>{!v.orderData.EstTotal}</dd>
+                            <dt>Shipped (Value):</dt>
+                            <dd> {!v.orderData.EstShipable} </dd>
+                            <dt>Remaining Open (Value):</dt>
+                            <dd>{!v.orderData.EstOpened}</dd>
+                            <dt>Canceled:</dt>
+                            <dd>{!v.orderData.EstCancelled}</dd>
+                            <dt>Prefered Ship Date:</dt>
+                            <dd>{!v.orderData.EndDate}</dd>
+                            <dt>Invoice:</dt>
+                            <dd><a href="#">123</a></dd>
+                        </dl>     
+                    </div>
+                    <div class="sub-info">
+                        <strong class="sub-title">Order Comments</strong>
+                        <p>{!v.orderData.Description}</p>
+                    </div>
+                </div>
+            </div>
+            <ul class="status-list">
+            	<li class="placed">
+                    <strong class="title">Quantity Placed</strong>
+                    <span class="items">{!v.countMap.total} items</span>
+            	</li>
+                <li class="fulfilled">
+                    <strong class="title">Quantity Fulfilled</strong>
+                    <span class="items">{!v.countMap.fulfilled} Items</span>
+            	</li>
+                <li class="open">
+                    <strong class="title">Quantity Open</strong>
+                    <span class="items">{!v.countMap.opened} Items</span>
+            	</li>
+                <li class="cancelled">
+                    <strong class="title">Quantity Cancelled</strong>
+                    <span class="items">{!v.countMap.cancelled} Items</span>
+            	</li>
+            </ul>
+            <div class="table-wrap">
+             <table  aria-multiselectable="true" class="slds-table slds-no-cell-focus slds-table_bordered slds-table_edit slds-table_fixed-layout " role="grid" aria-label="Example default inline edit table with cell focused">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        
+                        
+                        <aura:iteration items="{! v.columns }" var="item">
+                            <th aria-label="Name" aria-sort="none" class=" slds-is-sortable" scope="col">
+                                <span class="slds-assistive-text">Sort by: </span>
+                                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                    <span class="slds-th__action slds-truncate" id="{!item.fieldName +'|0'}" title="{!item.label}" onclick="{!c.headerClick}">{!item.label} </span>
+                                </div>
+                                
+                            </th>
+                            
+                            
+                        </aura:iteration>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{! v.data }" var="item">
+                        <tr aria-selected="false" class="slds-hint-parent">
+                            
+                            <td role="gridcell" tabindex="-1">
+                                <div class="product-name" title="{!item.Product2.ProductCode}">
+                                    
+                                    <a href="{!'/horizonhobby/s/product-detail-page?pid='+item.Product2Id}">{!item.Product2.ProductCode}</a>
+                                    
+                                    <!-- <div class="image">
+                            <img src='{!item.Product2.PrimaryImageID__c}' />
+                        </div>
+                        -->
+                                </div>
+                            </td> 
+                            <td role="gridcell" tabindex="-1">
+                                <div class="product-name" title="{!item.Product2.ProductCode}">
+                                    <div class="slds-truncate" title="{!item.UnitPrice}">{!item.Quantity}</div>
+                                    
+                                </div>
+                            </td> 
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate" title="{!item.ProductName}">{!item.Product2.Name}</div>
+                            </td> 
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate" title="{!item.UnitPrice}">€{!item.UnitPrice}</div>
+                            </td>    
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate" title="{!item.UnitPrice}">€<lightning:formattedNumber value="{!item.UnitPrice * item.Quantity}" maximumFractionDigits="2"/></div>
+                            </td> 
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate" title="{!item.pbe.Product2.Avail__c}">{!item.Product2.Avail__c}</div>
+                            </td>
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate" title="{!item.Opened__c}">{!item.opened__c}</div>
+                            </td>
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate" title="{!item.Fulfilled__c}">{!item.fulfilled__c}</div>
+                            </td>
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate" title="{!item.Cancelled__c}">{!item.Cancelled__c}</div>
+                            </td>
+                            <td role="gridcell" tabindex="-1">
+                                <div class="product-name" title="{!item.Product2.ProductCode}">
+                                    <div class="slds-truncate" title="{!item.UnitPrice}">{!item.Description}</div>
+                                    
+                                </div>
+                            </td> 
+                            
+                            
+                        </tr>
+                        
+                        
+                    </aura:iteration>
+                </tbody>
+            </table>
+           </div>
+        </div>
+    </div>
+    
+   <aura:if isTrue="{!v.showPrintModal}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open print-modal" >
+            <div class="slds-modal__container">
+                <div class="slds-modal__wrap slds-theme_default" onclick="{!c.closeModal2}">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModal }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <strong class="slds-modal__title slds-hyphenate">{!v.heading}</strong>
+                    </header>    
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                        
+                        <aura:if isTrue="{!v.isExcel}">
+                            
+                            <c:csvExport records="{!v.data}" calledFrom = "orderDetail" buttonName="All Page" fileName="Export.csv"/>
+                        </aura:if>
+                    </div>
+                </div>  
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    
+</aura:component>

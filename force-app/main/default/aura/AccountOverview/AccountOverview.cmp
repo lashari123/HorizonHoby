@@ -1,0 +1,90 @@
+<aura:component controller="AccountOverviewController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:attribute name="monthlySale" type="decimal" default="0"/>
+    <aura:attribute name="monthlyGoal" type="decimal" default="0"/>
+    
+    <aura:attribute name="monthlySalePercent" type="decimal" default="0"/>
+    <aura:attribute name="monthlyGoalPercent" type="decimal" default="100"/>
+    
+    <aura:attribute name="earnedDiscount" type="decimal" default="0"/>
+    <aura:attribute name="memberStatus" type="string" default=""/>
+    
+ 
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 30px;font-weight: 500;">
+            <p> Overview  </p>
+        </div>
+        
+    </div>
+    <br></br>
+    <br></br>
+    <br></br>
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 14px;font-weight: 500;">
+            <p> Monthly Sales: </p>
+        </div>
+        <div class="slds-float_right" style="font-size: 14px;font-weight: 500;">
+            <p> Monthly Goal: </p>
+        </div>
+        
+    </div>
+    <br></br><br></br>
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 40px;font-weight: 500;">
+            <p> <lightning:formattedNumber value="{!v.monthlySale}" minimumFractionDigits="2" />  </p>
+        </div>
+        <div class="slds-float_right" style="font-size: 40px;font-weight: 500;">
+            <p> <lightning:formattedNumber value="{!v.monthlyGoal}" minimumFractionDigits="2" />  </p>
+        </div>
+    </div>
+    <br></br>
+    <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" aria-label="{{Placeholder for description of progress bar}}" role="progressbar">
+        <span class="slds-progress-bar__value" style="{! 'width:'+v.monthlySalePercent + '% !important'}">
+          <!--  <span class="slds-assistive-text">Progress: 25%</span> -->
+        </span>
+    </div>
+
+   <br></br>
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 14px;font-weight: 500;margin-top:35px">
+            <p> Earned Discount:</p>
+        </div>
+    </div>
+    <br></br>
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 40px;font-weight: 500;">
+            <p> {!v.earnedDiscount}%  </p>
+        </div>
+    </div>
+    <br></br>
+    
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 14px;font-weight: 500;margin-top:35px">
+            <p> Current Member Status:</p>
+        </div>
+    </div>
+    <br></br>
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 40px;font-weight: 500;">
+            <p> {!v.memberStatus} </p>
+        </div>
+    </div>
+    <br></br>
+    <br></br>    
+    
+    
+    <div class="slds-clearfix">
+        
+        <div class="slds-float_right">
+            <lightning:layoutItem flexibility="auto" padding="around-small">
+                <lightning:button class="btn-default outline" label="VIEW MEMBERSHIPS" onclick="{!c.viewMembershipDocument}" />
+            </lightning:layoutItem>
+            
+        </div>
+        
+    </div>
+
+    
+</aura:component>

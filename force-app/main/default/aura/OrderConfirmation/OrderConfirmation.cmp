@@ -1,0 +1,98 @@
+<aura:component controller="OrderConfirmationController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+   
+    <aura:attribute name="orderId" type="string" default =''/>    
+    <aura:attribute name="orderData" type="object" />
+    
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <div class="checkout-details">
+        
+        <div class="items-details">
+            <div class="order-confirmation-head">
+                <div class="titles-area">
+                    <h1>Order Confirmation</h1>
+                    <p>YAY! We recieved you order &amp; are working to fulfil it.</p>
+                </div>
+                <a href="{!'/horizonhobby/s/order-detail?oid='+v.orderId}" class="btn-default">View Order</a>
+            </div>
+            <div class="checkout-widget">
+                <strong class="title">Contact Information</strong>
+                <div class="data-wrap">
+                    <dl>
+                        <dt>Name:</dt>
+                        <dd>{!v.orderData.contactName}</dd>
+                    </dl>
+                    <dl>
+                        <dt>Email:</dt>
+                        <dd>{!v.orderData.email}</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="checkout-widget">
+                <strong class="title">Order Information</strong>
+                <div class="data-wrap">
+                    <dl>
+                        <dt>Order Name:</dt>
+                        <dd>{!v.orderData.Name}</dd>
+                        <dt>Order #:</dt>
+                        <dd>{!v.orderData.OrderName}</dd>
+                        <dt>PO #:</dt>
+                        <dd>{!v.orderData.PONumber}</dd>
+                    </dl>
+                    <dl>
+                        <dt>Store Name:</dt>
+                        <dd>Hobby Town</dd>
+                        <dt>Address:</dt>
+                        <dd><aura:unescapedHtml value="{!v.orderData.shippingAddress}" /></dd>
+                    </dl>
+                </div>
+                <div class="sub-info">
+                    <strong class="sub-title">Order Comments</strong>
+                    <p>{!v.orderData.Description}</p>
+                </div>
+            </div>
+            <div class="checkout-widget">
+                <strong class="title">Shipping Options</strong>
+                <div class="data-wrap">
+                    <dl>
+                        <dt>Shipping:</dt>
+                        <dd>{!v.orderData.shippingType}</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="checkout-widget">
+                <strong class="title">Payment Terms</strong>
+                <div class="data-wrap">
+                    <dl>
+                        <dt>Type:</dt>
+                        <dd>{!v.orderData.paymentType}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="summary-details">
+            <strong class="title">Order Summary</strong>
+            <ul class="order-summary-list">
+                <li>
+                    <span class="sub-title">Original Price</span>
+                    <span class="value">{!v.orderData.orderOriginalPrice}</span>
+                </li>
+                <li>
+                    <span class="sub-title">Discount</span>
+                    <span class="value">{!v.orderData.orderDiscount}</span>
+                </li>
+                <li>
+                    <span class="sub-title">Shipping</span>
+                    <span class="value">{!v.orderData.shipping}</span>
+                </li>
+                <li>
+                    <span class="sub-title">Sales Tax/VAT</span>
+                    <span class="value">{!v.orderData.salesTaxVAT}</span>
+                </li>
+                <li class="totals">
+                    <span class="sub-title">Your Price:</span>
+                    <span class="value">{!v.orderData.orderNetTotal}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,58 @@
+.THIS h2 {
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 500;
+    font-family: 'Roboto',sans-serif;
+    margin: 0 0 20px;
+    text-align: center;
+}
+.THIS h2 span {
+    display: inline-block;
+    vertical-align: top;
+    padding: 0 0 5px;
+    border-bottom: 5px solid #000;
+}
+.THIS .card {
+	margin: 10px;
+	border-radius: 10px;
+	flex-grow: 1;
+    flex-basis: 0;
+}
+
+.THIS .card .title {
+    padding: 5px;
+    font-size: 15px;
+    font-weight: 400;
+    display: block;
+}
+
+.THIS .card img {
+    width: 100%;
+}
+
+.THIS .mcard {
+	margin: 0 -10px;
+	display: flex;
+	flex-wrap: wrap;
+}
+.THIS .mcard a {
+    color: #000;
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+	transition: all 0.3s ease;
+}
+.THIS .mcard a:hover {
+	color: #003567;
+    text-decoration: underline;
+}
+.THIS .mcard a:hover strong {
+    font-weight: bold;
+}
+@media only screen and (max-width: 767px) {
+    .THIS .card {
+        width: calc(50% - 20px);
+        flex-grow: inherit;
+        flex-basis: inherit;
+    }
+}

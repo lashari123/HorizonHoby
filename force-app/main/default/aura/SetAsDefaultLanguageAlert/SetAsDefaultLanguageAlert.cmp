@@ -1,0 +1,36 @@
+<aura:component controller="LanguageController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    
+    <aura:attribute name="languageSelectedValue" type="string" />
+    <aura:attribute name="message" type="string" default = 'You have selected to view the site in a new language. Would you like to save this selection as a default on your account? If not, this language change will be in place for your current session only.'/>
+    <aura:attribute name="Yes" type="string" default = 'Set as default'/>
+    <aura:attribute name="No" type="string" default = 'This session only'/>
+    <aura:attribute name="show" type="Boolean" default="true"/>
+    <!--Handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:If isTrue="{!v.show}">
+    <section role="dialog" aura:id="MainDiv" tabindex="-1" class="slds-backdrop slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" onclick="{!c.closeModal}">
+        <div class="slds-modal__container" >
+            <header class="slds-modal__header" onclick="{!c.closeModal2}">
+                <div style="text-align: right;">
+                    <button class="slds-button slds-button_icon" title="Close" onclick="{!c.cancelAction}" >
+                        <lightning:icon class="pointer" iconName="action:close" size="x-small"  alternativeText="Indicates approval"/>
+                    	<i class="far fa-times-circle"></i>
+                    </button>
+                </div>                                                                                                            
+            </header>
+            
+            <div class="slds-modal__content_box" onclick="{!c.closeModal2}">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                      <p>{!v.message}</p>
+                </div>
+                <footer class="slds-modal__footer">
+                  <button class="slds-button slds-button_success" onclick="{!c.Yes}">{!v.Yes}</button>
+                  <button class="slds-button slds-button_destructive" onclick="{!c.No}">{!v.No}</button>
+                </footer>
+            </div>
+        </div>
+        
+        
+    </section>
+    </aura:If>
+</aura:component>

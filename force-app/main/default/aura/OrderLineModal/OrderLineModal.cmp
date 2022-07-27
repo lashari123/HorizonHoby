@@ -1,0 +1,65 @@
+<aura:component>
+    <!--Boolean attribute to indicate if modal is open or not 
+       default value is false as modal is closed when page is loaded 
+    -->
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="OrderLineItemsResult" type="List" />
+    <aura:attribute name="FailedRecords" type="Integer" default="0" />
+    <aura:attribute name="SuccessRecords" type="Integer"   default="0"/>
+    
+    
+    <div class="slds-m-around_xx-large">
+        <!--
+        <lightning:button variant="brand"
+                          label="What is Modal/PopUp Box?"
+                          title="What is Modal/PopUp Box?"
+                          onclick="{! c.openModel }" />
+		-->
+        <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+        <aura:if isTrue="{!v.isModalOpen}">
+             
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                    <!--    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Order Lines Validation Result</h2> -->
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        
+                        <c:ImportContacts />
+                        <!--
+                        <b> You have {!v.FailedRecords} failed records in your file, do you want to proceed? </b>
+                        <br></br>
+                        <br></br>
+                        Number of successful lines found in the file : {!v.SuccessRecords} <br></br>
+                        Number of error lines found in the file : {!v.FailedRecords}
+                        <br></br> <br></br>
+                        <aura:iteration items="{!v.OrderLineItemsResult}" var="cus" indexVar="key">
+                            {!cus.key} – {!cus.value}<br/><br/>
+                        </aura:iteration>
+                        -->
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <!-- <lightning:button variant="neutral"
+                                          label="No"
+                                          title="No"
+                                          onclick="{! c.closeModel }"/> -->
+                        <lightning:button variant="brand"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{!c.closeModel}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+</aura:component>

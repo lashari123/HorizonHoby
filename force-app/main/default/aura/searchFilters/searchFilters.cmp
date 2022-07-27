@@ -1,0 +1,45 @@
+<aura:component description="Search Filters" access="global">
+    <aura:attribute name="renderedList" type="List" default="[]"/>
+    <aura:attribute name="keyword"  type="string"   />
+    <aura:attribute name="filteredProductList" type="List" default="[]"/>
+    <aura:attribute name="filterListSelected" type="String" default="Filters Selected"/>
+    
+    <aura:registerEvent name="RunFilterEvent" type="c:RunFilter"/> 
+    
+    
+	<div class="search-filters">
+        <div class="search-area">
+        	<div class="fields-area">
+                <input type="search" aura:id="keyword"  placeholder="SEARCH TERM" />
+            </div>
+            <button type="button" class="btn-default" onclick='{!c.filter}'>Search</button>
+            <!--<ul class="checkboxes-list">
+            	<li>
+                	<label class="filter-checkbox">
+                        <input type="checkbox" />
+                        <span class="fake-checkbox"></span>
+                        <span class="label">REORDER</span>
+                    </label>
+                </li>
+                <li>
+                	<label class="filter-checkbox">
+                        <input type="checkbox" />
+                        <span class="fake-checkbox"></span>
+                        <span class="label">QUANTITY BUY ITEMS ONLY</span>
+                    </label>
+                </li>
+                <li>
+                	<label class="filter-checkbox">
+                        <input type="checkbox" />
+                        <span class="fake-checkbox"></span>
+                        <span class="label">GUARANTEED SALE ITEMS ONLY</span>
+                    </label>
+                </li>
+            </ul> -->
+        </div>
+        <div class="checkboxes-list">
+        	<c:savedFiltersList renderedList="{!v.renderedList}" filterListSelected = "{!v.filterListSelected}"/>
+        </div>
+        <c:filterAccordion renderedList="{!v.renderedList}" filteredProductList="{!v.filteredProductList}" aura:id="cComp"/>
+    </div>
+</aura:component>

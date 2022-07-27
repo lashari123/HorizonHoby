@@ -1,0 +1,95 @@
+<aura:component controller="ProductTileController" description="productTiles" implements="forceCommunity:availableForAllPageTypes" access="global">
+	
+    <aura:attribute name="PricebookEntryList" type="PricebookEntry[]" />
+     <aura:attribute name="title" type="string" default="Top Selling Products" />
+    
+    <!--Handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="top-selling-products">
+		<h2><span>{!v.title}</span></h2>
+		<div class="row">
+			<div class="product-col">
+				<div class="image">
+					<img src="{!'../servlet/servlet.FileDownload?file=' + v.PricebookEntryList[0].Product2.PrimaryImageID__c}" alt="{!v.PricebookEntryList[0].Product2.Name}" />
+				</div>
+				<div class="details">
+					<h3>{!v.PricebookEntryList[0].Product2.Name}</h3>
+					<p>{!v.PricebookEntryList[0].Product2.Description}</p>
+					<a href="{!'/horizonhobby/s/product-detail-page?pid='+ v.PricebookEntryList[0].Product2.Id}">View Product</a>
+					<div class="pricing">
+						<span class="price">€{!v.PricebookEntryList[0].UnitPrice}</span>
+					</div>
+				</div>
+			</div>
+			<div class="product-col">
+				<div class="image">
+					<img src="{!'../servlet/servlet.FileDownload?file=' + v.PricebookEntryList[1].Product2.PrimaryImageID__c}" alt="{!v.PricebookEntryList[1].Product2.Name}" />
+				</div>
+				<div class="details">
+					<h3>{!v.PricebookEntryList[1].Product2.Name}</h3>
+					<p>{!v.PricebookEntryList[1].Product2.Description}</p>
+					<a href="{!'/horizonhobby/s/product-detail-page?pid='+ v.PricebookEntryList[1].Product2.Id}">View Product</a>
+					<div class="pricing">
+						<!--<span class="stroke">$1,000.00</span> -->
+						<span class="price">€{!v.PricebookEntryList[1].UnitPrice}</span>
+					</div>
+				</div>
+			</div>
+			<div class="product-col">
+				<div class="image">
+					<img src="{!'../servlet/servlet.FileDownload?file=' + v.PricebookEntryList[2].Product2.PrimaryImageID__c}" alt="{!v.PricebookEntryList[2].Product2.Name}" />
+				</div>
+				<div class="details">
+					<h3>{!v.PricebookEntryList[2].Product2.Name}</h3>
+					<p>{!v.PricebookEntryList[2].Product2.Description}</p>
+					<a href="{!'/horizonhobby/s/product-detail-page?pid=' + v.PricebookEntryList[2].Product2.Id}">View Product</a>
+					<div class="pricing">
+						<span class="price">€{!v.PricebookEntryList[2].UnitPrice}</span>
+					</div>
+				</div>
+			</div>
+			<div class="product-col">
+				<div class="image">
+					<img src="{!'../servlet/servlet.FileDownload?file=' + v.PricebookEntryList[3].Product2.PrimaryImageID__c}" alt="{!v.PricebookEntryList[3].Product2.Name}" />
+				</div>
+				<div class="details">
+					<h3>{!v.PricebookEntryList[3].Product2.Name}</h3>
+					<p>{!v.PricebookEntryList[3].Product2.Description}</p>
+                    <a href="{!'/horizonhobby/s/product-detail-page?pid='+ v.PricebookEntryList[3].Product2.Id}">View Product</a>
+					<div class="pricing">
+						<!--<span class="stroke">$1,000.00</span> -->
+						<span class="price">€{!v.PricebookEntryList[3].UnitPrice}</span>
+					</div>
+				</div>
+			</div>
+			<div class="product-col">
+				<div class="image">
+					<img src="{!'../servlet/servlet.FileDownload?file=' + v.PricebookEntryList[4].Product2.PrimaryImageID__c}" alt="{!v.PricebookEntryList[4].Product2.Name}"/>
+				</div>
+				<div class="details">
+					<h3>{!v.PricebookEntryList[4].Product2.Name}</h3>
+					<p>{!v.PricebookEntryList[4].Product2.Description}</p>
+                    <a href="{!'/horizonhobby/s/product-detail-page?pid='+ v.PricebookEntryList[4].Product2.Id}">View Product</a>
+					<div class="pricing">
+						<span class="price">€{!v.PricebookEntryList[4].UnitPrice}</span>
+					</div>
+				</div>
+			</div>
+			<div class="product-col">
+				<div class="image">
+					<img src="{!'../servlet/servlet.FileDownload?file=' + v.PricebookEntryList[5].Product2.PrimaryImageID__c}" alt="{!v.PricebookEntryList[5].Product2.Name}" />
+				</div>
+				<div class="details">
+					<h3>{!v.PricebookEntryList[5].Product2.Name}</h3>
+					<p>{!v.PricebookEntryList[5].Product2.Description}</p>
+                    <a href="{!'/horizonhobby/s/product-detail-page?pid='+ v.PricebookEntryList[5].Product2.Id}">View Product</a>
+					<div class="pricing">
+						<!--<span class="stroke">$1,000.00</span>-->
+						<span class="price">€{!v.PricebookEntryList[5].UnitPrice}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</aura:component>

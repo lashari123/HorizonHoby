@@ -1,0 +1,347 @@
+.THIS .greyOut{    
+   pointer-events: none; 
+   background: #CCC; 
+   color: #333; 
+   border: 1px solid #666 
+}
+.THIS.slds-hidden {
+    display: none;
+}
+.THIS .slds-is-relative {
+    z-index:1;
+}
+.THIS.catalog-results {
+    display: flex;
+}
+.THIS .search-results {
+    padding: 0 0 0 15px;
+}
+.THIS .prev,
+.THIS .next {
+    width: 31px;
+    height: 33px;
+    border: 0;
+    background: #000;
+    color: #fff;
+    border-radius: 0;
+    position: relative;
+    padding:0;
+    font-size: 0;
+    line-height: 0;
+}
+.THIS .prev:before,
+.THIS .next:after {
+    content: "\f053";
+    font-family: "Font Awesome 5 Pro";
+    color: #fff;
+    position: absolute;
+    font-size: 20px;
+    line-height: 32px;
+}
+.THIS .next:after {
+    content: "\f054";
+}
+.THIS .items-count {
+    text-align: right;
+    padding: 0 10px;
+}
+.THIS .paging a{
+    color: #000;
+}
+.THIS .paging b a {
+    margin: 0 3px;
+    text-decoration: underline;
+}
+.THIS .custom-select {
+    display: inline-block;
+    vertical-align: middle;
+    width: 98px;
+}
+.THIS .custom-select select {
+    width: 100%;
+    min-width: 100%;
+    padding: 5px 15px 5px 5px;
+}
+.THIS .custom-select.num {
+    width: 60px;
+    margin: 0 0 0 8px;
+}
+.THIS .custom-checkbox {
+    display: inline-block;
+    vertical-align: middle;
+    margin:0 15px 0 0;
+}
+.THIS .checkbox-row {
+    display: flex;
+}
+.THIS .select-row {
+    display: flex;
+    justify-content: flex-end;
+}
+.THIS .print-list {
+    list-style: none;
+    margin:0;
+    padding:0;
+    display: flex;
+}
+.THIS .print-list li + li:before {
+    content:"|";
+    margin: 0 5px;
+}
+.THIS .export-options {
+    display: flex;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+}
+.THIS.slds-is-relative {
+    margin: 0 0 15px;
+}
+.THIS .export-options .sub-title {
+    padding: 0 3px 0 15px;
+}
+.THIS .export-options a{
+    color: #000;
+    text-decoration: underline;
+}
+.THIS.items-head td {
+    padding: 15px 0;
+}
+.THIS .slds-table thead th {
+    vertical-align: top;
+}
+.THIS .slds-table thead th:first-child {
+    width: 115px;
+}
+.THIS .slds-table thead th:nth-child(2) {
+    width: 80px;
+}
+.THIS .slds-table thead th:nth-child(3) {
+    width: 130px;
+}
+.THIS .slds-table thead th:nth-child(7) {
+    width: 70px;
+}
+.THIS .slds-table thead th:nth-last-of-type(2) {
+    width: 80px;
+}
+.THIS .slds-table thead th:nth-last-of-type(3) {
+    width: 90px;
+}
+.THIS .slds-table tbody td,
+.THIS .slds-table thead th {
+    color: #000;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 700;
+    padding: 5px 5px 5px 0;
+    border-top: 0;
+}
+.THIS .slds-table thead th .slds-th__action {
+    padding: 0;
+    height: auto;
+   /* white-space: normal;*/
+}
+.THIS .slds-table tbody td {
+    font-weight: 400;
+    padding: 10px 5px 10px 0;
+}
+.THIS .slds-table tbody tr:hover td {
+    background: #fff;
+    box-shadow: none !important;
+}
+.THIS .slds-table tbody tr + tr td {
+    border-top: 1px solid #e1e1e1;
+}
+.THIS .slds-cell-edit .slds-popover {
+    width: 70px;
+    box-shadow: none;
+    border-radius: 0;
+    position: static !important;
+    border: 0;
+}
+.THIS .slds-cell-edit .slds-popover input {
+    text-align: center;
+    border-radius: 0;
+    border-color: #e1e1e1;
+    outline: none;
+}
+.THIS .slds-popover_edit .slds-popover__body {
+    padding: 0;
+}
+.THIS .slds-popover .slds-form-element__control button {
+    border: 0;
+    color: #000;
+    outline: none;
+}
+.THIS .slds-popover .slds-form-element__control button:focus{
+    box-shadow: none;
+}
+.THIS .slds-popover .slds-form-element__control .slds-input__button_decrement {
+    left: 5px;
+}
+.THIS .slds-popover .slds-form-element__control .slds-input__button_increment {
+    right: 5px;
+}
+.THIS .search-selects-footer {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, rgba(188,186,186,1) 0%, rgba(225,225,225,1) 100%);
+}
+.THIS .search-selects-footer .btn-default {
+    border-radius: 0;
+    margin:0 5px;
+    font-size: 12px;
+    min-width: 150px;
+}
+.THIS .search-selects-footer .slds-button_neutral:hover {
+    color: #fff;
+    background: #003567;
+}
+.THIS .search-selects-footer .btn-default.clear {
+    background: #7d7d7d;
+    min-width: inherit;
+}
+.THIS .items-summary {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+.THIS .items-summary li {
+    padding: 0 10px;
+    position: relative;
+}
+.THIS .items-summary li + li:before {
+    content: "|";
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.THIS .filters-selected {
+    padding: 8px;
+    margin: 20px 0;
+    display: inline-block;
+    vertical-align: top;
+    border: 1px solid #7d7d7d;
+}
+.THIS .filters-selected.Noborder{
+        padding: 23px;
+    margin: 24px 0;
+    display: inline-block;
+    vertical-align: top;
+    border: none;
+
+}
+.THIS .filters-selected .title {
+    display: inline-block;
+    vertical-align: top;
+    padding: 0 8px;
+    background: #fff;
+    margin: -20px 0 20px;
+}
+.THIS .filters-selected .links-area {
+    display: inline-flex;
+    vertical-align: middle;
+    align-items: center;
+    padding: 0 0 0 20px;
+}
+.THIS .filters-selected .links-area .btn-default {
+    border-radius: 0;
+    position:relative;
+    padding: 7px 15px;
+}
+.THIS .filters-selected .links-area .btn-default:before {
+    content: "\f005";
+    font-family: "Font Awesome 5 Pro";
+    margin: -2px 6px 0 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+.THIS .filters-selected .links-area .clear-all {
+    color: #7d7d7d;
+    font-weight: 500;
+    margin: 0 10px 0 15px;
+    text-decoration: underline;
+}
+.THIS .filters-selected .filters-content {
+    display: flex;
+    align-items: flex-start;
+    margin: -15px 0 0;
+}
+.THIS .tags-list {
+    list-style: none;
+    padding: 7px 0 0 0;
+    margin: 0;
+    display: inline-flex;
+    flex-flow: row wrap;
+    font-weight: 500;
+    flex-grow: 1;
+    flex-basis: 0;
+}
+.THIS .tags-list li {
+    padding: 4px 8px;
+}
+.THIS .tags-list li a {
+    color: #000;
+    margin: 0 0 0 5px;
+}
+.THIS.print-modal .slds-modal__container{
+    max-width: 595px;
+    min-width: inherit;
+    width: auto;
+    padding: 10px;
+}
+.THIS.print-modal .slds-modal__header {
+    text-align: left;
+    border-bottom: 1px solid #f4f4f4;
+    padding: 0 0 10px;
+    margin: 0 0 20px;
+}
+.THIS.print-modal .slds-modal__close {
+    position: static;
+    float: right;
+    margin: -5px 0 0;
+}
+.THIS.print-modal .slds-modal__close .slds-button_icon-inverse {
+    color: #000;
+    width: 20px;
+    height: 20px;
+}
+.THIS.print-modal .slds-theme_default {
+    padding: 15px;
+}
+.THIS.print-modal .slds-modal__title {
+    color: #333;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 700;
+}
+.THIS.print-modal .btn-default {
+    border-radius: 0;
+}
+.THIS.print-modal .slds-modal__content:last-child {
+    box-shadow: none;
+    padding: 0;
+    border-radius: 0;
+}
+@media only screen and (max-width: 1299px) {
+    .THIS.catalog-results {
+        display: block;
+    }
+    .THIS .search-results {
+        padding: 0;
+    }
+}
+@media only screen and (max-width: 991px) {
+    .THIS .search-results {
+        overflow-x: auto;
+    }
+    .THIS .search-results-wrap {
+        min-width: 935px;
+        overflow: hidden;
+    }
+}

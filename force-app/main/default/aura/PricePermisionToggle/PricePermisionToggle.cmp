@@ -1,0 +1,28 @@
+<aura:component controller="PricePermisionController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="chkboxvalue" type="boolean"/>
+    <aura:attribute name="loaded" type="boolean" default = "true"/> 
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+        <aura:if isTrue="{!v.loaded }">
+            <div class="slds-is-relative" style="position:unset">
+                <lightning:spinner alternativeText="Loading" />
+            </div>
+        </aura:if>
+
+    <!--  <lightning:input type="toggle" name="toggleButton" aura:id="tglbtn" label="Dealer Pricing" 
+                    checked="{!!v.chkboxvalue}" 
+                     messageToggleActive="I am Enable Now!" messageToggleInactive="I am Disable Now!" 
+                     onchange="{!c.getToggleButtonValue}"/>
+    <p><b>Toggle value is {!v.chkboxvalue} </b></p>-->
+    
+   
+        <div class="dealer-pricing">
+            <label class="dealer-checkbox">
+                <input type="checkbox" name="toggleButton" aura:id="tglbtn" checked="{!!v.chkboxvalue}"    onchange="{!c.getToggleButtonValue}" />
+                <span class="fake-checkbox"></span>
+                <span class="label">Dealer Pricing</span>
+            </label>
+        </div>
+    
+</aura:component>

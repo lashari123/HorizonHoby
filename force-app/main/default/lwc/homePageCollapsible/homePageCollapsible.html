@@ -1,0 +1,116 @@
+<template>
+	<div class="slds-card scroll ">
+		<ul class="slds-accordion">
+			<li class="slds-accordion__list-item">
+				<section class="slds-accordion__section slds-is-open" data-id="section1" >
+					<div class="slds-accordion__summary">
+						<h2 class="slds-accordion__summary-heading">
+
+							<button data-id="section1" onclick={handleToggle}  class="slds-button slds-button_reset slds-accordion__summary-action" 
+							aria-controls="referenceId-21" aria-expanded="true" title="Accordion summary">
+								<span class="slds-accordion__summary-content">{DraftOrders}</span>
+							</button>
+						</h2>
+						<lightning-icon icon-name="utility:add" alternative-text="add" size="xx-small"
+							title="xx-small size"></lightning-icon>
+					</div>
+					<div class="slds-accordion__content" id="referenceId-21">
+						<lightning-datatable columns={draftOrderColumns} onrowaction={handleRowActions} data={draftOrderdata} key-field="Product2Id"
+							suppress-bottom-bar="true" hide-checkbox-column="true">
+						</lightning-datatable>
+
+						<a href='/horizonhobby/s/draftorders' class="btn-default">View All</a>
+
+						</div>
+				</section>
+			</li>
+			<li class="slds-accordion__list-item">
+				<section class="slds-accordion__section" data-id="section2" >
+					<div class="slds-accordion__summary">
+						<h2 class="slds-accordion__summary-heading">
+							<button  data-id="section2" onclick={handleToggle} class="slds-button slds-button_reset slds-accordion__summary-action" aria-controls="referenceId-22" aria-expanded="false" title="Accordion summary">
+
+					<span class="slds-accordion__summary-content">{SubmittedOrders}</span>
+					</button>
+						</h2>
+						<lightning-icon icon-name="utility:add" alternative-text="add" size="xx-small"
+							title="xx-small size"></lightning-icon>
+					</div>
+					<div class="slds-accordion__content" id="referenceId-22">
+						<lightning-datatable columns={submittedOrderColumns} onrowaction={handleRowActions} data={submittedOrderdata} key-field="Product2Id"
+							suppress-bottom-bar="true" hide-checkbox-column="true">
+						</lightning-datatable>
+
+						<a href='/horizonhobby/s/invoicehistory' class="btn-default">View All</a>
+						
+						</div>
+				</section>
+			</li>
+			<li class="slds-accordion__list-item">
+				<section class="slds-accordion__section" data-id="section3" >
+					<div class="slds-accordion__summary">
+						<h2 class="slds-accordion__summary-heading">
+							<button data-id="section3" onclick={handleToggle} class="slds-button slds-button_reset slds-accordion__summary-action" aria-controls="referenceId-23" aria-expanded="false" title="Accordion summary">
+
+<span class="slds-accordion__summary-content">{Backorders}</span>
+</button>
+						</h2>
+						<lightning-icon icon-name="utility:add" alternative-text="add" size="xx-small"
+							title="xx-small size"></lightning-icon>
+					</div>
+					<div class="slds-accordion__content" id="referenceId-23">
+						<lightning-datatable columns={backedOrderColumns} onrowaction={handleRowActions} data={backedOrderdata} key-field="Product2Id"
+							suppress-bottom-bar="true" hide-checkbox-column="true">
+						</lightning-datatable>
+
+						<a href='/horizonhobby/s/recentorders' class="btn-default">View All</a>
+						
+						</div>
+				</section>
+			</li>
+			<li class="slds-accordion__list-item">
+				<section class="slds-accordion__section" data-id="section4" >
+					<div class="slds-accordion__summary">
+						<h2 class="slds-accordion__summary-heading">
+							<button data-id="section4" onclick={handleToggle} class="slds-button slds-button_reset slds-accordion__summary-action" aria-controls="referenceId-24" aria-expanded="false" title="Accordion summary">
+								<span class="slds-accordion__summary-content">{OrderHistory}</span>
+							</button>
+						</h2>
+						<lightning-icon icon-name="utility:add" alternative-text="add" size="xx-small"
+							title="xx-small size"></lightning-icon>
+					</div>
+					<div class="slds-accordion__content" id="referenceId-24">
+						<lightning-datatable columns={orderHistoryColumns} onrowaction={handleRowActions} data={orderHistoryData} key-field="Product2Id"
+							suppress-bottom-bar="true" hide-checkbox-column="true">
+						</lightning-datatable>
+
+						<a href='/horizonhobby/s/recentorders' class="btn-default">View All</a>
+						
+						</div>
+				</section>
+			</li>
+			<li class="slds-accordion__list-item">
+				<section class="slds-accordion__section" data-id="section5">
+					<div class="slds-accordion__summary">
+						<h2 class="slds-accordion__summary-heading">
+							<button data-id="section5" onclick={handleToggle} class="slds-button slds-button_reset slds-accordion__summary-action" aria-controls="referenceId-26" aria-expanded="false" title="Accordion summary">
+								<span class="slds-accordion__summary-content">{InvoiceHistory}</span>
+							</button>
+						</h2>
+						<lightning-icon icon-name="utility:add" alternative-text="add" size="xx-small"
+							title="xx-small size"></lightning-icon>
+					</div>
+					<div class="slds-accordion__content" id="referenceId-26">
+						<lightning-datatable columns={invoiceHistoryColumns} onrowaction={handleRowActions} data={invoiceHistoryData} key-field="Product2Id"
+							suppress-bottom-bar="true" hide-checkbox-column="true">
+						</lightning-datatable>
+
+						<a href='/horizonhobby/s/recentorders' class="btn-default">View All</a>
+						
+						</div>
+				</section>
+			</li>
+
+		</ul>
+	</div>
+</template>

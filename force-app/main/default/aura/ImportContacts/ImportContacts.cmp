@@ -1,0 +1,345 @@
+<aura:component controller="ImportOrderLineController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="showAddToDraftOrder" type="boolean" default="false"/>
+    <aura:attribute name="skuQuantityList" type="String[]" />
+    <aura:attribute name="Products" type="Map" default="{}"/>
+    <aura:attribute name="iterationValues" type="String[]" default="{}"/>
+    
+        <aura:attribute name="AddLabel" type="String" default="+ Add"/>
+    <aura:attribute name="isDisabled" type="String" default="NotDisabled btn-default"/>
+    <aura:attribute name="orderType" type="string" />
+    <aura:attribute name="orderList" type="Order[]" />
+    <aura:attribute name="showDraftOrders" type="Boolean" default="false" />
+    <aura:attribute name="isCreated" type="Boolean" default="false"/>
+    <aura:attribute name="loaded" type="Boolean" default="false" />
+    
+    <aura:attribute name="showNewOrder" type="Boolean" default="false" />
+    <aura:attribute name="FromAllOrderPage" type="Boolean" default="false" />
+    
+    <aura:attribute name="dealerContactId" type="String"/>
+    
+    <!-- File Upload component attributes -->
+    <aura:attribute name="filetype" type="List" default="['.csv']" />
+    <aura:attribute name="multiple" type="Boolean" default="true" />
+    <aura:attribute name="disabled" type="Boolean" default="true" />
+    <aura:attribute name="ValidateDisable" type="Boolean" default="true"/>
+    <aura:attribute name="recordId" type="String" />
+    
+    <!-- .CSV File Attributes-->
+    <aura:attribute name="OrderLinesFromCSV" type="List" />
+    
+    <aura:attribute name="showBool" type="Boolean" default="false"/>
+    
+    <aura:attribute name="showOrderButton" type="Boolean" default="false"/>
+    
+    <aura:attribute name="showImportModalComplete" type="Boolean" default="true"/>
+    
+    <aura:attribute name="OrderLineItemsResult" type="List" />
+    <aura:attribute name="SuccessLines" type="List" />
+    
+    <aura:attribute name="FailedRecords" type="Integer" default="0" />
+    <aura:attribute name="SuccessRecords" type="Integer"   default="0"/>
+    <aura:attribute name="TotalRecords" type="Integer"   default="0"/>
+    
+    <!-- modal attribures -->
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+ 
+    
+    <!--Handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    
+    <aura:if isTrue="{!v.showImportModalComplete}">
+    
+    <!-- <c:OrderLineModal isModalOpen="true"/> -->
+    <div class="slds-m-around_xx-large slds-modal_large">
+        <!--
+        <lightning:button variant="brand"
+                          label="What is Modal/PopUp Box?"
+                          title="What is Modal/PopUp Box?"
+                          onclick="{! c.openModel }" />
+  -->
+        <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+        
+        
+        <!-- Modal/Popup Box starts here-->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__wrap">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <strong class="title">Import Order Lines</strong>
+                        <button class="slds-button slds-button_icon" title="Close" onclick="{!c.closeCompleteModal}" >
+                            <lightning:icon class="pointer" iconName="action:close" size="x-small"  alternativeText="Indicates approval"/>
+                            <i class="far fa-times-circle"></i>
+                        </button>
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{!c.closeImportModal}"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning:fileUpload label="File Upload:"
+                                              name="fileUploader"
+                                              multiple="false"
+                                              accept="{!v.filetype}"
+                                              recordId="{!v.dealerContactId}"
+                                              onuploadfinished="{!c.handleUploadFinished}" />
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:layout>
+                            <lightning:layoutItem flexibility="auto" padding="around-small">
+                                <lightning:button class="btn-default" label="VALIDATE" onclick="{!c.Validate}" disabled="{!v.ValidateDisable}"/>
+                            </lightning:layoutItem>
+                            
+                            <lightning:layoutItem flexibility="auto" padding="around-small">
+                                <lightning:button class="btn-default cancel" label="CANCEL" onclick="{!c.closeCompleteModal}" />
+                            </lightning:layoutItem>
+                            
+                            <lightning:layoutItem flexibility="auto" padding="around-small">
+                                <lightning:button class="btn-default outline" label="HELP" onclick="{!c.helpDocument}" />
+                            </lightning:layoutItem>
+                           
+                            
+                        </lightning:layout>
+                    </footer>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        
+    </div>
+    
+    
+    
+     <aura:renderIf isTrue="{!v.showOrderButton}">
+     <div class="quick-orders-section">
+        <div class="form-content">
+                <lightning:layout>
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        <lightning:select name="select1" onchange="{!c.onChangeOrderType}" value="{!v.orderType}" label="Order Type">
+                            <option value="">SELECT </option>
+                            
+                            <option value="DraftOrders">Add to Draft Order</option>
+                            <option value="CreateOrder">Create New Order - Business</option>
+                            <option value="DraftOrders-B">Add to Draft Order - Business</option>
+                        </lightning:select>
+                        <!--
+                        <lightning:select name="select1" label="File Format">
+                            <option value="">SELECT </option>
+                            <option value="1">.CSV</option>
+                        </lightning:select>
+                        -->
+                    </lightning:layoutItem>
+                </lightning:layout>
+       	</div>
+    </div>
+    </aura:renderIf>
+    <!--
+    <div class="slds-form-element">
+        <div class="slds-form-element__control">
+            <div class="slds-checkbox">
+                <input type="checkbox" name="options" id="checkbox-unique-id-113" value="checkbox-unique-id-113" checked="" />
+                <label class="slds-checkbox__label" for="checkbox-unique-id-113">
+                    <span class="slds-checkbox_faux"></span>
+                    <span class="slds-form-element__label">BACKORDER IF UNAVAILABLE</span>
+                </label>
+            </div>
+            
+            <div class="slds-checkbox">
+                <input type="checkbox" name="options" id="checkbox-unique-id-114" value="checkbox-unique-id-114" checked="" />
+                <label class="slds-checkbox__label" for="checkbox-unique-id-114">
+                    <span class="slds-checkbox_faux"></span>
+                    <span class="slds-form-element__label">LOAD PURCHASE ORDER VALUE FROM IMPORT FILE</span>
+                </label>
+            </div>
+        </div>
+    </div>   
+    -->
+
+    <!--
+    <lightning:fileUpload label="FILE UPLOAD"
+                          name="fileUploader"
+                          multiple="true"
+                          accept="{!v.filetype}"
+                          recordId="0016t00000Nsz7qAAB"
+                          onuploadfinished="{!c.handleUploadFinished}" />
+     -->
+        <!--
+    <div class="quick-orders-section">
+    <lightning:layout>
+        <lightning:layoutItem flexibility="auto" padding="around-small">
+            <lightning:button class="btn-default" label="VALIDATE" onclick="{!c.Validate}" disabled="{!v.ValidateDisable}"/>
+        </lightning:layoutItem>
+        
+        <lightning:layoutItem flexibility="auto" padding="around-small">
+            <lightning:button class="btn-default" label="CANCEL" onclick="" />
+        </lightning:layoutItem>
+        
+        <lightning:layoutItem flexibility="auto" padding="around-small">
+            <lightning:button class="btn-default" label="HELP" onclick="" />
+        </lightning:layoutItem>
+       
+        
+    </lightning:layout>
+    </div>
+-->
+    <div>
+        <aura:renderIf isTrue="{!v.showBool}">
+         <!--   <c:OrderLineModal OrderLineItemsResult="{!v.OrderLineItemsResult}" SuccessRecords="{!v.SuccessRecords}" FailedRecords = "{!v.FailedRecords}" isModalOpen="true" /> -->
+            <!-- Modal Code Start -->
+            
+            <div class="slds-m-around_xx-large slds-modal_large">
+                <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+                <aura:if isTrue="{!v.isModalOpen}">
+                    
+                    <!-- Modal/Popup Box starts here-->
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <div class="slds-modal__wrap">
+                                <!-- Modal/Popup Box Header Starts here-->
+                                <header class="slds-modal__header">
+                                    <strong class="title">Order Lines Validation Result</strong>
+                                    <button class="slds-button slds-button_icon" title="Close" onclick="{!c.closeModel}" >
+                                        <lightning:icon class="pointer" iconName="action:close" size="x-small"  alternativeText="Indicates approval"/>
+                                        <i class="far fa-times-circle"></i>
+                                    </button>
+                                    <lightning:buttonIcon iconName="utility:close"
+                                                          onclick="{! c.closeModel }"
+                                                          alternativeText="close"
+                                                          variant="bare-inverse"
+                                                          class="slds-modal__close"/>
+                                </header>
+                                 <!--   <lightning:button type=""  label="Get PDF" onclick="{!c.validatePDF}"/> -->
+                                 <!--Modal/Popup Box Body Starts here-->
+                                <div class="slds-modal__content slds-p-around_medium example-print" id="modal-content-id-1">
+                                    <ul class="record-status">
+                                    <li class="found"> {!v.SuccessRecords} of {!v.TotalRecords} - Accepted Lines </li>
+                                    <li class="notfound"> {!v.FailedRecords} of {!v.TotalRecords} - Failed Lines </li>
+                                    </ul>                                 
+                                    <!--
+                                    <strong class="sub-title"> You have {!v.FailedRecords} failed records in your file, do you want to proceed? </strong>                                   
+                                    <p>Number of successful lines found in the file : {!v.SuccessRecords}</p>
+                                    <p>Number of error lines found in the file : {!v.FailedRecords}</p>
+									-->
+                                    <!-- Show only failed lines details -->
+                                    <ul class="record-status">
+                                        <aura:iteration items="{!v.OrderLineItemsResult}" var="cus" indexVar="key">
+                                            <aura:if isTrue="{!cus.value=='Accepted'}">
+                                              <!--  <li class="found">{!cus.key} – {!cus.value}</li> -->
+                                                <aura:set attribute="else">
+                                                    <li class="notfound">{!cus.key} – {!cus.value}</li>
+                                                </aura:set>
+                                            </aura:if>                                        
+                                        </aura:iteration>
+                                    </ul>
+                                </div>
+                                <!--Modal/Popup Box Footer Starts here-->
+                                <footer class="slds-modal__footer">
+                                    <lightning:button variant="brand" label="Get PDF" title="" onclick="{!c.validatePDF}" class="slds-m-left_x-small btn-default" />
+                                    <lightning:button variant="neutral"
+                                                      label="Cancel"
+                                                      title="Cancel"
+                                                      class="btn-default cancel"
+                                                      onclick="{! c.closeModel }"/>
+                                    <lightning:button variant="brand"
+                                                      label="Finalize"
+                                                      title="Finalize"
+                                                      class="btn-default"
+                                                      onclick="{!c.proceed}"/>
+                                </footer>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </aura:if>
+            </div>
+            <!-- Modal Code End -->
+             
+       
+        </aura:renderIf>
+    </div>
+    
+    <!-- Show Draft Orders Section -->
+    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" onclick="{!c.closeModal}">
+        <aura:renderIf isTrue="{!v.showNewOrder}">
+            <div class="slds-scrollable" style="height:10rem"> 
+                <div class="slds-table--header-fixed_container">
+                    <ui:scrollerWrapper class="scrollerSize">
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table--header-fixed">
+                            
+                            <thead>
+                                <tr class="slds-text-title_caps">
+
+                                    <th scope="col"><div class="slds-truncate slds-cell-fixed">ORDER #</div></th>
+                                    <th scope="col"><div class="slds-truncate slds-cell-fixed">PO #</div></th>
+                                    <th scope="col"><div class="slds-truncate slds-cell-fixed">Date</div></th>
+                                    <th scope="col"><div class="slds-truncate slds-cell-fixed"></div></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration var="order" items="{!v.orderList}" start="0" end="1">
+                                    <tr>
+                                        <td><div class="slds-truncate"><a href="{!'../s/cart/?oid='+ order.Id}">{!order.OrderNumber}</a></div></td>
+                                        <td><div class="slds-truncate">{!order.PoNumber}</div></td>
+                                        <td><div class="slds-truncate">{!order.EffectiveDate}</div></td>
+                                         
+                                    <td>
+                                        <a data-orderId="{!order.Id}" class="{!v.isDisabled}" onclick="{!c.addOrderLinesToDraftOrder1}">{!v.AddLabel}</a>
+                                    </td>  
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </ui:scrollerWrapper>
+                </div>
+            </div>
+        </aura:renderIf>
+        
+        <!-- end new ordr -->
+
+        <aura:if isTrue="{!v.showDraftOrders}">
+        
+            <div class="slds-scrollable" style="height:10rem"> 
+            <div class="slds-table--header-fixed_container">
+                <ui:scrollerWrapper class="scrollerSize">
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table--header-fixed">
+                        
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                                <th scope="col"><div class="slds-truncate slds-cell-fixed">SELECT</div></th>
+                                
+                                <th scope="col"><div class="slds-truncate slds-cell-fixed">ORDER #</div></th>
+                                <th scope="col"><div class="slds-truncate slds-cell-fixed">PO #</div></th>
+                                <th scope="col"><div class="slds-truncate slds-cell-fixed">Date</div></th>
+                                <th scope="col"><div class="slds-truncate slds-cell-fixed"></div></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration var="order" items="{!v.orderList}">
+                                <tr>
+                                    <td><div class="slds-truncate"> 	<ui:inputCheckbox aura:id="checkbox" text="{!order.Id}" label="" click="{!c.addOrderLinesToDraftOrder}"/> </div></td>
+                                    <td><div class="slds-truncate"><a href="{!'../s/cart/?oid='+ order.Id}">{!order.OrderNumber}</a></div></td>
+                                    <td><div class="slds-truncate">{!order.PoNumber}</div></td>
+                                    <td><div class="slds-truncate">{!order.EffectiveDate}</div></td>
+                                    <!--
+                                    <td>
+                                        <a data-orderId="{!order.Id}" class="{!v.isDisabled}" onclick="{!c.Add}">{!v.AddLabel}</a>
+                                    </td> -->
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </ui:scrollerWrapper>
+            </div>
+             </div>
+       </aura:if>
+    </div>
+    <!-- End Draft Orders Section -->
+    <aura:if isTrue="{!v.showAddToDraftOrder}" >
+        <c:AddToDraftOrder Products="{!v.Products}" skuQuantityList="{!v.skuQuantityList}" show="{!v.showAddToDraftOrder}" FromImportOrderLine="true" SuccessLines="{!v.SuccessLines}" FromAllOrderPage="{!v.FromAllOrderPage}"/>
+    </aura:if>
+    </aura:if>
+</aura:component>

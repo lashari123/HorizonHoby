@@ -1,0 +1,14 @@
+<aura:component controller="HeaderController" description="callActions" implements="forceCommunity:availableForAllPageTypes" access="global">
+	<ul class="action-calls">
+		<li>
+			<a href="#">
+                <img src="{!$Resource.hh_icon_call}" align="Call" />
+			</a>
+		</li>
+		<li>
+			<a href="#">
+                <img src="{!$Resource.hh_icon_chat}" align="Chat" />
+			</a>
+		</li>
+	</ul>
+</aura:component>

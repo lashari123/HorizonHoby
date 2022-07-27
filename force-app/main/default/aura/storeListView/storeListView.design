@@ -1,0 +1,5 @@
+<design:component label ="storeListView">
+	    <design:attribute name="title" label="Title" />
+	    <design:attribute name="filter" label="filter" />
+	    <design:attribute name="noOfRows" label="number of Rows" />
+</design:component>

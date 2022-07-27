@@ -1,0 +1,29 @@
+.THIS.info-widget {
+	color: #fff;
+	background: #004e96;
+	padding: 20px 0;
+	margin: 0 0 30px;
+}
+
+.THIS.info-widget .container {
+	max-width: 1170px;
+	margin: 0 auto;
+}
+.THIS.info-widget .title {
+	font-weight: 600;
+	font-size: 18px;
+}
+.THIS.info-widget .row {
+	display: flex;
+	flex-flow: row wrap;
+	margin: 0 -10px;
+}
+.THIS.info-widget .row .col {
+	padding: 0 10px;
+	flex-basis: 0;
+	flex-grow: 1;
+	text-align: center;
+}
+.THIS.info-widget .row .col + .col {
+	border-left: 1px solid rgba(255,255,255,0.5);
+}

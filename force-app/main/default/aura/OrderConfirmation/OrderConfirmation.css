@@ -1,0 +1,147 @@
+.THIS.checkout-details {
+    display: flex;
+    align-items: flex-start;
+}
+.THIS.checkout-details .items-details {
+    width: 75%;
+    padding-right: 20px;
+}
+.THIS .summary-details {
+    background: #e1e1e1;
+    padding: 15px;
+    text-align: center;
+    width: 25%;
+}
+.THIS .shipping-progress {
+    margin: 0 0 25px;
+}
+.THIS .shipping-progress .shipping-title {
+    display: block;
+    margin: 0 0 5px;
+    font-size: 12px;
+    font-weight: normal;
+}
+.THIS .shipping-progress .shipping-title .shipping-status {
+    color: #003567;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.THIS .summary-details .title{
+    font-size: 20px;
+    line-height: 22px;
+    margin: 0 0 15px;
+    display: block;
+}
+.THIS .order-summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px;
+}
+.THIS .order-summary-list + .order-summary-list {
+    padding: 10px 0;
+    margin:0;
+    border-top: 1px solid rgba(0,0,0,0.4);
+}
+.THIS .order-summary-list li {
+    display: flex;
+    margin: 0 0 8px;
+}
+.THIS .order-summary-list li .sub-title {
+    flex-grow: 1;
+    padding: 0 5px 0 0;
+    text-align: left;
+}
+.THIS .order-summary-list li.totals {
+    font-weight: bold;
+}
+.THIS .order-summary-list li .edit {
+    color: #003567;
+}
+.THIS .summary-details .btn-default{
+    display: block;
+    text-decoration: none;
+}
+.THIS .progress-bar {
+    width: 100%;
+    height: 5px;
+    position: relative;
+    background: #fff;
+}
+.THIS .progress-bar .status {
+    position: relative;
+    height: 5px;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: #003567;
+}
+.THIS .checkout-widget {
+    margin: 0 0 10px;
+    font-size: 16px;
+    line-height: 20px;
+    border: 1px solid #e1e1e1;
+}
+.THIS .checkout-widget .title {
+    display: block;
+    padding: 10px 15px;
+    color: #7d7d7d;
+    border-bottom: 1px solid #e1e1e1;
+}
+.THIS .checkout-widget .data-wrap {
+    display: flex;
+    flex-flow: row wrap;
+    padding: 15px 15px 10px;
+}
+.THIS .checkout-widget .data-wrap dl {
+    flex-grow: 1;
+    flex-basis: 0;
+    max-width: 50%;
+    padding: 0 10px 0 0;
+    margin: 0;
+}
+.THIS .checkout-widget .data-wrap dl dt {
+    width: 50%;
+    padding: 0 5px 0 0;
+    font-weight: bold;
+    margin: 0 0 8px;
+    float: left;
+}
+.THIS .checkout-widget .data-wrap dl dd {
+    min-height: 20px;
+    margin: 0 0 8px;
+}
+.THIS .checkout-widget .sub-info {
+    font-size: 12px;
+    line-height: 16px;
+    padding: 10px 15px;
+    border-top: 1px solid #e1e1e1;
+}
+.THIS .checkout-widget .sub-info .sub-title {
+    font-weight: 500;
+    display: block;
+}
+.THIS .checkout-widget .sub-info p {
+    margin: 0;
+}
+.THIS .order-confirmation-head {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    margin: 0 0 20px;
+}
+.THIS .order-confirmation-head h1 {
+    font-size: 30px;
+    line-height: 34px;
+    font-weight: bold;
+    margin: 0 0 5px;
+}
+.THIS .order-confirmation-head .btn-default {
+    min-width: 120px;
+    text-align: center;
+    vertical-align: top;
+    margin: 5px 0 0;
+}
+.THIS .order-confirmation-head .titles-area {
+    flex-grow: 1;
+    padding: 0 10px 0 0;
+}

@@ -1,0 +1,99 @@
+.THIS .slds-tabs_scoped__nav,
+.THIS .slds-tabs--scoped__nav {
+    background: none;
+    border:0;
+    margin: 0 0 0 -1px;
+}
+.THIS li.slds-tabs_scoped__item {
+    border-top: 1px solid #e1e1e1;
+    border-right: 1px solid #e1e1e1;
+    margin:0;
+}
+.THIS li.slds-tabs_scoped__item:first-child {
+    border-left: 1px solid #e1e1e1;
+}
+.THIS li.slds-tabs_scoped__item.slds-is-active {
+    border-color: 003567;
+}
+.THIS li.slds-tabs_scoped__item a {
+    background: #fff;
+    color: #003567;
+    width: 190px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    padding:10px;
+    height: inherit;
+} 
+.THIS li.slds-tabs_scoped__item.slds-is-active a{
+    color: #fff;
+    background: #003567;
+    text-decoration: underline;
+}
+.THIS .slds-tabs_scoped__content,
+.THIS .slds-tabs--scoped__content {
+    border: 1px solid #003567;
+    padding: 10px 0 0;
+}
+.THIS .slds-table_bordered tbody td,
+.THIS .slds-table_bordered tbody th,
+.THIS .slds-table--bordered tbody td,
+.THIS .slds-table--bordered tbody th {
+    border-top: 1px solid #e1e1e1;
+}
+
+.THIS .slds-table th,
+.THIS .slds-table td{
+    color: #000;
+    padding: 15px;
+    font-size: 15px;
+}
+.THIS .slds-table tbody td {
+    font-size: 13px;
+}
+.THIS .slds-table tbody th,
+.THIS .slds-table tbody td a {
+    font-size: 15px;
+}
+.THIS .slds-table td a {
+    color: #000;
+}
+.THIS .slds-table thead th{
+    padding: 0;
+}
+.THIS .slds-has-button-menu .slds-th__action{
+    padding-left: 15px;
+    text-transform: uppercase;
+}
+.THIS .slds-has-button-menu .slds-th__action:hover {
+    background: none;
+}
+.THIS .slds-table_header-fixed_container .slds-resizable__handle,
+.THIS .slds-has-button-menu .slds-th__action-button {
+    display: none;
+}
+.THIS .slds-table_header-fixed_container .slds-grid_align-end {
+    justify-content: inherit;
+}
+.THIS .btnV {
+    background: #003567;
+    color: white;
+	border: 0;
+    padding: 5px 10px;
+}
+.THIS .slds-tabs_scoped__overflow-button {
+    height: inherit;
+}
+.THIS .slds-tabs_scoped__overflow-button .slds-button {
+    min-height: 60px;
+}
+.THIS .sub-info {
+    display: flex;
+    align-items: center;
+    margin: 15px 15px 5px;
+}
+.THIS .sub-info b {
+    font-size: 12px;
+    flex-grow: 1;
+    padding: 0 5px 0 0;
+}

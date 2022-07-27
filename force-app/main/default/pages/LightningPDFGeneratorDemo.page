@@ -1,0 +1,47 @@
+<apex:page showHeader="false"  renderAs="" lightningStyleSheets="true">
+       
+    
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" crossorigin="anonymous"></script>    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.17.1/styles/salesforce-lightning-design-system-imports.sanitized.min.css"  rel="stylesheet"/>
+        <style>
+        .cart-page {
+        	padding: 150px;
+        }
+        </style>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+    <apex:stylesheet value="{!$Resource.HHCSSfile}"/>
+    <apex:stylesheet value="{!$Resource.appcss}"/>
+    <apex:includeScript value="{!($Resource.appjs)}"/>
+    <div id='print' class='form'>
+        
+    </div>
+   
+    <script>
+    var lexOrigin = "https://b2bdev-horizonhobbysupport.cs166.force.com";
+    window.addEventListener("message", function(event) {
+     
+        if (event.origin !== lexOrigin) {
+            // Not the expected origin: reject message!
+            return;
+        }
+      
+        $('#print')[0].innerHTML = (event.data[1] );
+
+        let pdf = new jsPDF();
+        let section=$('body');
+        let page= function() {
+            pdf.save('cart.pdf');
+            parent.document.getElementById('vfiframe').style['display'] = 'none'
+        };
+        pdf.addHTML(section,page);
+        
+
+    
+        
+    }, false);
+    </script>
+   
+</apex:page>

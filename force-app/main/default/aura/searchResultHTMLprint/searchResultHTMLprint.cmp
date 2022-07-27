@@ -1,0 +1,178 @@
+<aura:component controller="HtmlPrintController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="categorySelectedValue" type="string" default=""/>
+    <aura:attribute name="start" type="string" default=""/>
+    <aura:attribute name="end" type="string" default=""/>
+    <aura:attribute name="manufacturerSelectedValue" type="string" default=""/>
+    <aura:attribute name="keyword"  type="string"   />
+    <aura:attribute name="FilterId" type="string" default=""/>
+    <aura:attribute name="isSummary" type="boolean" default="false"/>
+    <aura:attribute name="isBackOrder" type="boolean" default="false"/>
+    
+    <aura:attribute name="today" type="Date" />
+    
+    
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <button onclick="{!c.print}">Download HTML</button>
+    <div  aura:id= 'printTab' class = "">
+        <div class="slds-p-around_medium ">
+            <h1 class="slds-text-align_center slds-text-heading_medium">Search Result</h1>
+        </div>
+        <aura:if isTrue="{!v.isSummary}">
+            <table aria-multiselectable="true" id = 'printTab'  class="slds-table slds-table_cell-buffer slds-no-cell-focus slds-table_bordered slds-table_edit slds-table_fixed-layout " role="grid" aria-label="Example default inline edit table with cell focused">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        
+                        <aura:iteration items="{! v.columns }" var="item">
+                            <th aria-label="Name" aria-sort="none" class=" slds-is-sortable" scope="col">
+                                {!item.label}
+                                
+                            </th>                        
+                            
+                        </aura:iteration>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:if isTrue="{!v.isBackOrder}">
+                        <aura:iteration items="{! v.data }" var="item">
+                            <tr>
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.Order.OrderNumber}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.Product2.ProductCode}</div>
+                                </td>
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.Order.PoNumber}</div>
+                                </td>
+                                <!--<td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.Product2.Description}</div>
+                                        </td> -->
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.opened__c}</div>
+                                </td>
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.Product2.avail__c}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">€{!item.UnitPrice}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.TotalPrice}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.Order.CreatedDate}</div>
+                                </td>
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.Order.EndDate}</div>
+                                </td> 
+                            </tr>
+                            
+                        </aura:iteration>
+                    <aura:set attribute="else">
+                        <aura:iteration items="{! v.data }" var="item">
+                            <tr>
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.EffectiveDate}</div>
+                                </td>
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.OrderNumber}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.PoNumber}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.Order_Line_Items_Count__c}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.TotalAmount}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.ProductName}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.ProductName}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.ProductName}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.ProductName}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.Status}</div>
+                                </td> 
+                                <td role="gridcell" tabindex="-1">
+                                    <div class="slds-truncate">{!item.Inv}</div>
+                                </td> 
+                            </tr>
+                            
+                        </aura:iteration>
+                    </aura:set>
+                    </aura:if>
+                </tbody>
+            </table>
+            
+        </aura:if>
+        <aura:if isTrue="{!v.isSummary == false }">    
+            <table aria-multiselectable="true" id = 'printTab'  class="slds-table slds-table_cell-buffer slds-no-cell-focus slds-table_bordered slds-table_edit slds-table_fixed-layout " role="grid" aria-label="Example default inline edit table with cell focused">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        
+                        <!--    <th class="" scope="col" style="width:2rem">
+                                            <span id="column-group-header" class="slds-assistive-text">Choose a row</span>
+                                            <div class="slds-th__action slds-th__action_form">
+                                                <div class="slds-checkbox">
+                                                    <input type="checkbox" name="options" id="checkbox-unique-id-301" value="checkbox-unique-id-301" tabindex="-1" aria-labelledby="check-select-all-label column-group-header" />
+                                                    <label class="slds-checkbox__label" for="checkbox-unique-id-301" id="check-select-all-label">
+                                                        <span class="slds-checkbox_faux"></span>
+                                                        <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </th>    -->
+                        <aura:iteration items="{! v.columns }" var="item">
+                            <th aria-label="Name" aria-sort="none" class=" slds-is-sortable" scope="col">
+                                {!item.label}
+                                
+                            </th>
+                            
+                            
+                        </aura:iteration>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{! v.data }" var="item">
+                        
+                        <c:inlineEditRow 
+                                         parent="{! this }"
+                                         item="{!item}"
+                                         showSaveCancelBtn="{!v.showSaveCancelBtn}"
+                                         sNo="{!sNo + 1}" 
+                                         printable ='true'
+                                         SelectedValues= "{!v.SelectedValues}"
+                                         totalAmountSelected = "{!v.totalAmountSelected}"/>
+                        
+                    </aura:iteration>
+                    <!--   <lightning:button label="First" disabled="{!v.start == 0}"  onclick="{!c.first}" />-->
+                    
+                    
+                    
+                    <!--    <lightning:button label="Last" disabled="{!v.end >= v.totalSize-1}" onclick="{!c.last}" />-->
+                    
+                </tbody>
+            </table>
+        </aura:if>
+        <div class='slds-text-title_bold slds-text-body_small'>
+            <ul class="slds-list_dotted">
+                <li>
+                    Please do not share any data or content from this partner site outside of your organization. 
+                </li>
+                <li> Product pricing is valid as of the time of printing {!v.today} and subject to change at the discretion of Horizon Hobby. 
+                </li>
+            </ul>
+        </div>
+    </div>   
+</aura:component>

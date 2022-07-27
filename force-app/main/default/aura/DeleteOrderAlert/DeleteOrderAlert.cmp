@@ -1,0 +1,47 @@
+<aura:component controller="DeleteOrderAlertController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="message" type="string" default = ''/>
+    <aura:attribute name="Yes" type="string" default = 'Yes, Delete'/>
+    <aura:attribute name="No" type="string" default = 'No'/>
+    <aura:attribute name="show" type="Boolean" default="true"/>
+    <aura:attribute name="title" type="string" default="" />
+    
+    <!-- Values send from parent -->
+    <aura:attribute name="orderId" type="string" default =''/>
+    <aura:attribute name="SelectedValues" type="list" default="[]"/>
+    <aura:attribute name="deleteAll" type="Boolean" default="false" />
+    <aura:attribute name="callName" type="string" default="Delete" />
+    
+    <aura:registerEvent name="MoveOrderLineItemEvent" type="c:MoveOrderLineItem"/>
+    
+    <aura:If isTrue="{!v.show}">
+    <section role="dialog" aura:id="MainDiv" tabindex="-1" class="slds-backdrop slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" onclick="{!c.cancel}">
+        <div class="slds-modal__container" >
+            <header class="slds-modal__header" onclick="{!c.closeModal2}"> 
+                
+                <div style="text-align: right;">
+                    <button class="slds-button slds-button_icon" title="Close" onclick="{!c.cancel}" >
+                        <lightning:icon class="pointer" iconName="action:close" size="x-small"  alternativeText="Indicates approval"/>
+                    	<i class="far fa-times-circle"></i>
+                    </button>
+                </div>                
+                
+                        <strong class="slds-modal__title slds-hyphenate">{!v.title}</strong>
+            </header>
+            
+            <div class="slds-modal__content_box" onclick="{!c.closeModal2}">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                      <p>{!v.message}</p>
+                </div>
+                <footer class="slds-modal__footer">
+                  <button class="slds-button slds-button_success btn-default" onclick="{!c.Yes}">{!v.Yes}</button>
+                  <button class="slds-button slds-button_destructive btn-default" onclick="{!c.No}">{!v.No}</button>
+                </footer>
+            </div>
+        </div>
+        
+        
+    </section>
+    </aura:If>
+</aura:component>

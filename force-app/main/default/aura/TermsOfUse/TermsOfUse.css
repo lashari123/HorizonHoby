@@ -1,0 +1,76 @@
+.THIS.content-page {
+    max-width: 890px;
+    margin: 0 auto;
+}
+.THIS .accordion .card {
+    color: #000;
+    margin: 0 0 4px;
+}
+.THIS h1 {
+    font-size: 32px;
+    line-height: 34px;
+    font-weight: bold;
+    margin: 0 0 20px;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+}
+.THIS p {
+    margin: 0 0 15px;
+}
+.THIS .date {
+    display: block;
+    margin: 0 0 15px;
+}
+ol.THIS p {
+    margin: 0 0 15px;
+}
+ol.THIS li {
+    font-weight: 500;
+    margin: 0 0 10px;
+}
+.THIS .accordion .btn-link {
+	display: block;
+    padding: 18px 45px 18px 15px;
+    color: #000;
+    width: 100%;
+    background: none;
+    text-align: left;
+    border: 0;
+    cursor: pointer;
+    background: #e1e1e1;
+    font-weight: bold;
+    position: relative;
+}
+.THIS .accordion .btn-link:after {
+    content: "+";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    font-size: 22px;
+    line-height: 24px;
+    font-weight: normal;
+    transform: translateY(-50%);
+}
+.THIS .accordion .btn-link.opener:after {
+    content: "--";
+    margin: -2px 5px 0 0;
+    letter-spacing: -4px;
+}
+.THIS .accordion p {
+    margin: 0 0 15px;
+}
+.THIS .accordion .multi-collapse,
+.THIS .accordion .collapse {
+    display: none;
+    overflow: hidden;
+}
+.THIS .accordion .collapse {
+    padding: 15px;
+}
+.THIS .multi-btn-link {
+    color: #003567;
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 0 15px;
+    text-decoration: underline;
+}

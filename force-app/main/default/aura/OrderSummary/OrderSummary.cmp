@@ -1,0 +1,626 @@
+<aura:component controller="OrderSummaryController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="mainData" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="sortColumns" type="List"/>
+    <aura:attribute name="paginationList" type="object"/>
+    <aura:attribute name ='printAll' type='boolean'></aura:attribute>
+    <aura:attribute name="pageSize" type="Integer" default="10"/>
+    
+    <aura:attribute name="totalSize" type="Integer"/>
+    <aura:attribute name="totalPages" type="Integer"/>
+    <aura:attribute name="totalPagesList" type="Integer"/>
+    <aura:attribute name="currentPage" type="Integer" default="1"/>
+    <aura:attribute name="headerCounterText" type="string" />
+    
+    <aura:attribute name="showImportModal" type="boolean" default="false"/>
+    
+    <aura:attribute name="noOfItem" type="list" default="[1,2,5,10,20]" />
+    
+    <aura:attribute name="start" type="Integer" />
+    
+    <aura:attribute name="end" type="Integer"/>
+    
+    
+    <aura:attribute name="isPDF" type="boolean" default="false"/>
+    <aura:attribute name="isPDFShow" type="boolean" default="false"/>
+    <aura:attribute name="isHTML" type="boolean" default="false"/>
+    <aura:attribute name="isExcel" type="boolean" default="false"/>
+    
+    <aura:attribute name="showPrintModal" type="boolean" default="false"/>
+    <aura:attribute name="isBackOrder" type="boolean" default="false"/>
+    <aura:attribute name="newOrder" type="boolean" default="false"/>
+    
+    <aura:attribute name="totalAmountSelected" type="decimal" default = "0"/>
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <lightning:navigation aura:id="navService"/>   
+   
+    <div class="orders-page">
+        <div class="orders-aside">
+            <strong class="orders-title">Orders</strong>
+            <ul class="orders-links">
+                <li><a class="active" aura:id="allOrders" href="/horizonhobby/s/order-summary">All Orders</a></li>
+                <li><a href="javascript:void(0)" aura:id="openBackOrders" onclick="{!c.getBackOrder}">Open Backorders</a></li>
+            </ul>
+        </div>
+        <div class="orders-area">
+            <ul class="breadcrumbs">
+                <li><a href="/horizonhobby/s/order-summary">Orders</a></li>
+                <aura:if isTrue="{!v.isBackOrder}">
+                    <li><a class="current" href="/horizonhobby/s/order-summary">Open Backorders</a></li>
+                <aura:set attribute="else">
+                 	<li><a class="current" href="/horizonhobby/s/order-summary">All Orders</a></li>
+                </aura:set>
+                </aura:if>
+                
+            </ul>
+            <div class="head">
+                <aura:if isTrue="{!v.isBackOrder}">
+                    <h1>Open Backorders</h1>
+                <aura:set attribute="else">
+                 	<h1>All Orders</h1>
+                </aura:set>
+                </aura:if>
+                
+                <div class="filters-bar">
+                    <div class="filter-items">
+                        <aura:if isTrue="{!v.isBackOrder == false}">
+                        <div class="custom-select">
+                            <select onchange="{!c.changeType}">
+                                <option>Order History</option>
+                                <option>Draft</option>
+                                <option>Submitted </option>
+                                
+                            </select>
+                        </div>
+                             </aura:if>
+                        <div class="search-box">
+                            <div class="input-field">
+                                <input type="text" class="form-control" aura:id="searchInput" placeholder="Search Term" />
+                            </div>
+                            <button type="button" class="btn-default" onclick="{!c.getFilteredOrder}">Search</button>
+                        </div>
+                        <div class="range-box">
+                            <div class="custom-input-field">
+                                <label for="from">From</label>
+                                <input onchange="{!c.dateChange}" aura:id="from" id="from" type="date" />
+                            </div>
+                            <div class="custom-input-field">
+                                <label for="to">To</label>
+                                <input onchange="{!c.dateChange}" aura:id="to" id="to" type="date" />
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-default" type="button" onclick="{!c.NewOrder}"><span>+ New Order</span></button>
+                </div>
+               
+            </div>
+            <div class="table-wrap">
+            	<table class="items-head">
+        
+                    <tr > 
+                        <td>
+                            <div class="items-count">
+                                {!v.headerCounterText}
+                                <!-- Item {!v.start+1} to {!v.end+1} of {!v.data.length}-->
+                            </div>
+                        </td>
+                        <td style="width:2%">   
+                            <lightning:button label="Previous" class="prev" disabled="{!v.start == 0}"  onclick="{!c.previous}" />
+                            
+                        </td> 
+                        <td class="paging" style="width: 1px; padding: 15px; max-width: 100%; white-space: nowrap;">  
+                            <aura:iteration items="{!v.totalPagesList}" var="item"> 
+                                <aura:if isTrue="{!v.currentPage == item}">                            
+                                    <b><a onclick="{!c.onPageNoClick}">{!item+' '} </a></b>
+                                    <aura:set attribute="else">
+                                        <a onclick="{!c.onPageNoClick}">{!item + ' '}</a>
+                                    </aura:set>
+                                </aura:if>
+                            </aura:iteration>
+                        </td>
+                        <td style="width:5%">
+                            <lightning:button label="Next" class="next" disabled="{!v.end >= v.totalSize-1}" onclick="{!c.next}" />
+                        </td>
+                        <td style="width:64%">
+                            <div class="export-options" onclick="{! c.closeModal2 }">
+                                 <a   id="importc" onclick="{!c.openModalImport}">Import</a> 
+                                <a href="#" class="export-link">{!v.exportText}</a>
+                                <span class="sub-title">Print As:</span>
+                                <ul class="print-list">
+                                    <li><a id='HTML' onclick="{!c.openModal}">HTML</a></li>
+                                    <li><a id='PDF' onclick="{!c.openModal}">PDF</a></li>
+                                    <li>  <a id='Excel' onclick="{!c.openModal}" alternativeText="Export Data"> Excel </a></li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td style="width:6%">
+                            <div class="select-row ">
+                                <div class="custom-select slds-hide">
+                                    <Select class='slds-select' aura:id="sort" onchange="{!c.onSortChange}" >
+                                        
+                                        
+                                        <aura:iteration items="{! v.columns }" var="item">
+                                            <Option text="{!item.label}" value="{!item.fieldName}"/>
+                                            
+                                        </aura:iteration>  
+                                    </Select>
+                                </div>
+                                <div class="custom-select num">
+                                    <label>Items</label>
+                                    <Select class='slds-select' aura:id="records" onchange="{!c.onSelectChange}" >
+                                        <aura:iteration items="{!v.noOfItem}" var="item">
+                                            <Option text="{!item}" value="{!item}"  selected="{!v.pageSize == item}"/>
+                                        </aura:iteration>
+                                    </Select>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                </table>
+            
+            	<div class="slds-table_edit_container slds-is-relative">
+                    <table aura:id= 'tab' aria-multiselectable="true" class="slds-table slds-no-cell-focus slds-table_bordered slds-table_edit  " role="grid" aria-label="Example default inline edit table with cell focused">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                
+                                <!--    <th class="" scope="col" style="width:2rem">
+                                                        <span id="column-group-header" class="slds-assistive-text">Choose a row</span>
+                                                        <div class="slds-th__action slds-th__action_form">
+                                                            <div class="slds-checkbox">
+                                                                <input type="checkbox" name="options" id="checkbox-unique-id-301" value="checkbox-unique-id-301" tabindex="-1" aria-labelledby="check-select-all-label column-group-header" />
+                                                                <label class="slds-checkbox__label" for="checkbox-unique-id-301" id="check-select-all-label">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </th>    -->
+                                <aura:iteration items="{! v.columns }" var="item">
+                                    <th aria-label="Name" aria-sort="none" class=" slds-is-sortable" scope="col">
+                                        <span class="slds-assistive-text">Sort by: </span>
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                            <span class="slds-th__action slds-truncate" id="{!item.fieldName +'|0'}" title="{!item.label}" onclick="{!c.headerClick}">{!item.label} </span>
+                                            
+                                            
+                                            
+                                        </div>
+                                        
+                                    </th>
+                                    
+                                    
+                                </aura:iteration>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:if isTrue="{!v.isBackOrder}">
+                                <aura:iteration items="{! v.paginationList }" var="item">
+                                    <tr>
+                                        <td role="gridcell" tabindex="-1">
+                                            <aura:if isTrue="{!item.Status != 'Draft'}">  
+                                                <div class="slds-truncate"> <a href="{!'/horizonhobby/s/order-detail?oid='+item.Order.Id}"> {!item.Order.OrderNumber}</a></div>
+                                                <aura:set attribute='else'>
+                                                      <div class="slds-truncate"> <a href="{!'/horizonhobby/s/cart?oid='+item.Id}"> {!item.Order.OrderNumber}</a></div>
+    
+                                                </aura:set>
+                                            </aura:if>
+                                            
+                                        </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.Product2.ProductCode}</div>
+                                        </td>
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.Order.PoNumber}</div>
+                                        </td>
+                                        <!--<td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.Product2.Description}</div>
+                                        </td> -->
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.opened__c}</div>
+                                        </td>
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.Product2.Avail__c}</div>
+                                        </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">€{!item.UnitPrice}</div>
+                                        </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.TotalPrice}</div>
+                                        </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.Order.CreatedDate}</div>
+                                        </td>
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.Order.EndDate}</div>
+                                        </td> 
+                                    </tr>
+                                    
+                                </aura:iteration>
+                            <aura:set attribute="else">
+                                <aura:iteration items="{! v.paginationList }" var="item">
+                                    <tr>
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.EffectiveDate}</div>
+                                        </td>
+                                        <td role="gridcell" tabindex="-1">
+                                            <aura:if isTrue="{!item.Status != 'Draft'}">  
+                                                <div class="slds-truncate"> <a href="{!'/horizonhobby/s/order-detail?oid='+item.Id}"> {!item.OrderNumber}</a></div>
+                                                <aura:set attribute='else'>
+                                                      <div class="slds-truncate"> <a href="{!'/horizonhobby/s/cart?oid='+item.Id}"> {!item.OrderNumber}</a></div>
+    
+                                                </aura:set>
+                                            </aura:if>
+                                            
+                                            </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.PoNumber}</div>
+                                        </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.Order_Line_Items_Count__c}</div>
+                                        </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">€{!item.TotalAmount}</div>
+                                        </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.ProductName}</div>
+                                        </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.ProductName}</div>
+                                        </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.ProductName}</div>
+                                        </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.ProductName}</div>
+                                        </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.Status}</div>
+                                        </td> 
+                                        <td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.Inv}</div>
+                                        </td> 
+                                    </tr>
+                                
+                            	</aura:iteration>
+                            </aura:set>
+                            </aura:if>
+                        </tbody>
+                    </table>
+            	</div>
+           </div>
+        </div>
+    </div>
+    
+    <aura:if isTrue="{!v.showPrintModal}">
+        <section role="dialog" onclick="{!c.closeModal2}"  tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open print-modal" >
+            <div class="slds-modal__container">
+                <div class="slds-modal__wrap slds-theme_default">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModal }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <strong class="slds-modal__title slds-hyphenate">{!v.heading}</strong>
+                    </header>    
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                        <aura:if isTrue="{!v.isPDF}">
+                            
+                            <button class="slds-button slds-button_neutral btn-default" onclick="{!c.generatePDF}" id="current">This Page</button>
+                            <button class="slds-button slds-button_brand btn-default"  onclick="{!c.generatePDF}" id="all">All Pages</button>
+                        </aura:if>
+                        <aura:if isTrue="{!v.isHTML}">
+                            
+                            <button class="slds-button slds-button_neutral btn-default" onclick="{!c.print}" id="current">This Page</button>
+                            <button class="slds-button slds-button_brand btn-default"  onclick="{!c.print}" id="all">All Pages</button>
+                        </aura:if>
+                        <aura:if isTrue="{!v.isExcel}">
+                            <aura:if isTrue="{!v.isBackOrder}">
+                                <c:csvExport records="{!v.paginationList}" buttonName="This Page" fileName="Export.csv" calledFrom="backOrders"/>
+                                <c:csvExport records="{!v.data}" buttonName="All Page" fileName="Export.csv" calledFrom="backOrders"/>
+                            <aura:set attribute="else">
+                                <c:csvExport records="{!v.paginationList}" buttonName="This Page" fileName="Export.csv"/>
+                                <c:csvExport records="{!v.data}" buttonName="All Page" fileName="Export.csv"/>
+                        	</aura:set>
+                    		</aura:if>
+                        </aura:if>
+                    </div>
+                </div>  
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isPDFShow}" >
+        <c:pdfDownloader aura:Id='pdfPrint' printAll='{!v.printAll}' />
+    </aura:if>
+      <!-- printable html table -->
+    <div  aura:id= 'printTab' class = "slds-hide" onclick="{! c.closeModal }">
+        <table aria-multiselectable="true" id = 'printTab'  class="slds-table slds-no-cell-focus slds-table_bordered slds-table_edit slds-table_fixed-layout " role="grid" aria-label="Example default inline edit table with cell focused">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    
+                    <!--    <th class="" scope="col" style="width:2rem">
+                                            <span id="column-group-header" class="slds-assistive-text">Choose a row</span>
+                                            <div class="slds-th__action slds-th__action_form">
+                                                <div class="slds-checkbox">
+                                                    <input type="checkbox" name="options" id="checkbox-unique-id-301" value="checkbox-unique-id-301" tabindex="-1" aria-labelledby="check-select-all-label column-group-header" />
+                                                    <label class="slds-checkbox__label" for="checkbox-unique-id-301" id="check-select-all-label">
+                                                        <span class="slds-checkbox_faux"></span>
+                                                        <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </th>    -->
+                    <aura:iteration items="{! v.columns }" var="item" indexVar='i'>
+                        
+                        <aura:if isTrue= "{!i!=1}">
+                            <th aria-label="Name" aria-sort="none" class=" slds-is-sortable" scope="col">
+                                {!item.label}
+                                
+                            </th>
+                        </aura:if>
+                        
+                    </aura:iteration>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <aura:if isTrue="{!v.isBackOrder}">
+                    <aura:iteration items="{! v.paginationList }" var="item">
+                        <tr>
+                            <td role="gridcell" tabindex="-1">
+                                <aura:if isTrue="{!item.Status != 'Draft'}">  
+                                    <div class="slds-truncate"> <a href="{!'/horizonhobby/s/order-detail?oid='+item.Id}"> {!item.Order.OrderNumber}</a></div>
+                                    <aura:set attribute='else'>
+                                        <div class="slds-truncate"> <a href="{!'/horizonhobby/s/cart?oid='+item.Id}"> {!item.Order.OrderNumber}</a></div>
+                                        
+                                    </aura:set>
+                                </aura:if>
+                                
+                            </td> 
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.Product2.ProductCode}</div>
+                            </td>
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.Order.PoNumber}</div>
+                            </td>
+                            <!--<td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.Product2.Description}</div>
+                                        </td> -->
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.opened__c}</div>
+                            </td>
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.Product2.avail__c}</div>
+                            </td> 
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">€{!item.UnitPrice}</div>
+                            </td> 
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.TotalPrice}</div>
+                            </td> 
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.Order.CreatedDate}</div>
+                            </td>
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.Order.EndDate}</div>
+                            </td> 
+                        </tr>
+                        
+                    </aura:iteration>
+                    <aura:set attribute="else">
+                    <aura:iteration items="{! v.data }" var="item">
+                    <tr>
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.EffectiveDate}</div>
+                        </td>
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">  {!item.OrderNumber}
+                  </div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.PoNumber}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.Order_Line_Items_Count__c}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.TotalAmount}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.ProductName}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.ProductName}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.ProductName}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.ProductName}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.Status}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.Inv}</div>
+                        </td> 
+                    </tr>
+                    
+                </aura:iteration>
+                    </aura:set>
+                    </aura:if>
+                <!--   <lightning:button label="First" disabled="{!v.start == 0}"  onclick="{!c.first}" />-->
+                
+                
+                
+                <!--    <lightning:button label="Last" disabled="{!v.end >= v.totalSize-1}" onclick="{!c.last}" />-->
+                
+            </tbody>
+        </table>
+    </div>  
+    <!-- printable html table -->
+    <div  aura:id= 'printTabCurrent' class = "slds-hide" onclick="{! c.closeModal }">
+        <table aria-multiselectable="true" id = 'printTabCurrent'  class="slds-table slds-no-cell-focus slds-table_bordered slds-table_edit slds-table_fixed-layout " role="grid" aria-label="Example default inline edit table with cell focused">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    
+                   <aura:iteration items="{! v.columns }" var="item" indexVar='i'>
+                        
+                        <aura:if isTrue= "{!i!=1}">
+                            <th aria-label="Name" aria-sort="none" class=" slds-is-sortable" scope="col">
+                                {!item.label}
+                                
+                            </th>
+                        </aura:if>
+                        
+                    </aura:iteration>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:if isTrue="{!v.isBackOrder}">
+                    <aura:iteration items="{! v.paginationList }" var="item">
+                        <tr>
+                            <td role="gridcell" tabindex="-1">
+                                <aura:if isTrue="{!item.Status != 'Draft'}">  
+                                    <div class="slds-truncate"> <a href="{!'/horizonhobby/s/order-detail?oid='+item.Id}"> {!item.Order.OrderNumber}</a></div>
+                                    <aura:set attribute='else'>
+                                        <div class="slds-truncate"> <a href="{!'/horizonhobby/s/cart?oid='+item.Id}"> {!item.Order.OrderNumber}</a></div>
+                                        
+                                    </aura:set>
+                                </aura:if>
+                                
+                            </td> 
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.Product2.ProductCode}</div>
+                            </td>
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.Order.PoNumber}</div>
+                            </td>
+                            <!--<td role="gridcell" tabindex="-1">
+                                            <div class="slds-truncate">{!item.Product2.Description}</div>
+                                        </td> -->
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.opened__c}</div>
+                            </td>
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.Product2.avail__c}</div>
+                            </td> 
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">€{!item.UnitPrice}</div>
+                            </td> 
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.TotalPrice}</div>
+                            </td> 
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.Order.CreatedDate}</div>
+                            </td>
+                            <td role="gridcell" tabindex="-1">
+                                <div class="slds-truncate">{!item.Order.EndDate}</div>
+                            </td> 
+                        </tr>
+                        
+                    </aura:iteration>
+                    <aura:set attribute="else">
+                  <aura:iteration items="{! v.paginationList }" var="item">
+                    <tr>
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.EffectiveDate}</div>
+                        </td>
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">  {!item.OrderNumber}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.PoNumber}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.Order_Line_Items_Count__c}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.TotalAmount}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.ProductName}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.ProductName}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.ProductName}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.ProductName}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.Status}</div>
+                        </td> 
+                        <td role="gridcell" tabindex="-1">
+                            <div class="slds-truncate">{!item.Inv}</div>
+                        </td> 
+                    </tr>
+                    
+                </aura:iteration>
+                        </aura:set>
+                    </aura:if>
+                <!--   <lightning:button label="First" disabled="{!v.start == 0}"  onclick="{!c.first}" />-->
+                
+                
+                
+                <!--    <lightning:button label="Last" disabled="{!v.end >= v.totalSize-1}" onclick="{!c.last}" />-->
+                
+            </tbody>
+        </table>
+    </div>   
+    <!-- Order Import Modal -->
+    <aura:if isTrue="{!v.showImportModal}">
+        
+      
+        <div class="slds-m-around_xx-large">
+      
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{!c.closeImportModal}"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                          <c:ImportContacts />
+                      <!--  <c:ImportContacts FromAllOrderPage="true" /> -->
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+
+                        <lightning:button variant="brand"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{!c.closeImportModal}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+             
+        </div>
+
+    </aura:if>
+    <!--
+    <aura:if isTrue="{!v.newOrder}">
+        <section role="dialog" tabindex="-1" class="slds-backdrop slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" onclick="{!c.cancelAction}">
+            <div class="slds-modal__container">
+                <div class="slds-modal__wrap">
+        			<c:QuickOrder />
+                </div>
+            </div>
+        </section>
+    </aura:if>
+-->
+</aura:component>

@@ -1,0 +1,39 @@
+<aura:component controller="footerController" description="footer" implements="forceCommunity:availableForAllPageTypes" access="global">
+	<aura:attribute name="footer" type="String" default="Horizon Hobby, LLC" access="global" />
+	<aura:attribute name="footerYear" type="String" default="2017" access="global" />
+	<aura:attribute name="manager" type="object" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+	<footer id="footer">
+		<div class="container">
+			<div class="logo-area">
+				<div class="footer-logo">
+					<img src="{!$Resource.footer_logo}" />
+				</div>
+  
+
+
+
+
+                <address>Horizon Hobby GmbH  <br/>Hanskampring 9 <br/>D-22885 Barsbüttel <br/>Germany </address>
+				<strong class="sub-title">Contact</strong>
+				<span class="num">+49-40-822167800 </span>
+
+			</div>
+			<div class="footer-detail">
+				<div class="widget">
+					<strong class="title">{!v.manager.FirstName +' ' }  {!v.manager.LastName}</strong>
+					<span>{!v.manager.Phone}</span>
+					<p>Monday–Friday  |  {!v.manager.Contact.WeekDayTiming__c}  <br />Saturday–Sunday  |  {!v.manager.Contact.WeekEndTiming__c}</p>
+		
+				</div>
+				<ul class="footer-nav">
+					<li><a href="/horizonhobby/s/privacy-law">Privacy</a></li>
+					<li><a href="/horizonhobby/s/terms-of-use">Term &amp; Conditions</a></li>
+                    <li><a href="/horizonhobby/s/compliance">Compliance</a></li>
+					<li><a href="/horizonhobby/s/imprint">Imprint</a></li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+</aura:component>

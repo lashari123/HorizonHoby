@@ -1,0 +1,621 @@
+<aura:component controller="ProductHelper" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    <ltng:require scripts="{!join(',',$Resource.HHSlickSlider,$Resource.HHJQueryFile)}" afterScriptsLoaded="{!c.productSlickSlider}" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:attribute name="product" type="object" default=""/>
+    <aura:attribute name="productName" type="String" default=""/>
+    <aura:attribute name="productCode" type="String" default=""/>
+    <aura:attribute name="eta" type="String" default=""/>
+    <aura:attribute name="isActive" type="String" default=""/>
+    <aura:attribute name="unitPrice" type="Decimal" default=""/>
+    <aura:attribute name="dealerPrice" type="Decimal" default=""/>
+    <aura:attribute name="totalPrice" type="Decimal" default="0"/>
+    <aura:attribute name="isStock" type="String" default=""/>
+    <aura:attribute name="isDealer" type="String" default=""/>
+    
+    <aura:attribute name="showAddToDraftOrder" type="boolean" default="false"/>
+    <aura:attribute name="skuQuantityList" type="String[]" />
+    <aura:attribute name="variationColor" type="String" />
+    
+    <aura:attribute name="variationRedirect" type="object" />
+    <aura:attribute name="imageUrls" type="list" />
+    <aura:attribute name="imageUrlsB" type="boolean" default="false" />
+    <aura:attribute name="imageUrlsC" type="boolean" default="false" />
+    <aura:attribute name="manufacturerLogo" type="String" default="" />
+    
+    
+    <aura:attribute name="priceRangeMap" type="list" default="[]" />
+    <aura:attribute name="featuredImages" type="list" />
+    <aura:attribute name="sliderVideos" type="list" />
+    
+    
+    <!-- Translation Attributes -->
+    <aura:attribute name="addtoCart" type="string" default = 'Add to Cart'/>
+    <aura:attribute name="originalPrice" type="string" default = 'Original Price'/>
+    <aura:attribute name="YourPrice" type="string" default = 'Your Price'/>
+    <aura:attribute name="Pricing" type="string" default = 'Pricing'/>
+    <aura:attribute name="Stock" type="string" default = 'Stock'/>
+    <aura:attribute name="itemDetails" type="string" default = 'Item Details'/>
+    <aura:attribute name="review" type="string" default = 'Reviews'/>
+    <aura:attribute name="Retail" type="string" default = 'Retail'/>
+    <aura:attribute name="Dealer" type="string" default = 'Dealer'/>
+    <aura:attribute name="Status" type="string" default = 'Status'/>
+    
+    
+    
+    
+    <!--<div class="slds-p-around_medium slds-hidden">
+        <h1 class="slds-text-heading_large">Search Result</h1>
+    </div>
+    
+     the container element determine the height of the datatable
+    
+    
+    <aura:if isTrue="{!!v.ShowQuantity}">
+        <lightning:input label="Search Term" value="{!v.searchTerm}"></lightning:input>
+    </aura:if>
+    Categories Dropdown for Filter 
+    <lightning:select name="category" label="Category" aura:id="category" onchange="{!c.categorySelected}" value="{!v.categorySelectedValue}" >
+        <option value="">Select Category </option>
+        <aura:iteration items="{!v.categoryList}" var="item">
+            
+            <option value="{!item.Id}" selected="{!v.catName == item.Name || v.categorySelectedValue == item.Id}">{!item.Name}</option>
+        </aura:iteration>
+    </lightning:select>
+    
+    <lightning:select name="manufacturer" label="Manufacturer" aura:id="manufacture" onchange="{!c.manfacturerSelected}" value="{!v.manufacturerSelectedValue}" class="slds-hidden">
+        <option value="">Select Manufacture </option>
+        <aura:iteration items="{!v.manufacturerList}"  var="item">
+            <option value="{!item.Id}" selected="{!v.manufacturerSelectedValue == item.Id}">{!item.Name}</option>
+        </aura:iteration>
+    </lightning:select>
+     -->
+    <div class="product-details-wrap">
+        <div class="product-image">
+            <div class="product-slider-wrap">
+                <aura:if isTrue="{!v.imageUrlsB}">
+                    <div class="slider-nav">
+                        <aura:iteration items="{!v.imageUrls}" var="item">
+                            <div class="slide">
+                                <img src="{!item}" />
+                            </div>
+                        </aura:iteration>
+                        <aura:iteration items="{!v.sliderVideos}" var="item">
+                         <div class="slide">
+                            <div class="video-link">
+                                <span class="icon-play"></span>
+                                <span class="video-text">Video</span>
+                            </div>
+                        </div>
+                        </aura:iteration>
+                    </div>
+               
+                </aura:if>
+                
+                <div class="product-slider">
+                    <!--    <div class="slide">
+                        <img src="https://via.placeholder.com/500x500" />
+                    </div>
+                    <div class="slide">
+                        <img src="https://via.placeholder.com/500x500" />
+                    </div>
+                    <div class="slide">
+                        <img src="https://via.placeholder.com/500x500" />
+                    </div>
+                    <div class="slide">
+                        <img src="https://via.placeholder.com/500x500" />
+                    </div>
+                    <div class="slide">
+                        <img src="https://via.placeholder.com/500x500" />
+                    </div>
+                    <div class="slide">
+                        <img src="https://via.placeholder.com/500x500" />
+                    </div>
+                    <div class="slide">
+                        <img src="https://via.placeholder.com/500x500" />
+                    </div>-->
+                    <aura:iteration items="{!v.imageUrls}" var="item">
+                        <div class="slide">
+                            <img src="{!item}" />
+                        </div>
+                    </aura:iteration>
+                     <div class="slide">
+                        <div class="main-video">
+                            <div class="custom-video video-paused">
+                                <aura:iteration items="{!v.sliderVideos}" var="item">
+                                    <iframe width="100%" src="{!item.Video_URL__c}" >
+                                    </iframe> 
+                                </aura:iteration>
+                               <!-- <video class="video" width="100%" loop="" playsinline="">
+                                    <source src="https://cdn.videvo.net/videvo_files/video/free/2013-07/large_watermarked/hd0051_preview.mp4" type="video/mp4" />
+                                    <source src="https://cdn.videvo.net/videvo_files/video/free/2013-07/large_watermarked/hd0051_preview.mp4" type="video/ogg" />
+                                </video> -->
+                                <div class="video-controls">
+                                    <span class="js-play-pause"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="product-details">
+            <div class="head">
+                <div class="badge">
+                    <img src="{!'../servlet/servlet.FileDownload?file=' + v.manufacturerLogo}" />
+                </div>
+                <div class="reviews">
+                    2 {!v.review}
+                </div>
+            </div>
+            <div class="product-titles">
+                <strong class="product-name">{!v.productName}</strong>
+                <span class="product-id">{!v.productCode}</span>
+            </div>
+            <div class="details">
+                <div class="variations-box">
+                    <div class="widget">
+                        <strong class="title">{!v.itemDetails}</strong>
+                        <p>ETA: <span>{!v.eta}</span></p>
+                        <p>{!v.Status}: <span>{!v.isActive}</span></p>
+                    </div>
+                    <div class="widget">
+                        <strong class="title">{!v.Stock}</strong>
+                        <p>Germany: <span>{!v.isStock}</span></p>
+                    </div>
+                    <div class="widget">
+                        <strong class="title">{!v.Pricing}</strong>
+                        <p>{!v.Retail}: <span>€{!v.unitPrice}</span></p>
+                        <aura:if isTrue="{!v.isDealer}">
+                        	<p>{!v.Dealer}: <span>€{!v.dealerPrice}</span></p>
+                        </aura:if>
+                        
+                    <!--    <p>MAP: <span>€969.99</span></p>-->
+                    </div>
+                    <div class="widget">
+                        <table class="disc-price-table">
+                            <thead>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th class="th-sale">Sale</th>
+                                <!--<th>Margin</th>-->
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{!v.priceRangeMap}" var ="item">
+                                <tr>
+                                    <td>{!item.LowerBound}+</td>
+                                    <td><span class="price">€{!v.dealerPrice}</span></td>
+                                    <td><span class="sale">€{!item.TierValue }</span></td>
+                                   
+                                </tr> 
+                                </aura:iteration>
+                              <!--  <tr>
+                                    <td>1+</td>
+                                    <td><span class="price">€37.80</span></td>
+                                    <td><span class="sale">€36.80</span></td>
+                                   
+                                </tr>
+                                <tr>
+                                    <td>1+</td>
+                                    <td><span class="price">€37.80</span></td>
+                                    <td><span class="sale">€36.80</span></td>
+                                    
+                                </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="widget">
+                        <strong class="title">Color</strong>
+                        <ul class="swatches">
+                            <aura:iteration items="{!v.variationRedirect}" var ="item">
+                             <li>
+                                 <aura:if isTrue="{!item.Color == v.variationColor}">
+                                     <a href="{!'/horizonhobby/s/product-detail-page?pid='+item.pid}" class="active" style="{! 'background:' + item.Color +';'}"></a>
+                                     <aura:set attribute="else">
+                                       <a href="{!'/horizonhobby/s/product-detail-page?pid='+item.pid}" style="{! 'background:' + item.Color +';'}"></a>
+                                   
+                                     </aura:set>
+                                 </aura:if>
+                                </li>
+                            </aura:iteration>
+                          
+                        </ul>
+                    </div>
+                </div>
+                <div class="price-area">
+                    <div class="price-box">
+                        <strong class="price">{!v.YourPrice}: <span>€{!v.totalPrice}</span></strong>
+                     <!--   <p class="org-price">{!v.originalPrice}: <span class="line-through">€222.84</span></p>
+                        --><div class="cta-row">
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control">
+                                    <lightning:buttonIcon name="dec" tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_increment" onclick="{!c.increment}" iconName="utility:add"  size="x-small" alternativeText="Minus" title="Minus" />
+                                    <input type="number" min="0" name="count"  aura:id="quantity"  class="slds-input slds-input_counter" onkeyup="{!c.onChange}" />
+                                    <lightning:buttonIcon name="inc" tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_decrement"  onclick="{!c.decrement}" iconName="utility:dash"  size="x-small" alternativeText="Add" title="Add" />
+                                </div>
+                            </div>
+                            <button class="btn-default" onclick="{!c.Add}">{!v.addtoCart}</button>
+                        </div>
+                    </div>
+                    <span class="sale-ends">Sale Ends: 10/31/2021</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="description-tabs">
+		<ul class="tabslist">
+			<li class="active"><a href="#tab-1">Overview</a></li>
+			<li><a href="#tab-2">Specifications</a></li>
+			<li><a href="#tab-3">Support</a></li>
+			<li><a href="#tab-4">Supporting Products</a></li>
+			<li><a href="#tab-5">Completion Guides</a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane tab-active" id="tab-1">
+				<a href="javascript:void(0)" class="tab-opener">Overview</a>
+				<div class="content" style="display: none;">
+					<div class="widget" >
+						<div class="head">
+							<div class="icon"></div>
+							<strong class="title">Fearture</strong>
+						</div>
+                        <!--  {!v.product.Description}-->
+                    </div>
+						<!---<ul>
+							<li>ARRMA Warranty Information - Multilingual </li>
+							<li>Firma_ESC_CP_ARRMA_Kraton_8S_Smartlink_App_and_Updater_B309 </li>
+							<li>KRATON 8S BLX with DX2E ACTIVE Manual - Multilingual </li>
+							<li>KRATON 8S BLX with DX3 Manual - Multilingual </li>
+						</ul>
+					</div>
+					<div class="widget">
+						<div class="head">
+							<div class="icon"></div>
+							<strong class="title">Exploded View</strong>
+						</div>
+						<ul>
+							<li>KRATON 8S BLX with DX2E ACTIVE Exploded View </li>
+							<li>KRATON 8S BLX with DX3 Exploded View </li>
+						</ul>
+					</div>-->
+				</div>
+                
+                <div class="content">
+					<div class="inner-tabs">
+						<ul class="tabslist inner">
+							<li class="active"><a href="#inner-tab-1">General Features</a></li>
+							<li><a href="#inner-tab-2">Performance</a></li>
+							<li><a href="#inner-tab-3">Durability</a></li>
+							<li><a href="#inner-tab-4">Summary</a></li>
+						</ul>
+						<div class="inner-tabs-content">
+                            <aura:if isTrue="{!v.imageUrlsC}"> 
+                                <div class="tab-pane tab-active" id="inner-tab-1">
+                                    <a href="javascript:void(0)" class="tab-opener">General Features</a>
+                                    <div class="content" id="descriptionDiv">
+                                         <aura:unescapedHtml value="{!v.product.Description}" />
+                                        <!--	<p>For the original RR10™ Bomber 4WD RTR, Axial® partnered with Bomber Fabrication owner and two-time King of Hammers rock racing champion Randy Slawson to create a new level of 1/10 scale rock racing rig built on the fast, durable Axial® full tube chassis. Now that rig is set to continue its dominance with new electronics from Spektrum™ and Dynamite™ brands. Also, in addition to the Randy Slawson Bomber updated livery, a second option is available with Savvy Offroad Bomber livery. The Randy Slawson version includes Trail Ready beadlock wheels wrapped with BF Goodrich® Baja T/S KR3 tires, while the Savvy Offroad Bomber comes with Raceline beadlock wheels wrapped with Falken Wildpeak M/T tires.</p>
+         <ul class="info-list">
+          <li>ARRMA®-tough design</li>
+          <li>ARRMA® modular platform with many "custom-build" options</li>
+          <li>Adjustable battery boxes with hook and loop straps</li>
+          <li>Chassis brace options including tower-to-tower</li>
+          <li>Reverse bell crank steering system</li>
+          <li>Heavy-duty double spring servo saver</li>
+          <li>Hex hardware throughout</li>
+          <li>Versatile chassis accepts motors up to 56110 size and 1/6 or 1/5 size servos</li>
+          <li>2-year limited warranty (see website for details)</li>
+         </ul>-->
+                                      <!--  <aura:if isTrue="{!v.imageUrlsC}">
+                                            <div class="slider-nav">
+                                                <aura:iteration items="{!v.imageUrls}" var="item">
+                                                    <div class="recommendation-slider">
+                                                        <div class="slide">
+                                                            <a href="javascript:void(0)">
+                                                                <div class="image">
+                                                                    <img src="{!item}" />
+                                                                </div>
+                                                                <strong class="title">Title</strong>
+                                                                <p> this is some this description</p>
+                                                            </a>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </aura:iteration>
+                                            </div>
+                                        </aura:if>
+                                       -->
+                                       
+                                        <div class="recommendation-slider">
+                                          
+                                            <aura:iteration var="item" items="{!v.featuredImages}">
+                                                <div class="slide">
+                                                    <a href="javascript:void(0)">
+                                                        <div class="image">
+                                                            <img src="{!item.imageUrl__c}" />
+                                                        </div>
+                                                        <strong class="title">{!item.Name}</strong>
+                                                        <p> <aura:unescapedHtml value="{!item.Description__c}" /></p>
+                                                    </a>
+                                                </div>
+                                                
+                                            </aura:iteration>
+                                            
+                                    <!--         <div class="slide">
+                                            <a href="javascript:void(0)">
+                                                <div class="image">
+                                                    <img src="https://via.placeholder.com/200x150" />
+                                                </div>
+                                                <strong class="title">WHEELIE BAR</strong>
+                                                <p>For when only 90 degree wheelies will do.</p>
+                                            </a>
+                                        </div>
+                                         <div class="slide">
+                                            <a href="javascript:void(0)">
+                                                <div class="image">
+                                                    <img src="https://via.placeholder.com/200x150" />
+                                                </div>
+                                                <strong class="title">WHEELIE BAR</strong>
+                                                <p>For when only 90 degree wheelies will do.</p>
+                                            </a>
+                                        </div>
+                                        <div class="slide">
+                                            <a href="javascript:void(0)">
+                                                <div class="image">
+                                                    <img src="https://via.placeholder.com/200x150" />
+                                                </div>
+                                                <strong class="title">WHEELIE BAR</strong>
+                                                <p>For when only 90 degree wheelies will do.</p>
+                                            </a>
+                                        </div>
+                                        <div class="slide">
+                                            <a href="javascript:void(0)">
+                                                <div class="image">
+                                                    <img src="https://via.placeholder.com/200x150" />
+                                                </div>
+                                                <strong class="title">WHEELIE BAR</strong>
+                                                <p>For when only 90 degree wheelies will do.</p>
+                                            </a>
+                                        </div>
+                                        <div class="slide">
+                                            <a href="javascript:void(0)">
+                                                <div class="image">
+                                                    <img src="https://via.placeholder.com/200x150" />
+                                                </div>
+                                                <strong class="title">WHEELIE BAR</strong>
+                                                <p>For when only 90 degree wheelies will do.</p>
+                                            </a>
+                                        </div>-->
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </aura:if>
+							<div class="tab-pane" id="inner-tab-2">
+								<a href="javascript:void(0)" class="tab-opener">Performance</a>
+								<div class="content">
+									<div class="content-list">
+										<ul class="info-list">
+											<li>Spektrum™ DX3™ 2.4GHz Radio with SRS6110AT AVC® Receiver</li>
+											<li>Spektrum™ Firma™ 160A Smart ESC</li>
+											<li>Spektrum™ Firma™ 1250Kv Brushless Motor</li>
+											<li>Spektrum™ S905 Metal-Geared Digital Servo</li>
+											<li>4-Wheel shaft drive</li>
+											<li>8S Power (two 4S batteries, not included)</li>
+											<li>Anti-roll bars (optional, not included)</li>
+											<li>Adjustable camber</li>
+											<li>Adjustable front toe</li>
+											<li>Rear adjustable camber link positions</li>
+										</ul>
+										<ul class="info-list">
+											<li>Adjustable ride height</li>
+											<li>Adjustable droop</li>
+											<li>20 million cSt oil in center differentialr</li>
+											<li>CVD driveshafts</li>
+											<li>All-terrain dBoots® BACKFLIP tires</li>
+											<li>Massive 20mm bore oil-filled adjustable shocks</li>
+											<li>Wheelie bar with rubber tires for maximum stunting</li>
+											<li>High downforce wing fitted with special wear screws to protect the wing when upside down</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane" id="inner-tab-3">
+								<a href="javascript:void(0)" class="tab-opener">Durability</a>
+								<div class="content">
+									<div class="content-list">
+										<ul class="info-list">
+											<li>Extra-rigid, laser-etched anodized aluminum chassis</li>
+											<li>Multi-structured center brace system</li>
+											<li>Rear lower chassis brace</li>
+											<li>Strong composite chassis side pods</li>
+											<li>Under-chassis skids</li>
+											<li>Metal inserts molded into the front steering knuckles</li>
+											<li>Metal wishbone covers to prevent the pivot ball from pulling out of the arms</li>
+											<li>Extra-thick molded composite front and rear shock towers</li>
+											<li>Heavy-duty drivetrain</li>
+											<li>Durable steel driveshafts</li>
+											<li>All-metal diff outdrives and gearbox internals</li>
+											<li>Spiral-cut crown/pinion gears</li>
+											<li>Metal differential gears</li>
+											<li>Metal spur/idler gear</li>
+										</ul>
+										<ul class="info-list">
+											<li>Aluminum sliding motor mount</li>
+											<li>Heavy-duty dual spring servo saver</li>
+											<li>Waterproof* receiver box</li>
+											<li>Electronic ESC power switch</li>
+											<li>Captured hinge pins</li>
+											<li>Aluminum hanger inserts</li>
+											<li>Center protection tower that interfaces with the roll cage for increased body durability</li>
+											<li>Body clip protection pads on top of body</li>
+											<li>Single piece wing mount</li>
+											<li>Heavy-duty front bumper</li>
+											<li>Metal 24mm hex inserts in wheels</li>
+											<li>High downforce wing fitted with special wear screws to protect the wing when upside down</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane" id="inner-tab-4">
+								<a href="javascript:void(0)" class="tab-opener">Summary</a>
+								<div class="content">
+									<div class="show-more">
+										<p>Driven by 8S brushless power and an ARRMA®-tough design, the OUTCAST™ 8S BLX 4WD delivers the torque, acceleration and speed you need for extreme action in 1/5 scale. This ready-to-run stunt truck comes equipped to defy gravity right out of the box. From the heavy-duty front bumper to the wheelie bar in back, it's engineered to do it all: long, tall wheelies; tight, fast donuts; standing and aerial backflips; high leaps into the air; and more — over all terrain, in all conditions.</p>
+										<p>Just add your choice of batteries and charger and go. The OUTCAST™ 1/5 8S BLX 4WD includes a Spektrum™ DX3™ Smart transmitter and SRS6110AT AVC® (Active Vehicle Control®) receiver that take full advantage of the Spektrum™ Smart Firma™ brushless motor and ESC's innovative telemetry capabilities. Download the free Spektrum™ Dashboard App to your mobile device and follow motor RPM, ESC temperature, receiver voltage, drive pack voltage and more data in real-time. Dial-in extra stability with the radio's AVC® system to carve corners and nail jumps without letting up on the throttle.</p>
+										<p>Bigger than big and engineered for brute power and toughness, the ARRMA® 1/5 scale OUTCAST™ 8S BLX 4WD Stunt Truck features a metal-reinforced design that lets you blast up, over and through bruising obstacles. Metal shafts, turnbuckles and outdrives, plus all-metal internal gears, give the drivetrain and suspension system unstoppable strength. Even the included Spektrum™ S905 digital servo boasts the strength of metal gears.</p>
+										<p>Bigger than big and engineered for brute power and toughness, the ARRMA® 1/5 scale OUTCAST™ 8S BLX 4WD Stunt Truck features a metal-reinforced design that lets you blast up, over and through bruising obstacles. Metal shafts, turnbuckles and outdrives, plus all-metal internal gears, give the drivetrain and suspension system unstoppable strength. Even the included Spektrum™ S905 digital servo boasts the strength of metal gears.</p>
+										<div class="btn-wrap">
+											<a href="javascript:void(0)" class="btn-show-more">Show More</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane" id="tab-2">
+				<a href="javascript:void(0)" class="tab-opener">Specifications</a>
+				<div class="content">
+					<div class="specs-list">
+						<dl>
+							<dt>Approximate Assembly Time:</dt>
+							<dd>No assembly required</dd>
+							<dt>Ball Bearings:</dt>
+							<dd>Full set</dd>
+							<dt>Body: </dt>
+							<dd>Trimmed and screen printed, interior details</dd>
+							<dt>Brakes:</dt>
+							<dd>Integral with ESC</dd>
+							<dt>Bushing Material:</dt>
+							<dd>Metal</dd>
+							<dt>Charger:</dt>
+							<dd>Sold Separately</dd>
+							<dt>Chassis: </dt>
+							<dd>Scale tube high composite plastic</dd>
+							<dt>Color Variant:</dt>
+							<dd>Blue</dd>
+							<dt>Completion Level:</dt>
+							<dd>Ready-To-Run</dd>
+							<dt>Differential: </dt>
+							<dd>4 wheel drive locked diffs</dd>
+							<dt>Drivetrain:</dt>
+							<dd>4WD</dd>
+							<dt>Front Track:</dt>
+							<dd>11.50 in (292mm)</dd>
+							<dt>Gear Pitch:</dt>
+							<dd>32-Pitch</dd>
+							<dt>Ground Clearance:</dt>
+							<dd>Ground Clearance:</dd>
+							<dt>Motor Type:	</dt>
+							<dd>Brushed</dd>
+							<dt>Outer Diameter:</dt>
+							<dd>5.25 in (33.35mm)</dd>
+							<dt>Pinion:</dt>
+							<dd>12T</dd>
+							<dt>Power Type:	</dt>
+							<dd>Electric</dd>
+							<dt>Product Height:</dt>
+							<dd>Product Height:	</dd>
+						</dl>
+						<dl>
+							<dt>Product Length:</dt>
+							<dd>22.4 in (570mm)</dd>
+							<dt>Product Weight:</dt>
+							<dd>6.26 lb (2.83kg)</dd>
+							<dt>Product Width:</dt>
+							<dd>11.0 in (280mm)</dd>
+							<dt>Rear Track:</dt>
+							<dd>11.50 in (292mm)</dd>
+							<dt>Receiver:</dt>
+							<dd>Included</dd>
+							<dt>Scale:</dt>
+							<dd>1/10</dd>
+							<dt>Shock Type:</dt>
+							<dd>Aluminum body oil-filled</dd>
+							<dt>Spur Gear:</dt>
+							<dd>64T</dd>
+							<dt>Suspension:</dt>
+							<dd>4-link</dd>
+							<dt>Tire Compound:</dt>
+							<dd>SBR30</dd>
+							<dt>Track Surface:</dt>
+							<dd>Front &amp; Rear 11.50 in (292mm), distance from outer edges of tires measured side- to-side</dd>
+							<dt>Vehicle Type:</dt>
+							<dd>Rock Racer</dd>
+							<dt>Water-Resistant:</dt>
+							<dd>Yes</dd>
+							<dt>Wheel Hex Size:</dt>
+							<dd>12mm</dd>
+							<dt>Wheel Type:</dt>
+							<dd>2.2 in beadlock</dd>
+							<dt>Wheel Width:</dt>
+							<dd>1.74" (44.45mm)</dd>
+							<dt>Wheelbase:</dt>
+							<dd>14.75 in (375mm)</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane" id="tab-3">
+				<a href="javascript:void(0)" class="tab-opener">Support</a>
+				<div class="content">
+					<div class="widget">
+						<div class="head">
+							<div class="icon"></div>
+							<strong class="title">Manuals3</strong>
+						</div>
+						<ul>
+							<li>ARRMA Warranty Information - Multilingual </li>
+							<li>Firma_ESC_CP_ARRMA_Kraton_8S_Smartlink_App_and_Updater_B309 </li>
+							<li>KRATON 8S BLX with DX2E ACTIVE Manual - Multilingual </li>
+							<li>KRATON 8S BLX with DX3 Manual - Multilingual </li>
+						</ul>
+					</div>
+					<div class="widget">
+						<div class="head">
+							<div class="icon"></div>
+							<strong class="title">Exploded View</strong>
+						</div>
+						<ul>
+							<li>KRATON 8S BLX with DX2E ACTIVE Exploded View </li>
+							<li>KRATON 8S BLX with DX3 Exploded View </li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane" id="tab-4">
+				<a href="javascript:void(0)" class="tab-opener">Supporting Products</a>
+				<div class="content">
+					<div><a href="javascript:void(0)" class="link">Optional Parts</a></div>
+					<div>
+						<p>Replacement Parts</p>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane" id="tab-5">
+				<a href="javascript:void(0)" class="tab-opener">Completion Guides</a>
+				<div class="content">
+					<div><a href="javascript:void(0)" class="link">Chassis Brace Upgrade</a></div>
+					<div>
+						<p>Completion Guide</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <iframe width="100%" src="https://www.youtube.com/embed/nCvuEg9elJI" >
+                                </iframe>
+    
+ <!--
+  <iframe width="720" height="480" src="https://www.youtube.com/embed/nCvuEg9elJI"></iframe>
+ -->
+    
+    <aura:if isTrue="{!v.showAddToDraftOrder}" >
+        <c:AddToDraftOrder skuQuantityList="{!v.skuQuantityList}" show = "{!v.showAddToDraftOrder}" />
+    </aura:if>
+    
+</aura:component>

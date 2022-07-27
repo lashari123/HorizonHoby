@@ -1,0 +1,255 @@
+<aura:component controller="FilterAccordianController" description="Filter Accordion" access="global" implements="forceCommunity:availableForAllPageTypes">
+    <ltng:require scripts="{!$Resource.HHJQueryFile}" afterScriptsLoaded="{!c.filterAccordion}" />
+    
+    <!-- Checkbox Attributes -->
+    <aura:attribute name="categoryOptions" type="List" default="[]"/>
+    <aura:attribute name="categoryValue" type="List" default="[]"/>
+    <aura:attribute name="manufacturerOptions" type="List" default="[]"/>
+    <aura:attribute name="manufacturerValue" type="List" default="[]"/>
+    <aura:attribute name="retailPriceOptions" type="List" default="[]"/>
+    <aura:attribute name="retailPriceValue" type="List" default="[]"/>
+    <aura:attribute name="completionLevelOptions" type="List" default="[]"/>
+    <aura:attribute name="completionLevelValue" type="List" default="[]"/>
+    <aura:attribute name="scaleOptions" type="List" default="[]"/>
+    <aura:attribute name="scaleValue" type="List" default="[]"/>
+    <aura:attribute name="skillLevelOptions" type="List" default="[]"/>
+    <aura:attribute name="skillLevelValue" type="List" default="[]"/>
+    <aura:attribute name="powerTypeOptions" type="List" default="[]"/>
+    <aura:attribute name="powerTypeValue" type="List" default="[]"/>
+    <aura:attribute name="statusOptions" type="List" default="[]"/>
+    <aura:attribute name="statusValue" type="List" default="[]"/>
+    <aura:attribute name="vehicleTypeOptions" type="List" default="[]"/>
+    <aura:attribute name="vehicleTypeValue" type="List" default="[]"/>
+    
+    <!-- Checkbox Size Attributes -->
+    <aura:attribute name="categorySize" type="Integer" default="5"/>
+    <aura:attribute name="manufacturerSize" type="Integer" default="5"/>
+    <aura:attribute name="scaleSize" type="Integer" default="5"/>
+    <aura:attribute name="skillLevelSize" type="Integer" default="5"/>
+    <aura:attribute name="completionLevelSize" type="Integer" default="5"/>
+    <aura:attribute name="powerTypeSize" type="Integer" default="5"/>
+    <aura:attribute name="statusSize" type="Integer" default="5"/>
+    <aura:attribute name="vehicleTypeSize" type="Integer" default="5"/>
+    <aura:attribute name="retailPriceSize" type="Integer" default="5"/>
+    
+    <aura:attribute name="IsCat" type="Boolean" default="true"/>
+    <aura:attribute name="IsScale" type="Boolean" default="true"/>
+    <aura:attribute name="IsMan" type="Boolean" default="true"/>
+    <aura:attribute name="IsRetailP" type="Boolean" default="true"/>
+    <aura:attribute name="IsComLevel" type="Boolean" default="true"/>
+    <aura:attribute name="IsSkLevel" type="Boolean" default="true"/>
+    <aura:attribute name="IsPoTyp" type="Boolean" default="true"/>
+    <aura:attribute name="IsSt" type="Boolean" default="true"/>
+    <aura:attribute name="IsVehTyp" type="Boolean" default="true"/>
+    
+    <aura:attribute name="IsCatMore" type="Boolean" default="true"/>
+    <aura:attribute name="IsScaleMore" type="Boolean" default="true"/>
+    <aura:attribute name="IsManMore" type="Boolean" default="true"/>
+    <aura:attribute name="IsRetailPMore" type="Boolean" default="true"/>
+    <aura:attribute name="IsComLevelMore" type="Boolean" default="true"/>
+    <aura:attribute name="IsPoTypMore" type="Boolean" default="true"/>
+    <aura:attribute name="IsVehTypMore" type="Boolean" default="true"/>
+    
+    <aura:attribute name="renderedList" type="List" default="[]"/>
+    <aura:attribute name="mapper" type="Map" default="{}" />
+    <aura:attribute name="showFilterList" type="boolean" default="false"/>
+    
+    <aura:attribute name="filteredProductList" type="List" default="[]"/>
+    
+    <aura:method name="UpdateCheckbox" action="{!c.update}" access="PUBLIC"> 
+        <aura:attribute name="field" type="String"/>
+    	<aura:attribute name="fieldIterator" type="Integer"/>
+    </aura:method>
+   <!-- <aura:handler name="UpdateCheckboxEvent" event="c:UpdateCheckbox" action="{!c.update}" includeFacets="true" phase="bubble"/> -->
+    
+    
+    <aura:registerEvent name="RunFilterEvent" type="c:RunFilter"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+	<ul class="filter-items">
+        <aura:if isTrue="{!v.IsCat}" >
+            <li>
+                <a  class="opener">
+                    <span>Category</span>
+                </a>
+                <div class="filter-content">
+                    <div class="list-wrap">
+                        <div class="filters-list">
+                            <lightning:checkboxGroup name="categories"
+                                     aura:id = "categories"
+                                     options="{! v.categoryOptions }"
+                                     value="{! v.categoryValue }"
+                                     onchange="{! c.handleChange }"/>
+                        </div>
+                        <aura:if isTrue="{!v.IsCatMore}" >
+                        	<a class="more" onclick="{!c.getMoreCategories}">+ Show More Results</a>
+                        </aura:if>
+                    </div>
+                </div>
+            </li>
+        </aura:if>
+        <aura:if isTrue="{!v.IsMan}" >
+            <li>
+                <a  class="opener">
+                    <span>Manufacturer</span>
+                </a>
+                <div class="filter-content">
+                    <div class="list-wrap">
+                        <div class="filters-list">
+                            <lightning:checkboxGroup name="manufacturers"
+                                     aura:id = "manufacturers"
+                                     options="{! v.manufacturerOptions }"
+                                     value="{! v.manufacturerValue }"
+                                     onchange="{! c.handleChange }"/>
+                        </div>
+                        <aura:if isTrue="{!v.IsManMore}" >
+                        	<a class="more" onclick="{!c.getMoreManufacturers}">+ Show More Results</a>
+                        </aura:if>
+                    </div>
+                </div>
+            </li>
+        </aura:if>
+        <aura:if isTrue="{!v.IsRetailP}" >
+            <li>
+                <a  class="opener">
+                    <span>Retail Price</span>
+                </a>
+                <div class="filter-content">
+                    <div class="list-wrap">
+                        <div class="filters-list">
+                            <lightning:checkboxGroup name="retailPrices"
+                                     aura:id = "retailPrices"
+                                     options="{! v.retailPriceOptions }"
+                                     value="{! v.retailPriceValue }"
+                                     onchange="{! c.handleChange }"/>
+                        </div>
+                        <aura:if isTrue="{!v.IsRetailPMore}" >
+                        	<a class="more" onclick="{!c.getMoreRetailPrices}">+ Show More Results</a>
+                        </aura:if>
+                    </div>
+                </div>
+            </li>
+        </aura:if>
+        <aura:if isTrue="{!v.IsComLevel}" >
+            <li>
+                <a  class="opener">
+                    <span>Completion Level</span>
+                </a>
+                <div class="filter-content">
+                    <div class="list-wrap">
+                        <div class="filters-list">
+                            <lightning:checkboxGroup name="completionLevel"
+                                     aura:id = "completionLevel"
+                                     options="{! v.completionLevelOptions }"
+                                     value="{! v.completionLevelValue }"
+                                     onchange="{! c.handleChange }"/>
+                        </div>
+                        <aura:if isTrue="{!v.IsComLevelMore}" >
+                        	<a class="more" onclick="{!c.getMoreCompletionLevel}">+ Show More Results</a>
+                        </aura:if>
+                    </div>
+                </div>
+            </li>
+        </aura:if>
+        <aura:if isTrue="{!v.IsScale}" >
+            <li>
+                <a  class="opener">
+                    <span>Scale</span>
+                </a>
+                <div class="filter-content">
+                    <div class="list-wrap">
+                        <div class="filters-list">
+                            <lightning:checkboxGroup name="scale"
+                                     aura:id = "scale"
+                                     options="{! v.scaleOptions }"
+                                     value="{! v.scaleValue }"
+                                     onchange="{! c.handleChange }"/>
+                        </div>
+                        <aura:if isTrue="{!v.IsScaleMore}" >
+                            <a class="more" onclick="{!c.getMoreScale}">+ Show More Results</a>
+                        </aura:if>
+                    </div>
+                </div>
+            </li>
+        </aura:if>
+        <aura:if isTrue="{!v.IsSkLevel}" >
+            <li>
+                <a  class="opener">
+                    <span>Skill Level</span>
+                </a>
+                <div class="filter-content">
+                    <div class="list-wrap">
+                        <div class="filters-list">
+                            <lightning:checkboxGroup name="skillLevel"
+                                     aura:id = "skillLevel"
+                                     options="{! v.skillLevelOptions }"
+                                     value="{! v.skillLevelValue }"
+                                     onchange="{! c.handleChange }"/>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </aura:if>
+        <aura:if isTrue="{!v.IsPoTyp}" >
+            <li>
+                <a  class="opener">
+                    <span>Power Type</span>
+                </a>
+                <div class="filter-content">
+                    <div class="list-wrap">
+                        <div class="filters-list">
+                            <lightning:checkboxGroup name="powerType"
+                                     aura:id = "powerType"
+                                     options="{! v.powerTypeOptions }"
+                                     value="{! v.powerTypeValue }"
+                                     onchange="{! c.handleChange }"/>
+                        </div>
+                        <aura:if isTrue="{!v.IsPoTypMore}" >
+                        	<a class="more" onclick="{!c.getMorePowerType}">+ Show More Results</a>
+                        </aura:if>
+                    </div>
+                </div>
+            </li>
+        </aura:if>
+        <aura:if isTrue="{!v.IsSt}" >
+            <li>
+                <a  class="opener">
+                    <span>Status</span>
+                </a>
+                <div class="filter-content">
+                    <div class="list-wrap">
+                        <div class="filters-list">
+                            <lightning:checkboxGroup name="status"
+                                     aura:id = "status"
+                                     options="{! v.statusOptions }"
+                                     value="{! v.statusValue }"
+                                     onchange="{! c.handleChange }"/>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </aura:if>
+        <aura:if isTrue="{!v.IsVehTyp}" >
+            <li>
+                <a  class="opener">
+                    <span>Vehicle Type</span>
+                </a>
+                <div class="filter-content">
+                    <div class="list-wrap">
+                        <div class="filters-list">
+                            <lightning:checkboxGroup name="vehicleType"
+                                     aura:id = "vehicleType"
+                                     options="{! v.vehicleTypeOptions }"
+                                     value="{! v.vehicleTypeValue }"
+                                     onchange="{! c.handleChange }"/>
+                        </div>
+                        <aura:if isTrue="{!v.IsVehTypMore}" >
+                        	<a class="more" onclick="{!c.getMoreVehicleType}">+ Show More Results</a>
+                        </aura:if>
+                    </div>
+                </div>
+            </li>
+        </aura:if>
+    </ul>
+</aura:component>

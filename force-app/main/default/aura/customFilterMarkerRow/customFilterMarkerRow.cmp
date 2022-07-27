@@ -1,0 +1,66 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    
+    <aura:attribute name="parent" type="Aura.Component"/>
+    
+    <aura:attribute name="ObjectNames" type="list" default="['Product','Pricebook','Inventory']"></aura:attribute>
+    <aura:attribute name="FieldNames" type="list" default="[]"></aura:attribute>
+    <aura:attribute name="showFields" type="boolean" default='false'></aura:attribute>
+    <aura:attribute name="operators" type="list" default="[]"></aura:attribute>
+    <aura:attribute name="index" type="string"></aura:attribute>
+    <aura:attribute name="parseStringList" type="list"></aura:attribute>
+    <aura:attribute name="conditionList" type="string[]" default="['', '', '','','']"></aura:attribute>
+    <aura:attribute name="ConditionStrings" type="list"></aura:attribute>
+    
+    <aura:attribute name="Condition" type="string"></aura:attribute>
+    <aura:attribute name="Object" type="string"></aura:attribute>
+    <aura:attribute name="Field" type="string"></aura:attribute>
+    <aura:attribute name="Operator" type="string"></aura:attribute>
+    <aura:attribute name="Input" type="string"></aura:attribute>
+    
+    <aura:attribute name="item" type="object" />
+    
+    <aura:attribute name="conditionalOperator" type="boolean" default='0'></aura:attribute>
+    
+   
+    
+        <div class="slds-grid slds-gutters">
+            <aura:if isTrue="{!v.conditionalOperator || v.index !=0}">
+                <lightning:select value="{!v.Condition}" name="Condition" label="Condition" required="true" class="slds-col slds-size_1-of-12" onchange="{!c.showFields}">
+                    <option value="">choose one...</option>
+                    <option value="AND">AND</option>
+                    <option value="OR">OR</option>
+                </lightning:select>
+            </aura:if>
+            <aura:if isTrue="{!!v.conditionalOperator  }">
+                <lightning:select value="{!v.Object}" name="Objects" label="Object Name" required="true" class="slds-col slds-size_3-of-12" onchange="{!c.GetFields}">
+                    <option value="">choose one...</option>
+                    <aura:iteration items="{!v.ObjectNames}" var="item" >
+                        <option value="{!item}">{!item}</option>
+                    </aura:iteration>
+                </lightning:select>
+            </aura:if> 
+            <aura:if isTrue="{!v.showFields}">
+                
+                <lightning:select value="{!v.Field}" name="fields" label="Field Name" required="true" class="slds-col slds-size_3-of-12" onchange="{!c.setFieldName}" >
+                    <option value="">choose one...</option>
+                    <aura:iteration items="{!v.FieldNames}" var="item" >
+                        <option value="{!item.name}">{!item.label}</option>
+                    </aura:iteration>
+                </lightning:select>    
+                
+                <lightning:select value="{!v.Operator}" name="Operator" label="Operator" required="true" class="slds-col slds-size_2-of-12" onchange="{!c.setOperator}">
+                    <option value="">choose one...</option>
+                    <aura:iteration items="{!v.operators}" var="item" >
+                        <option value="{!item}">{!item}</option>
+                    </aura:iteration>
+                </lightning:select>
+                <lightning:input value="{!v.Input}" name="operand" label="Type here" class="slds-col slds-size_2-of-12" onchange="{!c.setValue}"/>
+                
+            </aura:if>
+            
+        </div>
+    <p aura:id="conditionP"></p>
+</aura:component>

@@ -1,0 +1,48 @@
+<apex:page controller="ImportOrderLineController"  renderAs="pdf" cache="false" action="{!fetchData}">
+    
+    
+    <html>
+        <head>
+            <title>Success/Errors</title>
+        </head>
+      
+        
+        <body style="margin: auto; box-sizing:border-box; overflow: hidden;">
+            
+            <apex:outputPanel >
+                  <p style="font-family: Helvetica;margin: auto; font-size: 22px; text-align: center; padding-top: 20px;">
+                        SUCCESS/ERROR
+                </p> 
+                <p style="font-family: Helvetica;margin: auto; font-size: 16px; text-align: left; padding-top: 20px;">
+                    Number of successful lines found in the file: {!successTotal}
+                </p>
+                <p style="font-family: Helvetica;margin: auto; font-size: 16px; text-align: left; padding-top: 20px;">
+                    Number of error lines found in the file: {!failedTotal}
+                </p>            
+
+                <p style="font-family: Helvetica;margin: auto; font-size: 22px; text-align: left; padding-top: 20px;">
+                </p>
+                <table border="0px">
+                    <tr>
+                     
+                        <th>SKU</th>
+                        <th>Result</th>
+                    </tr>      
+                    <apex:repeat value="{!skuList1}" var="key">
+                        <tr>
+                            <td> <apex:outputText value="{!key}" />
+                            </td>
+                            <td> <apex:outputText value="{!validateResult[key]}" />
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                    
+                </table>
+                    
+                   
+                
+            </apex:outputPanel>
+        </body>
+    </html>
+    
+</apex:page>

@@ -1,0 +1,5 @@
+<apex:page id="loginPage" controller="CommunitiesLoginController" action="{!forwardToAuthPage}" title="{!$Label.site.site_login}">
+    <script>
+    alert('test2');
+</script>
+</apex:page>

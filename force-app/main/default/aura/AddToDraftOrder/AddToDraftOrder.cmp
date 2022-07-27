@@ -1,0 +1,111 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" 
+                access="global" controller="OrderController">
+    <!--Handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:attribute name="FromAllOrderPage" type="Boolean" default="false" />
+    <aura:attribute name="FromImportOrderLine" type="boolean" default="false"/>
+    <aura:attribute name="SuccessLines" type="List" />
+    
+    <aura:attribute name="show" type="boolean" default="true"/>
+    <aura:attribute name="orderList" type="Order[]" />
+    <aura:attribute name="Products" type="Map" />
+    <aura:attribute name="skuQuantityList" type="String[]" />
+    <aura:attribute name="skuQuantities" type="String[]" />
+    <aura:attribute name="AddLabel" type="String" default="+ Add"/>
+    <aura:attribute name="NewOrderButtonLabel" type="String" default="Create New Order"/>
+    <aura:attribute name="isDisabled" type="String" default="NotDisabled btn-default"/>
+    <aura:attribute name="isCreated" type="Boolean" default="false"/>
+    <aura:attribute name="loaded" type="Boolean" default="false" />
+    <aura:attribute name="fromCatalogSearch" type="Boolean" default="false" />
+    <aura:attribute name="onlyNewOrder" type="Boolean" default="false" />
+    <aura:attribute name="onlyDraftOrder" type="Boolean" default="false" />
+    <aura:attribute name="isHomePage" type="Boolean" default="false" />
+    <aura:attribute name="singleDraftOrderAddedIndicator" type="Boolean" default="false" />
+    
+    <aura:registerEvent name="RunFilterEvent" type="c:RunFilter"/>
+    
+    <aura:registerEvent name="DeleteOrderLineItemEvent" type="c:DeleteOrderLineItem"/>
+    
+
+    <aura:If isTrue="{!v.show}">
+        <section role="dialog" tabindex="-1" class="slds-backdrop slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" onclick="{!c.cancelAction}">
+            <div class="slds-modal__container">
+                <div class="slds-modal__wrap">
+                    <header class="slds-modal__header" onclick="{!c.closeModal}">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Add to Draft Order</h1>
+                        <div style="text-align: right;">
+                            <button class="slds-button slds-button_icon" title="Close" onclick="{!c.cancelAction}" >
+                                <lightning:icon class="pointer" iconName="action:close" size="x-small"  alternativeText="Indicates approval"/>
+                                <i class="far fa-times-circle"></i>
+                            </button>
+                        </div>                                                                                                           
+                    </header>
+                    <div class="slds-grid slds-wrap" onclick="{!c.closeModal}">
+                        <aura:if isTrue="{!not(empty(v.SuccessLines))}">
+                            <aura:iteration var="skuQuantity" items="{!v.SuccessLines}">
+                                <aura:if isTrue="{!skuQuantity}">
+                                    <div class="slds-size_1-of-6">
+                                        <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small">{!skuQuantity}</div>
+                                    </div>
+                                </aura:if>
+                            </aura:iteration>
+                            <aura:set attribute="else">
+                                <aura:iteration var="skuQuantity" items="{!v.skuQuantities}">
+                                    <aura:if isTrue="{!skuQuantity.sku}">
+                                        <div class="slds-size_1-of-6">
+                                            <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small">{!skuQuantity.sku}</div>
+                                        </div>
+                                    </aura:if>
+                                </aura:iteration>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    <aura:if isTrue="{! !(v.onlyDraftOrder) }">
+                        <div onclick="{!c.closeModal}">
+                            <lightning:button class="slds-button_brand" onclick="{!c.addProductsToNewOrder}" label="{!v.NewOrderButtonLabel}" disabled="{!v.isCreated}" />                        
+                        </div>
+                    </aura:if>
+                    <div class="exampleHolder">
+                        <aura:if isTrue="{! v.loaded }">
+                            <lightning:spinner alternativeText="Loading" />
+                        </aura:if>
+                    </div>
+                    
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" onclick="{!c.closeModal}">
+                            <aura:if isTrue="{! !(v.onlyNewOrder) }">
+                                <div class="slds-table--header-fixed_container">
+                                <ui:scrollerWrapper class="scrollerSize">
+                                <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table--header-fixed">
+                                    
+                                    <thead>
+                                        <tr class="slds-text-title_caps">
+                                            <th scope="col"><div class="slds-truncate slds-cell-fixed">ORDER #</div></th>
+                                            <th scope="col"><div class="slds-truncate slds-cell-fixed">PO #</div></th>
+                                            <th scope="col"><div class="slds-truncate slds-cell-fixed">Date</div></th>
+                                            <th scope="col"><div class="slds-truncate slds-cell-fixed"></div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <aura:iteration var="order" items="{!v.orderList}">
+                                        <tr>
+                                            <td><div class="slds-truncate"><a href="{!'../s/cart/?oid='+ order.Id}">{!order.OrderNumber}</a></div></td>
+                                            <td><div class="slds-truncate">{!order.PoNumber}</div></td>
+                                            <td><div class="slds-truncate">{!order.EffectiveDate}</div></td>
+                                            <td>
+                                                <a data-orderId="{!order.Id}" class="{!v.isDisabled}" onclick="{!c.Add}">{!v.AddLabel}</a>
+                                            </td>
+                                        </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                                    </ui:scrollerWrapper>
+                                </div>
+                            </aura:if>
+                        </div>
+                   
+                </div>
+            </div>
+        </section>
+    </aura:If>
+</aura:component>

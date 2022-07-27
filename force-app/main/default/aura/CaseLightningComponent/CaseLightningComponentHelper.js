@@ -1,0 +1,3 @@
+({
+  handleFormSubmit: function (component) {}
+});

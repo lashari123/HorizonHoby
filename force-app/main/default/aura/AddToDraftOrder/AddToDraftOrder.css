@@ -1,0 +1,146 @@
+.THIS .scrollerSize {
+    max-height: 305px;
+}
+.THIS .slds-backdrop {
+    z-index: 10000;
+}
+.THIS .slds-modal__container {
+    font-family: 'Roboto', sans-serif;
+}
+.THIS .slds-table--header-fixed_container:before {
+    display: none;
+}
+.THIS .disabled {
+    color: #000;
+    pointer-events: none;
+    display: flex;
+}
+.THIS .slds-button_brand[disabled="true"]:before,
+.THIS .disabled:before {
+    content: "\f058";
+    color: #35833c;
+    margin: 0 5px 0 0;
+    font-size: 20px;
+    font-family: "Font Awesome 5 Pro";
+    text-decoration: none;
+}
+.THIS.slds-modal_large {
+    z-index: 10000;
+}
+.THIS .slds-modal__wrap {
+    padding: 20px 30px;
+    background: #fff;
+}
+.THIS .slds-modal__content {
+    padding: 10px 0 0;
+    box-shadow: none;
+}
+.THIS .slds-modal__header {
+    display: flex;
+    margin:0 0 15px;
+    align-items:center;
+    padding:0 0 10px;
+    border-bottom: 2px solid #f4f4f4;
+}
+.THIS .slds-modal__header h1 {
+    flex-grow: 1;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 700;
+    text-align:left;
+    font-family: 'Roboto', sans-serif;
+}
+.THIS.slds-modal_large .slds-button_icon {
+    margin: 0;
+}
+.THIS .slds-button_brand {
+    background: none;
+    padding: 0;
+    border:0;
+    line-height: 15px;
+    font-weight: 700;
+    position: relative;
+    text-transform: uppercase;
+    color: #003567;
+    text-decoration: underline;
+}
+.THIS .slds-button_brand[disabled="true"]{
+    text-decoration: none;
+}
+.THIS .slds-button_brand[disabled="true"]:after {
+    content:"";
+    position: absolute;
+    left: 30px;
+    right:0;
+    bottom:0;
+    height: 1px;
+    background: #003567;
+}
+.THIS .slds-button_brand:before {
+    content: "+";
+    letter-spacing: 4px;
+}
+.THIS .slds-wrap {
+    margin: 0 0 10px;
+}
+.THIS .slds-wrap .slds-size_1-of-6{
+    width: auto;
+}
+.THIS .slds-wrap .slds-box_x-small {
+    padding: 10px;
+    margin: 8px 8px 8px 0;
+    border: 1px solid #000;
+    border-radius: 0;
+    color: #000;
+}
+.THIS .slds-modal__container .slds-table_bordered {
+    border-top: 0;
+    color: #000;
+    font-size: 13px;
+}
+.THIS .slds-modal__container .slds-table thead th {
+    color: #000;
+    padding: 0;
+}
+.THIS .slds-modal__container .slds-table thead th .slds-cell-fixed {
+    padding: 15px 0; 
+}
+.THIS .slds-modal__container .slds-table_bordered tbody td {
+    padding: 15px 0;
+    border: 0;
+    min-height: 61px;
+}
+.THIS .slds-modal__container .slds-table_bordered tbody tr:hover td {
+    box-shadow: none;
+    background: none;
+}
+.THIS .slds-modal__container .slds-table_bordered tbody tr + tr td {
+    border-top: 1px solid #dcdcdc;
+}
+.THIS .scrollerSize .btn-default {
+    min-width: 90px;
+    height: 30px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 5px;
+    text-align: center;
+}
+.THIS .scrollerSize .btn-default:hover {
+    color: #fff;
+    text-decoration: none;
+}
+.THIS .scrollerSize .slds-truncate a{
+    color: #000;
+}
+.THIS.exampleHolder{
+    position: relative;
+    display: inline-block;
+    margin-left: 15px;
+    width: 55px;
+    white-space: nowrap;
+}
+@media only screen and (max-width: 767px) {
+    .THIS .slds-modal__container .slds-table_bordered {
+        min-width: 400px;
+    }
+}

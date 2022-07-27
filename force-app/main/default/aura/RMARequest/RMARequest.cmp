@@ -1,0 +1,167 @@
+<aura:component controller="RMARequestController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <ltng:require scripts="{!$Resource.HHJQueryFile}" afterScriptsLoaded="{!c.doinit}" />
+    
+    <aura:attribute name="wrapper" type="object" />
+    <aura:attribute name= "Inputindex" type="integer" default = '1' />
+    <aura:attribute name= "InputProofindex" type="integer" default = '1' />
+    <aura:attribute name= "Files" type="object[]" />
+    <aura:attribute name= "proofFiles" type="object[]" />
+    
+    <aura:attribute name= "lastDeleteId" type="String" /> 
+    <aura:attribute name= "caseNumber" type="String" /> 
+    <aura:attribute name= "caseID" type="String" default='' />
+    <aura:attribute name= "completed" type="boolean" default= 'false' />
+    
+    <aura:attribute name= "showDeleteModal" type="boolean" default= 'false' />
+    
+    <aura:attribute name= "showFile" type="boolean" default= 'false' />
+    <aura:attribute name= "progress" type="boolean" default= 'false' />
+    <aura:attribute name= "filetype" type="List" default="['.png', '.jpg', '.jpeg','.mov','.pdf','.mp4']" />    
+    <aura:attribute name= "auraIdDocIdMap" type="map" default = "{}" />
+    <aura:attribute name= "Pbody" type="Aura.Component[]" />
+    
+    
+    <div class="rma-request">
+        <aura:if isTrue="{!!v.completed}">
+            <div class="text-box">
+                <h1>RMA Request (Return Merchandise Authorization)</h1>
+                <p>For RMA claims, please complete the following. Once your request has been received and evaluated for completeness an RMA number will be assigned to your claim.</p>
+            </div>
+            <div class="contact-row">
+                <div class="col">
+                    <ul class="user-items">
+                        <li>{!v.wrapper.accountNumber}</li>
+                        <li>{!v.wrapper.accountName}</li>
+                        <li>{!v.wrapper.contactPhone}</li>
+                        <li>{!v.wrapper.contactName}</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <form action="#" class="rma-request-form">
+                        <div class="custom-field" >
+                            <input type="text" id="item-number" placeholder=" " class="requiredField" onchange="{!c.RequiredFieldCheck}" />
+                            <label for="item-number">*Item Number</label>
+                        </div>
+                        <div class="custom-field">
+                            <input type="text" id="item-description" placeholder=" " class="requiredField" onchange="{!c.RequiredFieldCheck}"/>
+                            <label for="item-description">*Item Description</label>
+                        </div>
+                        <div class="custom-field">
+                            <input type="text" id="defective" placeholder=" " />
+                            <label for="defective">Defective Part</label>
+                        </div>
+                        <div class="custom-field">
+                            <input type="text" id="claim" placeholder=" " />
+                            <label for="claim">Claim Refernce</label>
+                        </div>
+                        <div class="custom-field">
+                            <input type="text" id="date-of-purchase" placeholder=" " class="requiredField" onchange="{!c.RequiredFieldCheck}"/>
+                            <label for="date-of-purchase">*Date of Purchase</label>
+                        </div>
+                        <div class="file-field">
+                            <div id='uploadHere'>
+                                <span class="sub-title">*Upload Images</span>
+                                <!--  <input id='picture' type="file" placeholder="CHOOSE"  onchange="{!c.addFile}" onclick="{!c.remFile}" accept="image/*" />
+                           -->
+                                
+                                <lightning:fileUpload label=""
+                                                      aura:id= 'inputAppend0'
+                                                      id ="picture"
+                                                      name="fileUploader"
+                                                      multiple="false"  variant="label-hidden"
+                                                      accept="{!v.filetype}"
+                                                      disabled = "{!!v.showFile}"
+                                                      recordId="{!v.caseID}"
+                                                      onuploadfinished="{!c.handleUploadFinished}" />
+                                <lightning:buttonIcon aura:id ='dltBtninputAppend0' 
+                                                      disabled = "{!!v.showFile}" iconName="utility:delete"  variant="border-filled" alternativeText="delete" onclick="{!c.deleteConfimation}" title="Settings" /> 
+                                
+                                <span id='FileinputAppend0' >{!v.fileName}</span>
+                                {!v.body}
+                            </div>
+                            <aura:if isTrue="{!v.showFile}">
+                                <a id ='inputAppend0' onclick="{!c.addRow}" class="add-more">Add More</a>
+                            </aura:if>
+                            
+                        </div>
+                        <div class="file-field">
+                            <div id='uploadProofHere'>
+                                
+                                <span class="sub-title">*Proof of purchase </span>
+                                <lightning:fileUpload label=""
+                                                      aura:id= 'proofinputAppend0'
+                                                      name="fileUploader"
+                                                      onclick="{!v.fileUploaderClick}"
+                                                      multiple="false"  variant="label-hidden"
+                                                      accept="{!v.filetype}"
+                                                      disabled = "{!!v.showFile}"
+                                                      recordId="{!v.caseID}"
+                                                      onuploadfinished="{!c.handleUploadFinished}" />
+                                <lightning:buttonIcon aura:id ='dltBtnproofinputAppend0' 
+                                                      disabled = "{!!v.showFile}" iconName="utility:delete"  variant="border-filled" alternativeText="delete" onclick="{!c.deleteConfimation}" title="Settings" /> 
+                                
+                                <span id='FileproofinputAppend0' >{!v.fileName}</span>
+                                {!v.Pbody}
+                            </div>
+                            <aura:if isTrue="{!v.showFile}">
+                                <a id ='proofinputAppend0' onclick="{!c.addRow}" class="add-more">Add More</a>
+                            </aura:if>
+                        </div>
+                            <div class="custom-field">
+                                <input type="text" id="subject" class="requiredField" onchange="{!c.RequiredFieldCheck}" placeholder=" " />
+                                <label for="subject">*Subject</label>
+                            </div>
+                            <div class="custom-field">
+                                <input type="text" id="claim-error" placeholder=" " class="requiredField" onchange="{!c.RequiredFieldCheck}"/>
+                                <label for="claim-error">*Claim/Error Details</label>
+                            </div> 
+                            <button id='SbmtBtn' type="button" class="btn-default" disabled='true' onclick="{!c.submit}">Submit</button>
+                            
+                        </form>
+                    </div>
+                </div>
+                <aura:set attribute="else">
+                    <div class="submit-success" >
+                        <h1>RMA Request (Return Merchandise Authorization)</h1>
+                        <strong class="sub-title">We got it!</strong>
+                        <p>Your inquiry was successfully submitted. We will respond by email soon.</p>
+                        <p>Thanks for contacting us!</p>
+                        <span class="code">Case #: {!v.caseNumber}</span>
+                        <p><a onclick="{!c.refresh}">Fill out Another Form ></a></p>
+                    </div>
+                </aura:set>
+            </aura:if>
+        </div>
+    
+     <aura:If isTrue="{!v.showDeleteModal}">
+    <section role="dialog" aura:id="MainDiv" tabindex="-1" class="slds-backdrop slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" onclick="{!c.closeDeleteConfimation}">
+        <div class="slds-modal__container" >
+            <header class="slds-modal__header" > 
+                
+                <div style="text-align: right;">
+                    <button class="slds-button slds-button_icon" title="Close" onclick="{!c.closeDeleteConfimation}" >
+                        <lightning:icon class="pointer" iconName="action:close" size="x-small"  alternativeText="Indicates approval"/>
+                    	<i class="far fa-times-circle"></i>
+                    </button>
+                </div>                
+                
+                        <strong class="slds-modal__title slds-hyphenate">Delete!</strong>
+            </header>
+            
+            <div class="slds-modal__content_box" >
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                      <p>Do you want to delete the file?</p>
+                </div>
+                <footer class="slds-modal__footer">
+                  <button class="slds-button slds-button_success btn-default" onclick="{!c.deleteImage}">Yes</button>
+                  <button class="slds-button slds-button_destructive btn-default" onclick="{!c.closeDeleteConfimation}">No</button>
+                </footer>
+            </div>
+        </div>
+        
+        
+    </section>
+    </aura:If>
+    </aura:component>

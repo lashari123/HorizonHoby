@@ -1,0 +1,117 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <!--declare aura attributes-->
+    <aura:attribute name="showSaveCancelBtn" type="boolean"/>
+    <aura:attribute name="showErrorClass" type="boolean" default="false"/>
+    <aura:attribute name="sNo" type="string" />
+    <aura:attribute name="item" type="object"/>
+    <aura:attribute name="EditMode" type="boolean" default="false" />
+    <aura:attribute name="isLineUpdated" type="Boolean" default ='false'/>
+    
+    <aura:attribute name="orderId" type="string" default =''/>
+
+    <aura:attribute name="showDeleteAlert" type="Boolean" default="false" />    
+    <!-- 0 quantity  -->
+    <aura:attribute name="ZeroValue" type="list" default="[]"/>
+    
+    <aura:attribute name="isCheckAll" type="Boolean" default ='false'/>
+    <aura:attribute name="isParentCheckAll" type="Boolean" default ='false'/>
+    <aura:handler name="change" value="{!v.isCheckAll}" action="{!c.handleValueChange}"/>
+  
+    
+    <aura:attribute name="SelectedValuePrices" type="decimal" default=""/>
+    
+    <aura:attribute name="parent" type="Aura.Component"/>
+    
+    <aura:attribute name="printable" type="boolean" default="false" />
+    
+    <aura:attribute name="SelectedValues" type="list" default="[]"/>
+    
+    
+    <aura:attribute name="totalAmountSelected" type="decimal" default = "0"/>
+    
+    <tr aria-selected="false" class="slds-hint-parent">
+        
+        <td class="slds-cell-edit" role="gridcell">
+            <div class="slds-checkbox">
+                <label class="slds-checkbox">
+                    <ui:inputCheckbox aura:id="checkContact" value="" change="{!c.checkHandler}"/>
+                    <span class="slds-checkbox--faux" />
+                    <span class="slds-form-element__label"></span>
+                </label>
+            </div>
+        </td>
+        <td role="gridcell" tabindex="-1">
+            <div class="product-name" title="{!v.item.Product2.ProductCode}">
+                
+                <a href="{!'/horizonhobby/s/product-detail-page?pid='+v.item.Product2Id}">{!v.item.Product2.ProductCode}</a>
+                
+               <!-- <div class="image">
+                    <img src='{!v.item.Product2.PrimaryImageID__c}' />
+                </div>
+                -->
+            </div>
+        </td> 
+        <td class="slds-cell-edit" scope="row" tabindex="0">
+            
+            <section  tabindex="0" class="slds-popover slds-popover_edit" role="dialog" style="position: absolute; top: 0px">
+                <div class="slds-popover__body">
+                    <div class="slds-form-element slds-grid slds-wrap">
+                        <div class="slds-form-element__control slds-grow">
+                            
+                            <lightning:buttonIcon name="{!'1'+i}"  tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_increment" onclick="{!c.increment}" iconName="utility:add"  size="x-small" alternativeText="Minus" title="Minus" />
+                            <ui:inputNumber  class="slds-input inputFieldWidth"
+                                            labelClass="slds-form-element__label slds-form-element__label_edit slds-no-flex"
+                                            aura:id="inputId"
+                                            required="true"
+                                            label=""
+                                            keydown ="{!c.counter}"
+                                            updateOn="keyup"   
+                                            change="{!c.handleNoteValueChange}" 
+                                            value="{!v.item.Quantity}" /> 
+                            
+                            
+                            <lightning:buttonIcon name="{!'1'+i}" tabindex="-1" class="slds-button slds-button_icon slds-button_icon-small slds-input__button_decrement"  onclick="{!c.decrement}" iconName="utility:dash"  size="x-small" alternativeText="Add" title="Add" />
+                            
+                        </div>
+                    </div>
+                </div>
+                <span id="form-end" tabindex="0"></span>
+            </section>  
+            
+        </td>
+        <td role="gridcell" tabindex="-1">
+            <div class="slds-truncate" title="{!v.item.ProductName}">{!v.item.Product2.Name}</div>
+        </td> 
+        <td role="gridcell" tabindex="-1">
+            <div class="slds-truncate" title="{!v.item.UnitPrice}">€{!v.item.UnitPrice}</div>
+        </td>    
+        <td role="gridcell" tabindex="-1">
+            <div class="slds-truncate" title="{!v.item.UnitPrice}">€<lightning:formattedNumber value="{!v.item.UnitPrice * v.item.Quantity}" maximumFractionDigits="2"/><span class='hide'> {!v.item.UnitPrice * v.item.Quantity}</span></div>
+        </td> 
+        <td role="gridcell" tabindex="-1">
+            <div class="slds-truncate" title="{!v.item.pbe.Product2.Avail__c}">{!v.item.Product2.Avail__c}</div>
+        </td>
+        <td role="gridcell">
+            <div class="slds-truncate" title="Note">
+                <ui:inputTextArea   
+                                  class="slds-input"
+                                  labelClass="slds-form-element__label slds-form-element__label_edit slds-no-flex"
+                                  aura:id="NoteInput"
+                                  required=""
+                                  label=""
+                                  updateOn="keyup"   
+                                  change="{!c.handleNoteValueChange}" 
+                                  value="{!v.item.Description}" 
+                                  resizable="false"
+                                  /> 
+            </div>
+            
+        </td>
+        
+        
+    </tr>
+      <aura:if isTrue="{!v.showDeleteAlert}" >
+        <c:DeleteOrderAlert orderId="{!v.orderId}" SelectedValues = "{!v.ZeroValue}" show = "{!v.showDeleteAlert}" deleteAll="false" callName="Delete"/>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,21 @@
+<aura:component description="InfoWidget" implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="image" type="String" default="Image Text" access="global" />
+	<div class="info-widget">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<strong class="title">Same Day Shipping</strong>
+				</div>
+				<div class="col">
+					<strong class="title">Free Shipping</strong>
+				</div>
+				<div class="col">
+					<strong class="title">Expert Product Support</strong>
+				</div>
+				<div class="col">
+					<strong class="title">Easy Returns</strong>
+				</div>
+			</div>
+		</div>
+	</div>
+</aura:component>

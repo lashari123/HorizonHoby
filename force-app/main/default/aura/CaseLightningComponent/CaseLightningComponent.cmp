@@ -1,0 +1,77 @@
+<!--<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:lightningQuickAction" access="global" >-->
+<aura:component
+  implements="flexipage:availableForAllPageTypes,force:appHostable,lightning:actionOverride,force:lightningQuickAction"
+>
+  <aura:attribute name="loading" type="Boolean" default="false" />
+    <lightning:workspaceAPI aura:id="workspace"/>
+  <aura:handler name="init" value="{!this}" action="{!c.init}" />
+  <div class="slds-m-around--xx-large">
+    <lightning:card
+      title="Case"
+      iconName="standard:case"
+      class="slds-p-around_medium"
+    >
+      <lightning:recordEditForm
+        objectApiName="Case"
+        onsuccess="{!c.handleSuccess}"
+        onsubmit="{!c.handleSubmit}"
+        onerror="{!c.handleError}"
+        onload="{!c.handleLoad}"
+        aura:id="CaseRecodForm"
+      >
+        <!--  <lightning:recordEditForm aura:id="caseCreateForm" objectApiName="Case" onsuccess="{!c.handleOnSuccess}"> -->
+        <lightning:messages aura:id="OppMessage" />
+
+        <div class="slds-grid">
+          <div class="slds-col slds-size_1-of-2 slds-p-around_medium">
+            <span class="asterix">*</span>
+            <lightning:inputField
+              fieldName="ContactId"
+              aura:id="ContactId"
+            ></lightning:inputField>
+          </div>
+
+          <div class="slds-col slds-size_1-of-2 slds-p-around_medium">
+            <span class="asterix">*</span>
+            <lightning:inputField
+              fieldName="Channel__c"
+              aura:id="Channel"
+              requied="True"
+            ></lightning:inputField>
+          </div>
+        </div>
+
+            <div class="slds-grid">
+          <div class="slds-col slds-size_1-of-2 slds-p-around_medium">
+            <lightning:inputField
+              fieldName="Subject"
+              aura:id="Subject"
+              requied="True"
+            ></lightning:inputField>
+          </div>
+
+          <div class="slds-col slds-size_1-of-2 slds-p-around_medium">
+            <lightning:inputField
+              fieldName="Reason"
+              aura:id="Reason"
+            ></lightning:inputField>
+          </div>
+        </div>
+
+        <div class="slds-grid">
+          
+
+          <div class="slds-col slds-size_1-of-2 slds-p-around_medium">
+            <lightning:inputField
+              fieldName="Description"
+              aura:id="Description"
+            ></lightning:inputField>
+          </div>
+        </div>
+
+        <lightning:button type="submit" label="Save" variant="brand" />
+      </lightning:recordEditForm>
+      <lightning:navigation aura:id="navService" />
+    </lightning:card>
+  </div>
+</aura:component>

@@ -1,0 +1,55 @@
+.THIS.filter-items {
+    list-style: none;
+    padding: 0;
+    margin: 0 -15px;
+}
+.THIS.filter-items > li {
+    margin: 0;
+    border-top: 2px solid #fff;
+}
+.THIS.filter-items li .opener {
+    color: #000;
+    display: block;
+    padding: 15px;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 500;
+    background: #e1e1e1;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+.THIS.filter-items li .opener span {
+    display: block;
+    position: relative;
+    padding: 0 20px 0 0;
+}
+.THIS.filter-items li .opener span:after {
+    content: "\f067";
+    font-family: "Font Awesome 5 Pro";
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.THIS.filter-items li.active .opener span:after {
+    content: "\f068";
+}
+.THIS.filter-items .filter-content {
+    display: none;
+}
+.THIS.filter-items .filters-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.THIS.filter-items .filters-list li {
+    margin: 0 0 5px;
+}
+.THIS.filter-items .list-wrap {
+    padding: 10px;
+    background: #fff;
+}
+.THIS.filter-items .more {
+    color: #003567;
+    text-decoration: none;
+    font-weight: 500;
+}

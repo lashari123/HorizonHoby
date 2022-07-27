@@ -1,0 +1,66 @@
+<aura:component controller="DynamicContentCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    <ltng:require scripts="{!$Resource.HHJQueryFile}" afterScriptsLoaded="{!c.doInit}" />
+    <aura:html tag="style">
+        
+        .content-page {
+            margin: 0 auto;
+        	font-family: 'Roboto', sans-serif;
+        	color: #636363;
+        }        
+        
+  		h1 {
+        	font-size: 2.875rem;
+    		line-height: 1.2;
+        }
+        
+        h4 {
+            font-size: 1.375rem;
+            line-height: 2.1;
+        	font-weight: 700;
+        	font-family: 'Roboto', sans-serif !important;
+        }        
+        
+        lightning-formatted-rich-text span {
+        	font-family: 'Roboto', sans-serif !important;        
+        }
+        
+        ul {
+        	line-height: 1.5;
+        }
+        
+        lightning-formatted-rich-text span p {
+        	line-height: 1.5;
+        }
+    </aura:html>    
+    <aura:attribute name="dynamicContent" type="Object"/>
+    <aura:attribute name="contentSections" type="Content_Section__c[]"/>
+    <div class="content-page">    
+        <div>
+            <h1>
+                {!v.dynamicContent.Heading__c}
+            </h1>
+        </div>
+        <div>
+            <p class="date">
+                {!v.dynamicContent.Sub_Heading_1__c}
+            </p>
+        </div>   
+        <div>
+            <p>
+                {!v.dynamicContent.Sub_Text_1__c}
+            </p>
+        </div>     
+        <div class="">
+            <aura:iteration items="{!v.contentSections}" var="cont">
+                    <div class="" >
+                        <aura:If isTrue="{!cont.Button_Label_1__c!=null}">     
+                            <h4>{!cont.Button_Label_1__c}</h4>
+                        </aura:If>
+                    </div>
+                    <div class="">
+                        <p><lightning:formattedRichText value="{!cont.Rich_Text_1__c}"></lightning:formattedRichText></p>
+                    </div>
+            </aura:iteration>
+        </div>
+    </div>
+</aura:component>

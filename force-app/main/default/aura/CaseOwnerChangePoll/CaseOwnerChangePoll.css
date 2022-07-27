@@ -1,0 +1,9 @@
+.THIS {
+}
+
+.THIS.otherOwnerAssigned {
+    background-color: rgb(255,127,80);
+}
+.THIS.currentOwner {
+	background-color: rgb(182, 209, 218);
+}

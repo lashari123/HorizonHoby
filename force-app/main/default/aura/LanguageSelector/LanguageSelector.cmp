@@ -1,0 +1,40 @@
+<aura:component controller="LanguageController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+    <ltng:require scripts="{!$Resource.HHJQueryFile}" afterScriptsLoaded="{!c.languageFlagSelected}" />
+    
+    <aura:attribute name="languageSelectedValue" type="string" />
+    <aura:attribute name="languageSelectedValueLowerCase" type="string" />
+    <aura:attribute name="SupportedLanguages" type="List" default="['Eng', 'Ger', 'Fre']" />
+    <aura:attribute name="SupportedLanguagesLowerCase" type="List" default="['eng', 'ger', 'fre']" />
+    
+    <aura:attribute name="showAlert" type="Boolean" default="false" />
+    
+    <!--Handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="country">
+      <div id="country" class="select"><i class="{!'flagstrap-icon flagstrap-'+v.languageSelectedValueLowerCase}"></i>{!v.languageSelectedValue}</div>
+      <div id="country-drop" class="dropdown" style="display:none;">
+        <ul name="language" label="" variant="label-hidden" aura:id="language" >
+            <aura:iteration items="{!v.SupportedLanguagesLowerCase}" var="item" indexVar='idx'>
+                <li id="{!item}" onclick="{!c.languageSelected}" selected="{!v.languageSelectedValue == item}"><i class="{!'flagstrap-icon flagstrap-'+item}"></i> {!item}</li>
+            </aura:iteration>
+        </ul>
+      </div>
+	</div>
+    
+   <!-- <div class="slds-size_xx-small">
+        <lightning:select name="language" label="" variant="label-hidden" aura:id="language" onchange="{!c.languageSelected}" value="{!v.languageSelectedValue}">
+            <aura:iteration items="{!v.SupportedLanguages}" var="item">
+                
+                <option value="{!item}" selected="{!v.languageSelectedValue == item}">{!item}</option>
+            </aura:iteration>
+        </lightning:select>
+    </div>-->
+    
+    
+    
+    <aura:if isTrue="{!v.showAlert}" >
+        <c:SetAsDefaultLanguageAlert languageSelectedValue="{!v.languageSelectedValue}" show = "{!v.showAlert}" />
+    </aura:if>
+	
+</aura:component>

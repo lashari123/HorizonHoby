@@ -1,0 +1,3 @@
+<design:component label="Info Widget">
+	<design:attribute name="image" label="Info widget Image" description="Info widget Image Desc" />
+</design:component>

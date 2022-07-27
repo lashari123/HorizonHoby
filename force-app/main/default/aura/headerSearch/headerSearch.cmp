@@ -1,0 +1,38 @@
+<aura:component controller="storeListViewHandler" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="searchTerm" type="string" default=""/>
+    <aura:attribute name="categoryList" type="ProductCategory[]"/>
+    <aura:attribute name="categorySelectedValue" type="string" default=""/>
+    
+    <aura:attribute name="manufacturerList" type="list"/>
+    <aura:attribute name="manufacturerSelectedValue" type="string" default=""/>
+    
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    
+    <lightning:navigation aura:id="navService"/>  
+    
+    <form  class="search-form" onsubmit="{!c.filter}">
+        <div class="input-field">
+            <input type="text" aura:id="keyword" placeholder="Search" value="{!v.searchTerm}"/>
+        </div>
+        <span class="custom-select">
+            <select aura:id="manufacture" value ="{!manufacturerSelectedValue}">
+                <option value="">Manufacturer </option>
+                <aura:iteration items="{!v.manufacturerList}" var="item">
+                    <option value="{!item.Id}">{!item.Name}</option>
+                </aura:iteration>
+            </select>
+        </span>
+        <span class="custom-select">
+            <select aura:id="category" value ="{!categorySelectedValue}">
+                <option value="">Category </option>
+                <aura:iteration items="{!v.categoryList}" var="item">
+                    
+                    <option value="{!item.Id}" selected="{!v.categorySelectedValue == item.Name}">{!item.Name}</option>
+                </aura:iteration>
+            </select>
+        </span>
+        <button type="button" class="btn-default" onclick="{!c.filter}">Search</button>
+        <a href="#" class="advanced">+ Advanced</a>
+    </form>
+</aura:component>

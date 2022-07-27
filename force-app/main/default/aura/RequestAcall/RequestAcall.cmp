@@ -1,0 +1,93 @@
+<aura:component controller="RequestaCallController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name = "isOpen" type = "boolean" default='false'/>
+    <ltng:require scripts="{!$Resource.LiveChatButton}" afterScriptsLoaded="{!c.doInit}" />
+    <lightning:notificationsLibrary aura:id="notifyId"/>
+    <aura:attribute name = "contactNumber" type = "string" default=''/>
+    <aura:attribute name = "conId" type = "string" default=''/>
+    <aura:attribute name = "message" type = "string" default=''/>
+   <!-- <iframe id='vfiframe' aura:id="vfFrame" src="{!'/horizonhobby/apex/LiveChat'}" style="overflow: hidden; width:100%;" frameborder="0" ></iframe>   -->
+
+    <ul class="action-calls">
+        <li>
+            <a onclick="{!c.openModal}" >
+                <img src="{!$Resource.hh_icon_call}" align="Call" />
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <img src="{!$Resource.hh_icon_chat}" align="Chat" />
+            </a>
+            
+        </li>
+        <div id="liveagent_button_offline_5736t000000Cack" style="">
+            </div>
+    </ul>
+    <!--<lightning:button type="button" label="Request a Call" onclick="{!c.openModal}"></lightning:button>
+    --><aura:attribute name="options" type="List" default='[ { value: "Order question", label: "Order question" },
+            { value: "Account question", label: "Account question" },
+            { value: "Product question", label: "Product question" },
+            { value: "Other", label: "Other" }]'/>
+		
+		
+		
+
+		
+		
+		
+
+		
+		
+		
+
+    <aura:attribute name="selectedValue" type="String" />
+    
+   <!-- <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    -->
+    <aura:if isTrue='{!v.isOpen}'>
+        
+        
+        <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+        
+        
+        <!-- Modal/Popup Box starts here-->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box Header Starts here-->
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{! c.closeModel }"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Please fill in the following information to submit your callback request</h2>
+                </header>
+                <!--Modal/Popup Box Body Starts here-->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                   
+                    <lightning:input aura:id="field" type='tel' value="{!v.contactNumber}" label='Contact Number' required="true"  pattern="^\s*\(?(020[7,8]{1}\)?[ ]?[1-9]{1}[0-9{2}[ ]?[0-9]{4})|(0[1-8]{1}[0-9]{3}\)?[ ]?[1-9]{1}[0-9]{2}[ ]?[0-9]{3})\s*$"/>
+                    <lightning:select aura:id="field" label= 'Subject' value="{!v.selectedValue}"  required="true">
+                        <aura:iteration items="{!v.options}" var="option">
+                            <option text="{!option.label}" value="{!option.id}" selected="{!option.selected}"/>
+                        </aura:iteration>
+                    </lightning:select>
+               
+                
+                <lightning:textarea aura:id="field" name="notes" label="Notes" value = '{!v.message}'  required="true" placeholder="type here..."/>
+                 </div>
+                <!--Modal/Popup Box Footer Starts here-->
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="neutral"
+                                      label="Cancel"
+                                      title="Cancel"
+                                      onclick="{! c.closeModel }"/>
+                    <lightning:button variant="brand"
+                                      label="Submit Request"
+                                      title="OK"
+                                      onclick="{!c.submitDetails}"/>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        
+    </aura:if>
+</aura:component>

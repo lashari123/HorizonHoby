@@ -1,0 +1,23 @@
+.THIS  .slds-text-title_bold{
+    font-size:8pt
+}
+.THIS {
+     font-size:8pt
+        
+}
+.THIS .slds-table th,.THIS .slds-table td {
+    padding :0px; padding-left :02px;
+    margin:0px;
+    width:auto
+}
+.THIS .slds-table th:first-child {
+    
+    width:100px
+}
+.THIS .slds-p-around_medium {
+    padding: 0px;
+ 
+}
+.THIS .slds-table{
+   
+}

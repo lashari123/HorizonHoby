@@ -1,0 +1,105 @@
+<aura:component controller="DealerInfoController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:attribute name="accountRec" type="Account"  />
+    <aura:attribute name="contactRec" type="Contact" />
+    
+ 
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 25px;font-weight: 500;">
+            <p> Dealer Account Information  </p>
+        </div>
+        
+    </div>
+    <br></br>
+    <br></br>
+    <br></br>
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 14px;font-weight: 500;">
+            <p> Contact Information: </p>
+        </div>
+    </div>
+    <br></br>
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 12px; ">
+            <p>  Account Name: {!v.accountRec.Name} </p>
+            <p>  Account Number: {!v.accountRec.AccountNumber} </p>
+            <p>  Primary Contact Name: {!v.contactRec.Name}  </p>
+            <p>  Primary Account Email: {!v.contactRec.Email}  </p>
+            <p>  Primary Account Phone:  {!v.contactRec.Phone} </p>
+            <p>  Key Account Manager:  </p>
+        </div>
+    </div>
+    <br></br><br></br>
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 14px;font-weight: 500;">
+            <p> Credit Terms: </p>
+        </div>
+    </div>
+    <br></br> 
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 12px; ">
+            <p>  Type: {!v.accountRec.Credit_Type__c} </p>
+        </div>
+    </div>
+    <br></br><br></br>
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 14px;font-weight: 500;">
+            <p> Payment Method: </p>
+        </div>
+    </div>
+    <br></br> 
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 12px; ">
+            <p>  Type: {!v.accountRec.Payment_Type__c} </p>
+        </div>
+    </div>
+    <br></br><br></br>
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 14px;font-weight: 500;">
+            <p> Billing Address: </p>
+        </div>
+    </div>
+    <br></br> 
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 12px; ">
+            <p>  Billing Street: {!v.accountRec.BillingStreet} </p>
+            <p>  Billing City:  {!v.accountRec.BillingCity}</p>
+            <p>  Billing State/Province:  {!v.accountRec.BillingState}</p>
+            <p>  Billing Zip/Postal Code:  {!v.accountRec.BillingPostalCode}</p>
+            <p>  Billing Country:  {!v.accountRec.BillingCountry}</p>
+        </div>
+    </div>
+    <br></br> <br></br>
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 14px;font-weight: 500;">
+            <p> Shipping Method: </p>
+        </div>
+    </div>
+    <br></br> 
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 12px; ">
+            <p>  Type:  {!v.accountRec.Shipping_Type__c}</p>
+        </div>
+    </div>
+    <br></br><br></br> 
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 14px;font-weight: 500;">
+            <p> Shipping Address: </p>
+        </div>
+    </div>
+    <br></br> 
+    <div class="slds-clearfix">
+        <div class="slds-float_left" style="font-size: 12px; ">
+            <p>  Shipping Street: {!v.accountRec.ShippingStreet} </p>
+            <p>  Shipping City: {!v.accountRec.ShippingCity} </p>
+            <p>  Shipping State/Province: {!v.accountRec.ShippingState} </p>
+            <p>  Shipping Zip/Postal Code:{!v.accountRec.ShippingPostalCode}  </p>
+            <p>  Shipping Country:  {!v.accountRec.ShippingCountry}</p>
+        </div>
+    </div>
+    
+    
+    
+</aura:component>

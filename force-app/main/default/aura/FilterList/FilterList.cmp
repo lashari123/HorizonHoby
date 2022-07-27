@@ -1,0 +1,54 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" 
+                access="global" controller="FilterListController">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="show" type="boolean" default="true"/>
+    <aura:attribute name="name" type="String" default=""/>
+    <aura:attribute name="heading" type="String" default="Save List"/>
+    <aura:attribute name="buttonLabel" type="String" default="Save"/>
+    <aura:attribute name="editListId" type="String" default=""/>
+    <aura:attribute name="renderedList" type="List" default="[]"/>
+    
+    <!-- Event to update Saved Filter List dropdown (Called: savedFilterList.cmp) -->
+    <aura:registerEvent name="SavedFilterListUpdatedEvent" type="c:SavedFilterListUpdated"/>
+    
+    <aura:If isTrue="{!v.show}">
+        
+        <section role="dialog" tabindex="-1" class="slds-backdrop slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" onclick="{!c.cancelAction}" >
+            <div class="slds-modal__container">
+                <div class="slds-modal__wrap slds-theme_default">
+                    <header class="slds-modal__header" onclick="{!c.closeModal}">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{!v.heading}</h1>  
+                        <div style="text-align: right;">
+                            <button class="slds-button slds-button_icon" title="Close" onclick="{!c.cancelAction}" >
+                                <lightning:icon class="pointer" iconName="action:close" size="x-small"  alternativeText="Indicates approval"/>
+                                <i class="far fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </header>
+                    <div onclick="{!c.closeModal}">
+                    <lightning:input name="Name" label="Filter List Name" placeholder="New List Name - Popular Losi, Losi Favorites" aura:id="Name"/>
+            
+                    <ul class="tags-list">
+                        <aura:iteration var="val" items="{!v.renderedList}" indexVar= "i">
+                            
+                            <li>
+                                <div class="list-item">{!val.label}<a data-renderedListId="{!val.value + i}" onclick="{!c.Remove}"><i class="far fa-times-circle"></i></a></div>
+                            </li>
+                            
+                        </aura:iteration>
+                    </ul>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                        <lightning:button class="slds-button_brand btn-default cancel" onclick="{!c.cancelAction}" label="Cancel"  />
+                    	<lightning:button class="slds-button_brand btn-default" onclick="{!c.SaveList}" label="Save"  />
+                    </div>
+                    </div>
+                </div>
+            </div>
+             
+        </section>
+        
+        
+    </aura:If>
+	
+</aura:component>

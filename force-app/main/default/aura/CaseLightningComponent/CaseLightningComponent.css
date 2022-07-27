@@ -1,0 +1,13 @@
+.THIS {
+}
+
+.THIS .asterix {
+  position: absolute;
+
+  font-size: 15px;
+  color: #da1d1d;
+}
+
+.THIS .requiredField .slds-form-element__label {
+  margin-left: 9px;
+}

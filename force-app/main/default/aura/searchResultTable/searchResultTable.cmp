@@ -1,0 +1,477 @@
+<aura:component controller="storeListViewHandler" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    
+    <lightning:workspaceAPI aura:id="workspace"/>
+    
+    <lightning:navigation aura:id="navService"/>   
+    
+    <aura:attribute name="ShowQuantity"  type="boolean" default="true" access="global" />
+    <aura:attribute name="ShowDealer"  type="boolean" default="true"  />
+    <aura:attribute name="TableName"  type="string"  access="global" />
+    <aura:attribute name="keyword"  type="string"   />
+    <!-- attributes -->
+    <aura:attribute name="csvData" type="Object"/>
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="sortColumns" type="List"/>
+    <aura:attribute name="errors" type="Object" default="[]"/>
+    <aura:attribute name="draftValues" type="Object" default="[]"/>
+    <aura:attribute name="showAddToDraftOrder" type="boolean" default="false"/>
+    <aura:attribute name="skuQuantityList" type="String[]" default="[]"/>
+    
+    <aura:attribute name="color" type="string" default="red"/>
+    <aura:attribute name="SelectedValues" type="list" default="[]"/>
+    
+    <aura:attribute name="lastSortedColumn"  type="string"   />
+    
+    
+    <aura:attribute name="beforeToggleList" type="object[]"/>
+    <aura:attribute name="discontinuedList" type="object[]"/>
+    <aura:attribute name="inStockList" type="object[]"/>
+    <aura:attribute name="DiscontinuedTitle" type="string" default="Discontinued"/>
+    <aura:attribute name="InStockTitle" type="string" default="In Stock"/>
+    <aura:attribute name="exportText" type="string" default="Export"/>
+    <aura:attribute name="selectedItemText" type="string" default="Selected Items"/>
+    <aura:attribute name="TotalText" type="string" default="Total"/>    
+    <aura:attribute name="isInStock" type="boolean" default="false"/>
+    
+    <aura:attribute name="addToCartText" type="string" default="Add to Cart"/>    
+    <aura:attribute name="ClearQuantitiesText" type="string" default="Clear Quantities"/>
+    
+    <aura:attribute name="isDiscontinued" type="boolean" default="false"/>
+    
+    <aura:attribute name="FilterId" type="string" default=""/>
+    <aura:attribute name="showSearchFilter" type="Boolean" default="false"/>
+    
+    
+    <aura:attribute name="catName" type="string" default=""/>
+    <aura:attribute name="selectedRows" type="list" default="[]"/>
+      <aura:attribute name ='printAll' type='boolean'></aura:attribute>
+    
+    <aura:attribute name="categoryList" type="ProductCategory[]"/>
+    <aura:attribute name="categorySelectedValue" type="string" default=""/>
+    <aura:attribute name="searchTerm" type="string" default=""/>
+    
+    <aura:attribute name="manufacturerList" type="list"/>
+    <aura:attribute name="manufacturerSelectedValue" type="string" default=""/>
+    
+    
+    <aura:attribute name="paginationList" type="object"/>
+    
+    <aura:attribute name="pageSize" type="Integer" default="10"/>
+    
+    <aura:attribute name="totalSize" type="Integer"/>
+    <aura:attribute name="totalPages" type="Integer"/>
+    <aura:attribute name="totalPagesList" type="Integer"/>
+    <aura:attribute name="currentPage" type="Integer" default="1"/>
+    <aura:attribute name="headerCounterText" type="string" />
+    
+    <aura:attribute name="noOfItem" type="list" default="[1,2,5,10,20]" />
+    
+    <aura:attribute name="start" type="Integer" />
+    
+    <aura:attribute name="end" type="Integer"/>
+    
+    
+    <aura:attribute name="isPDF" type="boolean" default="false"/>
+    <aura:attribute name="isPDFShow" type="boolean" default="false"/>
+    <aura:attribute name="isHTML" type="boolean" default="false"/>
+    <aura:attribute name="isExcel" type="boolean" default="false"/>
+    
+    <aura:attribute name="showPrintModal" type="boolean" default="false"/>
+    
+    <aura:attribute name="totalAmountSelected" type="decimal" default = "0"/>
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:method name="onchangeData" action="{!c.refreshData}" access="public">
+        
+    </aura:method>
+    
+    <aura:handler name="RunFilterEvent" event="c:RunFilter" action="{!c.runningFilter}"/>
+    <aura:attribute name="renderedList" type="List" default="[]"/>
+    <aura:attribute name="filteredProductList" type="List" default="[]"/>
+    <aura:attribute name="showFilterList" type="boolean" default="false"/>
+    <aura:attribute name="filterListSelected" type="String" default="Filters Selected"/>
+    <aura:attribute name="heading" type="String" default="PDF Print"/>
+    
+    <!-- <aura:registerEvent name="UpdateCheckboxEvent" type="c:UpdateCheckbox"/> -->
+    
+    <!--  <video autoplay="true" muted="true" loop="true" id="myVideo">
+        <source src="{!$Resource.VideoStaticResource}" type="video/mp4"/>
+    </video>
+    -->
+    <div class="slds-p-around_medium slds-hidden">
+        <h1 class="slds-text-heading_large">Search Result</h1>
+    </div>
+    
+    <!-- the container element determine the height of the datatable -->
+    
+    <aura:if isTrue="{!!v.ShowQuantity}">
+        <lightning:input label="Search Term" value="{!v.searchTerm}"></lightning:input>
+    </aura:if>
+    <!-- Categories Dropdown for Filter -->
+    <lightning:select name="category" label="Category" aura:id="category" onchange="{!c.categorySelected}" value="{!v.categorySelectedValue}" class="slds-hidden">
+        <option value="">Select Category </option>
+        <aura:iteration items="{!v.categoryList}" var="item">
+            
+            <option value="{!item.Id}" selected="{!v.catName == item.Name || v.categorySelectedValue == item.Id}">{!item.Name}</option>
+        </aura:iteration>
+    </lightning:select>
+    
+    <lightning:select name="manufacturer" label="Manufacturer" aura:id="manufacture" onchange="{!c.manfacturerSelected}" value="{!v.manufacturerSelectedValue}" class="slds-hidden">
+        <option value="">Select Manufacture </option>
+        <aura:iteration items="{!v.manufacturerList}"  var="item">
+            <option value="{!item.Id}" selected="{!v.manufacturerSelectedValue == item.Id}">{!item.Name}</option>
+        </aura:iteration>
+    </lightning:select>
+    
+    <lightning:button label="Search" iconName="utility:search" onclick="{!c.filter}" iconPosition="left" class="slds-hidden" />
+    <div class="catalog-results" onclick="{! c.closeModal }">
+        <aura:if isTrue="{!v.showSearchFilter}" >
+            <c:searchFilters renderedList="{!v.renderedList}" keyword="{!v.keyword}" filteredProductList="{!v.filteredProductList}" aura:id="aComp" filterListSelected = "{!v.filterListSelected}"/>
+        </aura:if>
+      
+        <div aura:id = 'search-results' class="search-results">
+            <aura:if isTrue="{!v.renderedList.length>0}">  
+                <div class="filters-selected">
+                    <strong class="title">{!v.filterListSelected}</strong>
+                    <div class="filters-content">
+                        <ul class="tags-list">
+                            <aura:iteration var="val" items="{!v.renderedList}" indexVar= "i">
+                                
+                                <li>
+                                    <div class="list-item">{!val.label}<a data-renderedListId="{!val.value + i}" onclick="{!c.Remove}"><i class="far fa-times-circle"></i></a></div>
+                                </li>
+                                
+                            </aura:iteration>
+                        </ul>
+                        <div class="links-area">
+                            <lightning:button class="slds-button_brand btn-default" onclick="{!c.SaveList}" label="SAVE LIST"  />
+                            <a class="clear-all" onclick="{!c.ClearRenderedList}">Clear All</a>
+                        </div>
+                    </div>
+                </div>
+             <!--   <aura:set attribute="else">
+                    <div class="filters-selected Noborder"></div>
+                </aura:set>-->
+            </aura:if>
+            <div class="search-results-wrap">
+                <aura:if isTrue="{!v.data}">
+                    
+                    
+                    <!--             <lightning:datatable aura:id="searchTab"
+                                             columns="{! v.columns }"
+                                             data="{! v.data }"
+                                             keyField="Product2Id"
+                                             suppressBottomBar="true"                              
+                                             oncellchange="{! c.handleSaveEdition}"
+                                             errors="{! v.errors }"
+                                             draftValues="{! v.draftValues }"
+                                             onsave="{! c.handleSaveEdition }"
+                                             hideCheckboxColumn="true"
+                                             onrowselection="{! c.getSelectedName }"/>-->
+                    
+                    
+                    <table class="items-head">
+                        
+                        <tr > 
+                            <td style="width:28%">
+                                <div class="checkbox-row">
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" name="InStockTglbtn" aura:id="InStockTglbtn" checked="{!v.isInStock}" onchange="{!c.getToggleButtonValue}" />
+                                        <span class="fake-checkbox"></span>
+                                        <span class="label">{!v.InStockTitle}</span>
+                                    </label>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" name="DiscontinuedTglbtn" aura:id="DiscontinuedTglbtn" checked="{!v.isDiscontinued}" onchange="{!c.getToggleButtonValue}" />
+                                        <span class="fake-checkbox"></span>
+                                        <span class="label">{!v.DiscontinuedTitle}</span>
+                                    </label>
+                                </div>
+                            </td>
+                            
+                            <td>
+                                <div class="items-count">
+                                    {!v.headerCounterText}
+                                    <!-- Item {!v.start+1} to {!v.end+1} of {!v.data.length}-->
+                                </div>
+                            </td>
+                            <td style="width:2%">   
+                                <lightning:button label="Previous" class="prev" disabled="{!v.start == 0}"  onclick="{!c.previous}" />
+                                
+                            </td> 
+                            <td class="paging" style="width: 1px; padding: 15px; max-width: 100%; white-space: nowrap;">  
+                                <aura:iteration items="{!v.totalPagesList}" var="item"> 
+                                    <aura:if isTrue="{!v.currentPage == item}">                            
+                                        <b><a onclick="{!c.onPageNoClick}">{!item+' '} </a></b>
+                                        <aura:set attribute="else">
+                                            <a onclick="{!c.onPageNoClick}">{!item + ' '}</a>
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:iteration>
+                            </td>
+                            <td style="width:5%">
+                                <lightning:button label="Next" class="next" disabled="{!v.end >= v.totalSize-1}" onclick="{!c.next}" />
+                            </td>
+                            <td style="width:25%">
+                                <div class="export-options" >
+                                    <a href="#" class="export-link">{!v.exportText}</a>
+                                    <span class="sub-title">Print As:</span>
+                                    <ul class="print-list">
+                                        <li><a id='HTML' onclick="{!c.openModal}">HTML</a></li>
+                                        <li><a id='PDF' onclick="{!c.openModal}">PDF</a></li>
+                                        <li>  <a id='Excel' onclick="{!c.openModal}" alternativeText="Export Data"> Excel </a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td style="width:20%">
+                                <div class="select-row ">
+                                    <div class="custom-select slds-hide">
+                                        <Select class='slds-select' aura:id="sort" onchange="{!c.onSortChange}" >
+                                            
+                                            
+                                            <aura:iteration items="{! v.sortColumns }" var="item">
+                                                <Option text="{!item.label}" value="{!item.fieldName}"/>
+                                                
+                                            </aura:iteration>  
+                                        </Select>
+                                    </div>
+                                    <div class="custom-select num">
+                                        <Select class='slds-select' aura:id="records" onchange="{!c.onSelectChange}" >
+                                            <aura:iteration items="{!v.noOfItem}" var="item">
+                                                <Option text="{!item}" value="{!item}"  selected="{!v.pageSize == item}"/>
+                                            </aura:iteration>
+                                        </Select>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    </table>
+                    
+                    <div class="slds-table_edit_container slds-is-relative">
+                        <table aura:id= 'tab' aria-multiselectable="true" class="slds-table slds-no-cell-focus slds-table_bordered slds-table_edit slds-table_fixed-layout " role="grid" aria-label="Example default inline edit table with cell focused">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    
+                                    <!--    <th class="" scope="col" style="width:2rem">
+                                            <span id="column-group-header" class="slds-assistive-text">Choose a row</span>
+                                            <div class="slds-th__action slds-th__action_form">
+                                                <div class="slds-checkbox">
+                                                    <input type="checkbox" name="options" id="checkbox-unique-id-301" value="checkbox-unique-id-301" tabindex="-1" aria-labelledby="check-select-all-label column-group-header" />
+                                                    <label class="slds-checkbox__label" for="checkbox-unique-id-301" id="check-select-all-label">
+                                                        <span class="slds-checkbox_faux"></span>
+                                                        <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </th>    -->
+                                    <aura:iteration items="{! v.columns }" var="item">
+                                        <th aria-label="Name" aria-sort="none" class=" slds-is-sortable" scope="col">
+                                            <span class="slds-assistive-text">Sort by: </span>
+                                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                                <span class="slds-th__action slds-truncate" id="{!item.fieldName +'|0'}" title="{!item.label}" onclick="{!c.headerClick}">{!item.label + ' ▼'} </span>
+                                                
+                                                    
+                                                
+                                            </div>
+                                            
+                                        </th>
+                                        
+                                        
+                                    </aura:iteration>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{! v.paginationList }" var="item">
+                                    
+                                    <c:inlineEditRow item="{!item}"
+                                                     parent="{! this }"
+                                                     showSaveCancelBtn="{!v.showSaveCancelBtn}"
+                                                     sNo="{!sNo + 1}" 
+                                                     SelectedValues= "{!v.SelectedValues}"
+                                                     totalAmountSelected = "{!v.totalAmountSelected}"/>
+                                    
+                                </aura:iteration>
+                                <!--   <lightning:button label="First" disabled="{!v.start == 0}"  onclick="{!c.first}" />-->
+                                
+                                
+                                
+                                <!--    <lightning:button label="Last" disabled="{!v.end >= v.totalSize-1}" onclick="{!c.last}" />-->
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <aura:if isTrue="{!v.ShowQuantity}">
+                        <div class="search-selects-footer">
+                            <ul class="items-summary">
+                                <li>
+                                    <strong>{!v.TotalText}: €{!v.totalAmountSelected}</strong>
+                                </li>
+                                <li>
+                                    <span>{!v.selectedItemText}: {!v.SelectedValues.length}</span>
+                                </li>
+                            </ul>
+                            <lightning:button label="{!v.ClearQuantitiesText}" class="btn-default clear" title="Neutral action" />
+                            <lightning:button label="{!v.addToCartText}" class="btn-default" title="Neutral action" onclick="{! c.addToCartHandler }"/>
+                        </div>
+                    </aura:if>
+                </aura:if>
+            </div>
+            </div>
+        
+    </div>
+    <aura:if isTrue="{!v.showAddToDraftOrder}" >
+        <c:AddToDraftOrder skuQuantityList="{!v.skuQuantityList}" show = "{!v.showAddToDraftOrder}" fromCatalogSearch ="true"/>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isPDFShow}" >
+        <c:pdfDownloader aura:Id='pdfPrint' printAll='{!v.printAll}' />
+    </aura:if>
+    
+    <aura:if isTrue="{!v.showPrintModal}">
+        <section role="dialog" tabindex="-1" onclick="{!c.closeModal2}" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open print-modal" >
+            <div class="slds-modal__container">
+                <div class="slds-modal__wrap slds-theme_default">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModal }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <strong class="slds-modal__title slds-hyphenate">{!v.heading}</strong>
+                    </header>    
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                        <aura:if isTrue="{!v.isPDF}">
+                            
+                            <button class="slds-button slds-button_neutral btn-default" onclick="{!c.generatePDF}" id="current">This Page</button>
+                            <button class="slds-button slds-button_brand btn-default"  onclick="{!c.generatePDF}" id="all">All Pages</button>
+                        </aura:if>
+                         <aura:if isTrue="{!v.isHTML}">
+                            
+                            <button class="slds-button slds-button_neutral btn-default" onclick="{!c.print}" id="current">This Page</button>
+                            <button class="slds-button slds-button_brand btn-default"  onclick="{!c.print}" id="all">All Pages</button>
+                        </aura:if>
+                        <aura:if isTrue="{!v.isExcel}">
+                           
+                            <c:csvExport records="{!v.paginationList}" buttonName="This Page" fileName="Export.csv"/>
+                            <c:csvExport records="{!v.data}" buttonName="All Page" fileName="Export.csv"/>
+                        </aura:if>
+                    </div>
+                  </div>  
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+        
+        <!-- printable html table -->
+        <div  aura:id= 'printTab' class = "slds-hide" onclick="{! c.closeModal }">
+            <table aria-multiselectable="true" id = 'printTab'  class="slds-table slds-no-cell-focus slds-table_bordered slds-table_edit slds-table_fixed-layout " role="grid" aria-label="Example default inline edit table with cell focused">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        
+                        <!--    <th class="" scope="col" style="width:2rem">
+                                            <span id="column-group-header" class="slds-assistive-text">Choose a row</span>
+                                            <div class="slds-th__action slds-th__action_form">
+                                                <div class="slds-checkbox">
+                                                    <input type="checkbox" name="options" id="checkbox-unique-id-301" value="checkbox-unique-id-301" tabindex="-1" aria-labelledby="check-select-all-label column-group-header" />
+                                                    <label class="slds-checkbox__label" for="checkbox-unique-id-301" id="check-select-all-label">
+                                                        <span class="slds-checkbox_faux"></span>
+                                                        <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </th>    -->
+                        <aura:iteration items="{! v.columns }" var="item" indexVar='i'>
+                            
+                            <aura:if isTrue= "{!i!=1}">
+                                <th aria-label="Name" aria-sort="none" class=" slds-is-sortable" scope="col">
+                                    {!item.label}
+                                    
+                                </th>
+                            </aura:if>
+                            
+                        </aura:iteration>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{! v.data }" var="item">
+                        
+                        <c:inlineEditRow 
+                                         parent="{! this }"
+                                         item="{!item}"
+                                         showSaveCancelBtn="{!v.showSaveCancelBtn}"
+                                         sNo="{!sNo + 1}" 
+                                         printable ='true'
+                                         SelectedValues= "{!v.SelectedValues}"
+                                         totalAmountSelected = "{!v.totalAmountSelected}"/>
+                        
+                    </aura:iteration>
+                    <!--   <lightning:button label="First" disabled="{!v.start == 0}"  onclick="{!c.first}" />-->
+                    
+                    
+                    
+                    <!--    <lightning:button label="Last" disabled="{!v.end >= v.totalSize-1}" onclick="{!c.last}" />-->
+                    
+                </tbody>
+            </table>
+        </div>  
+        <!-- printable html table -->
+        <div  aura:id= 'printTabCurrent' class = "slds-hide" onclick="{! c.closeModal }">
+            <table aria-multiselectable="true" id = 'printTabCurrent'  class="slds-table slds-no-cell-focus slds-table_bordered slds-table_edit slds-table_fixed-layout " role="grid" aria-label="Example default inline edit table with cell focused">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        
+                        <!--    <th class="" scope="col" style="width:2rem">
+                                            <span id="column-group-header" class="slds-assistive-text">Choose a row</span>
+                                            <div class="slds-th__action slds-th__action_form">
+                                                <div class="slds-checkbox">
+                                                    <input type="checkbox" name="options" id="checkbox-unique-id-301" value="checkbox-unique-id-301" tabindex="-1" aria-labelledby="check-select-all-label column-group-header" />
+                                                    <label class="slds-checkbox__label" for="checkbox-unique-id-301" id="check-select-all-label">
+                                                        <span class="slds-checkbox_faux"></span>
+                                                        <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </th>    -->
+                        <aura:iteration items="{! v.columns }" var="item" indexVar='i'>
+                            
+                            <aura:if isTrue= "{!i!=1}">
+                                <th aria-label="Name" aria-sort="none" class=" slds-is-sortable" scope="col">
+                                    {!item.label}
+                                    
+                                </th>
+                            </aura:if>
+                            
+                        </aura:iteration>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{! v.paginationList }" var="item">
+                        
+                        <c:inlineEditRow 
+                                         parent="{! this }"
+                                         item="{!item}"
+                                         showSaveCancelBtn="{!v.showSaveCancelBtn}"
+                                         sNo="{!sNo + 1}" 
+                                         printable ='true'
+                                         SelectedValues= "{!v.SelectedValues}"
+                                         totalAmountSelected = "{!v.totalAmountSelected}"/>
+                        
+                    </aura:iteration>
+                    <!--   <lightning:button label="First" disabled="{!v.start == 0}"  onclick="{!c.first}" />-->
+                    
+                    
+                    
+                    <!--    <lightning:button label="Last" disabled="{!v.end >= v.totalSize-1}" onclick="{!c.last}" />-->
+                    
+                </tbody>
+            </table>
+        </div>   
+        
+        
+        <aura:if isTrue="{!v.showFilterList}" >
+            <c:FilterList renderedList="{!v.renderedList}" show = "{!v.showFilterList}"/>
+        </aura:if>
+        
+    </aura:component>
